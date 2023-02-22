@@ -5,7 +5,7 @@ namespace dae
 	{
 	public:
 		explicit BaseComponent() = default;
-		~BaseComponent() = default;
+		virtual ~BaseComponent() = default;
 
 		BaseComponent(const BaseComponent&) = delete;
 		BaseComponent(BaseComponent&&) = delete;
