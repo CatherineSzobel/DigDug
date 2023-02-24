@@ -10,7 +10,7 @@ void dae::RenderComponent::Render()
 	dae::Renderer::GetInstance().RenderTexture(*m_Texture, pos.x, pos.y);
 }
 
-void dae::RenderComponent::Update()
+void dae::RenderComponent::Update(float)
 {}
 void dae::RenderComponent::FixedUpdate(float)
 {}

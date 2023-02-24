@@ -19,7 +19,7 @@ namespace dae
 		RenderComponent& operator=(const RenderComponent& other) = delete;
 		RenderComponent& operator=(RenderComponent&& other) = delete;
 		virtual void Render() override;
-		virtual void Update() override;
+		virtual void Update(float deltaTime) override;
 		virtual void FixedUpdate(float deltaTime) override;
 
 		void SetTexture(std::string texture);

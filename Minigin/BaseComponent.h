@@ -1,6 +1,7 @@
 #pragma once
 namespace dae
 {
+	class GameObject;
 	class BaseComponent
 	{
 	public:
@@ -13,9 +14,11 @@ namespace dae
 		BaseComponent& operator= (const BaseComponent&&) = delete;
 
 
-		//virtual void Initialize() = 0;
+		virtual void Initialize(GameObject* owner);
 		virtual	void Render() = 0;
-		virtual void Update() = 0;
+		virtual void Update(float deltaTime) = 0;
 		virtual void FixedUpdate(float deltaTime) = 0;
+	protected:
+		GameObject* m_pOwner;
 	};
 }

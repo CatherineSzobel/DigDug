@@ -12,7 +12,7 @@ namespace dae
 	public:
 		Scene& CreateScene(const std::string& name);
 
-		void Update();
+		void Update(float deltaTime);
 		void FixedUpdate(float deltaTime);
 		void Render();
 	private:

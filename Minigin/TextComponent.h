@@ -23,7 +23,7 @@ namespace dae
 		// Inherited via BaseComponent
 		//virtual void Initialize() override;
 		virtual void Render() override;
-		virtual void Update() override;
+		virtual void Update(float deltaTime) override;
 		virtual void FixedUpdate(float deltaTime) override;
 
 

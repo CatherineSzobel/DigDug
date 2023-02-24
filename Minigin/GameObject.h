@@ -18,7 +18,7 @@ namespace dae
 		GameObject& operator=(const GameObject& other) = delete;
 		GameObject& operator=(GameObject&& other) = delete;
 
-		virtual void Update();
+		virtual void Update(float deltaTime);
 		virtual void FixedUpdate(float deltaTime);
 		virtual void Render() const;
 
@@ -48,6 +48,7 @@ namespace dae
 		auto it = std::find(m_pComponents.cbegin(), m_pComponents.cend(), component);
 		if (it == m_pComponents.cend())
 		{
+			component->Initialize(this);
 			m_pComponents.emplace_back(component);
 		}
 	}
@@ -59,6 +60,7 @@ namespace dae
 
 		if (it == m_pComponents.cend())
 		{
+			currentComponent->Initialize(this);
 			m_pComponents.emplace_back(currentComponent);
 		}
 

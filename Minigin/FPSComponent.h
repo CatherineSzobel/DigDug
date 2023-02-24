@@ -3,6 +3,8 @@
 #include <memory>
 #include "BaseComponent.h"
 #include "Transform.h"
+#include "GameObject.h"
+#include "TextComponent.h"
 namespace dae
 {
 	class Font;
@@ -11,7 +13,7 @@ namespace dae
 	{
 	public:
 		FPSComponent();
-		virtual ~FPSComponent() = default;
+		virtual ~FPSComponent();
 
 		FPSComponent(const FPSComponent&) = delete;
 		FPSComponent(FPSComponent&&) = delete;
@@ -21,20 +23,14 @@ namespace dae
 
 		//virtual void Initialize() = 0;
 		virtual	void Render();
-		virtual void Update();
+		virtual void Update(float deltaTime);
 		virtual void FixedUpdate(float deltaTime);
 
-		void SetPosition(float x, float y);
-		void SetFont(const std::shared_ptr<Font> font);
-		void SetCounterEnableSwitch(bool enable);
+		int GetFPS();
 	private:
-		int CalculateFPS();
+		TextComponent* m_TextComponent;
+		float m_Elapsed = 0.f;
+		int m_FPS = 0;
 
-		bool m_CounterActivated{ false }, m_NeedsUpdate{ false };
-		std::string m_Text;
-		std::string m_FPSText;
-		Transform m_Transform{};
-		std::shared_ptr<Font> m_Font;
-		std::shared_ptr<Texture2D> m_TextTexture;
 	};
 }
