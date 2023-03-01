@@ -22,6 +22,9 @@ namespace dae
 		virtual void FixedUpdate(float deltaTime);
 		virtual void Render() const;
 
+		void AddChild(const std::shared_ptr<GameObject>& child);
+		void RemoveChild(unsigned int childIndex);
+		void SetParent(std::shared_ptr<GameObject> pParent);
 
 		template<class Type>
 		void AddComponent(Type* component);
@@ -41,6 +44,8 @@ namespace dae
 	private:
 		Transform m_transform{};
 		std::vector<BaseComponent*> m_pComponents{};
+		std::shared_ptr<GameObject> m_pParent{};
+		std::vector<std::shared_ptr<GameObject>> m_pChildren{};
 	};
 	template<class Type>
 	inline void GameObject::AddComponent(Type* component)
@@ -49,6 +54,7 @@ namespace dae
 		if (it == m_pComponents.cend())
 		{
 			component->Initialize(this);
+
 			m_pComponents.emplace_back(component);
 		}
 	}
@@ -61,6 +67,7 @@ namespace dae
 		if (it == m_pComponents.cend())
 		{
 			currentComponent->Initialize(this);
+			
 			m_pComponents.emplace_back(currentComponent);
 		}
 

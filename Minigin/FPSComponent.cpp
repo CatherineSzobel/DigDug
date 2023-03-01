@@ -21,7 +21,8 @@ void dae::FPSComponent::Render() {}
 
 void dae::FPSComponent::Update(float deltaTime)
 {
-	m_TextComponent = m_pOwner->GetComponent<TextComponent>();
+	
+	m_TextComponent = GetOwner()->GetComponent<TextComponent>();
 	if (!m_TextComponent)
 	{
 		throw std::runtime_error(std::string("Current GameObject has no TextComponent. ") + SDL_GetError());

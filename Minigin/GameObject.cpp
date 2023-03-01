@@ -33,3 +33,18 @@ void dae::GameObject::Render() const
 	}
 }
 
+void dae::GameObject::AddChild(const std::shared_ptr<GameObject>& child)
+{
+
+}
+
+void dae::GameObject::RemoveChild(unsigned int childIndex)
+{
+	
+}
+
+void dae::GameObject::SetParent(std::shared_ptr<GameObject> pParent)
+{
+	m_pParent = pParent;
+}
+
