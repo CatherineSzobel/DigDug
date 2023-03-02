@@ -26,6 +26,9 @@ namespace dae
 		void RemoveChild(unsigned int childIndex);
 		void SetParent(std::shared_ptr<GameObject> pParent);
 
+		void SetPosition(float x, float y,float z);
+		void SetRotation(float x, float y, float z);
+
 		template<class Type>
 		void AddComponent(Type* component);
 		template<class Type>
@@ -42,7 +45,7 @@ namespace dae
 		void RemoveComponent();
 
 	private:
-		Transform m_transform{};
+		Transform m_Transform{};
 		std::vector<BaseComponent*> m_pComponents{};
 		std::shared_ptr<GameObject> m_pParent{};
 		std::vector<std::shared_ptr<GameObject>> m_pChildren{};
