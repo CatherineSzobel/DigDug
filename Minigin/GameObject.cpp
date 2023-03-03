@@ -40,7 +40,7 @@ void dae::GameObject::AddChild(const std::shared_ptr<GameObject>& child)
 	auto childIt = std::find(m_pChildren.cbegin(), m_pChildren.cend(), child);
 	if (childIt == m_pChildren.cend())
 	{
-		child->m_pParent = std::make_shared<GameObject>(this);
+		child->m_pParent = std::make_shared<GameObject>(*this);
 		m_pChildren.emplace_back(child);
 	}
 	else
@@ -51,7 +51,7 @@ void dae::GameObject::AddChild(const std::shared_ptr<GameObject>& child)
 
 void dae::GameObject::RemoveChild(unsigned int childIndex)
 {
-	if (m_pChildren.size() != childIndex)
+	if (m_pChildren.size() - 1 != childIndex)
 	{
 		throw std::runtime_error(std::string("Index is out of bound. ") + SDL_GetError());
 	}
@@ -66,12 +66,36 @@ void dae::GameObject::SetParent(std::shared_ptr<GameObject> pParent)
 	m_pParent = pParent;
 }
 
+std::shared_ptr<dae::GameObject> dae::GameObject::GetParent()
+{
+	return m_pParent;
+}
+
+size_t dae::GameObject::GetChildCount()
+{
+	return m_pChildren.size();
+}
+
+std::vector<std::shared_ptr<dae::GameObject>> dae::GameObject::getChildren()
+{
+	return m_pChildren;
+}
+
+std::shared_ptr<dae::GameObject> dae::GameObject::GetChildAt(unsigned int index)
+{
+	if (m_pChildren.size() - 1 != index)
+	{
+		throw std::runtime_error(std::string("Index is out of bound. ") + SDL_GetError());
+	}
+	return m_pChildren[index];
+}
+
 void dae::GameObject::SetPosition(float x, float y,float z)
 {
 	m_Transform.SetPosition(x, y, z);
 }
 
-void dae::GameObject::SetRotation(float x, float y, float z)
+void dae::GameObject::SetRotation(float /*x*/, float/*y*/, float /*z*/)
 {
 
 }

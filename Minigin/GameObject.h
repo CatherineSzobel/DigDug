@@ -13,7 +13,7 @@ namespace dae
 	public:
 		GameObject() = default;
 		virtual ~GameObject();
-		GameObject(const GameObject& other) = delete;
+		GameObject(const GameObject& other) = default;
 		GameObject(GameObject&& other) = delete;
 		GameObject& operator=(const GameObject& other) = delete;
 		GameObject& operator=(GameObject&& other) = delete;
@@ -25,6 +25,10 @@ namespace dae
 		void AddChild(const std::shared_ptr<GameObject>& child);
 		void RemoveChild(unsigned int childIndex);
 		void SetParent(std::shared_ptr<GameObject> pParent);
+		std::shared_ptr<GameObject> GetParent();
+		size_t GetChildCount();
+		std::vector< std::shared_ptr<GameObject>> getChildren();
+		std::shared_ptr<GameObject> GetChildAt(unsigned int index);
 
 		void SetPosition(float x, float y,float z);
 		void SetRotation(float x, float y, float z);
