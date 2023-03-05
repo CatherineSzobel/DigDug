@@ -10,8 +10,7 @@ namespace dae
 	{
 	public:
 		// Inherited via BaseComponent
-		//virtual void Initialize() override;
-		explicit RenderComponent(){}
+		explicit RenderComponent() {};
 
 		virtual ~RenderComponent() = default;
 		RenderComponent(const RenderComponent& other) = delete;

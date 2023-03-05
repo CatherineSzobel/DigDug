@@ -7,22 +7,17 @@
 #include <chrono>
 
 dae::FPSComponent::FPSComponent()
-	:m_TextComponent{ nullptr }, m_FPS{ 0 }, m_Elapsed{ 0.f }
+	:m_TextComponent{}, m_FPS{ 0 }, m_Elapsed{ 0.f }
 {
 }
-
-dae::FPSComponent::~FPSComponent()
+void dae::FPSComponent::Initialize()
 {
-	m_TextComponent = nullptr;
-	delete m_TextComponent;
+	m_TextComponent = GetOwner()->GetComponent<TextComponent>();
 }
-
 void dae::FPSComponent::Render() {}
 
 void dae::FPSComponent::Update(float deltaTime)
 {
-	
-	m_TextComponent = GetOwner()->GetComponent<TextComponent>();
 	if (!m_TextComponent)
 	{
 		throw std::runtime_error(std::string("Current GameObject has no TextComponent. ") + SDL_GetError());

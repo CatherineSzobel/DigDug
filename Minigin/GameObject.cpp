@@ -4,6 +4,7 @@
 #include <SDL_ttf.h>
 #include "ResourceManager.h"
 #include "Renderer.h"
+#include <memory>
 
 dae::GameObject::~GameObject()
 {
@@ -40,7 +41,7 @@ void dae::GameObject::AddChild(const std::shared_ptr<GameObject>& child)
 	auto childIt = std::find(m_pChildren.cbegin(), m_pChildren.cend(), child);
 	if (childIt == m_pChildren.cend())
 	{
-		child->m_pParent = std::make_shared<GameObject>(*this);
+		child->SetParent(std::make_shared<GameObject>(*this), true);
 		m_pChildren.emplace_back(child);
 	}
 	else
@@ -49,39 +50,62 @@ void dae::GameObject::AddChild(const std::shared_ptr<GameObject>& child)
 	}
 }
 
-void dae::GameObject::RemoveChild(unsigned int childIndex)
+void dae::GameObject::RemoveChild(std::shared_ptr<GameObject> child)
 {
-	if (m_pChildren.size() - 1 != childIndex)
-	{
-		throw std::runtime_error(std::string("Index is out of bound. ") + SDL_GetError());
-	}
-	std::shared_ptr<GameObject> child = m_pChildren[childIndex];
+
 	auto childIt = std::find(m_pChildren.cbegin(), m_pChildren.cend(), child);
-	child->m_pParent = nullptr;
-	m_pChildren.erase(childIt);
+	if (childIt != m_pChildren.cend())
+	{
+		child->m_pParent = nullptr;
+		m_pChildren.erase(childIt);
+
+	}
 }
 
-void dae::GameObject::SetParent(std::shared_ptr<GameObject> pParent)
+void dae::GameObject::SetParent(std::shared_ptr<GameObject> pParent, bool keepWorldPosition)
 {
+	if (pParent == nullptr)
+	{
+		SetLocalPosition(GetWorldPosition());
+
+	}
+	else
+	{
+		if (keepWorldPosition)
+		{
+			SetLocalPosition(GetLocalPosition() - pParent->GetWorldPosition());
+
+			SetPositionDirty();
+		}
+	}
+	if (m_pParent)
+	{
+		m_pParent->RemoveChild(std::make_shared<GameObject>(*this));
+	}
 	m_pParent = pParent;
+	if (m_pParent)
+	{
+
+		AddChild(std::make_shared<GameObject>(*this));
+	}
 }
 
-std::shared_ptr<dae::GameObject> dae::GameObject::GetParent()
+std::shared_ptr<dae::GameObject> dae::GameObject::GetParent() const
 {
 	return m_pParent;
 }
 
-size_t dae::GameObject::GetChildCount()
+size_t dae::GameObject::GetChildCount() const
 {
 	return m_pChildren.size();
 }
 
-std::vector<std::shared_ptr<dae::GameObject>> dae::GameObject::getChildren()
+std::vector<std::shared_ptr<dae::GameObject>> dae::GameObject::getChildren() const
 {
 	return m_pChildren;
 }
 
-std::shared_ptr<dae::GameObject> dae::GameObject::GetChildAt(unsigned int index)
+std::shared_ptr<dae::GameObject> dae::GameObject::GetChildAt(unsigned int index) const
 {
 	if (m_pChildren.size() - 1 != index)
 	{
@@ -90,7 +114,7 @@ std::shared_ptr<dae::GameObject> dae::GameObject::GetChildAt(unsigned int index)
 	return m_pChildren[index];
 }
 
-void dae::GameObject::SetPosition(float x, float y,float z)
+void dae::GameObject::SetPosition(float x, float y, float z)
 {
 	m_Transform.SetPosition(x, y, z);
 }
@@ -98,5 +122,46 @@ void dae::GameObject::SetPosition(float x, float y,float z)
 void dae::GameObject::SetRotation(float /*x*/, float/*y*/, float /*z*/)
 {
 
+}
+
+glm::vec3 dae::GameObject::GetLocalPosition() const
+{
+	return m_LocalPosition;
+}
+
+const glm::vec3& dae::GameObject::GetWorldPosition()
+{
+	if (m_PositionIsDirty)
+	{
+		UpdateWorldPosition();
+	}
+	return m_WorldPosition;
+}
+
+void dae::GameObject::SetLocalPosition(const glm::vec3& localPosition)
+{
+	m_LocalPosition = localPosition;
+}
+
+void dae::GameObject::SetPositionDirty()
+{
+	m_PositionIsDirty = true;
+}
+
+void dae::GameObject::UpdateWorldPosition()
+{
+	if (m_PositionIsDirty)
+	{
+		if (m_pParent == nullptr)
+		{
+		m_WorldPosition = m_LocalPosition;
+		}
+		else
+		{
+			m_WorldPosition = m_pParent->GetWorldPosition() + m_LocalPosition;
+
+		}
+	}
+	m_PositionIsDirty = false;
 }
 

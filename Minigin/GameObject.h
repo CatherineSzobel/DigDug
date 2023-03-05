@@ -6,8 +6,6 @@
 namespace dae
 {
 	class Texture2D;
-
-	// todo: this should become final.
 	class GameObject final
 	{
 	public:
@@ -23,75 +21,56 @@ namespace dae
 		virtual void Render() const;
 
 		void AddChild(const std::shared_ptr<GameObject>& child);
-		void RemoveChild(unsigned int childIndex);
-		void SetParent(std::shared_ptr<GameObject> pParent);
-		std::shared_ptr<GameObject> GetParent();
-		size_t GetChildCount();
-		std::vector< std::shared_ptr<GameObject>> getChildren();
-		std::shared_ptr<GameObject> GetChildAt(unsigned int index);
+		void RemoveChild(std::shared_ptr<GameObject> child);
+		void SetParent(std::shared_ptr<GameObject> pParent, bool keepWorldPosition);
+		std::shared_ptr<GameObject> GetParent() const;
+		size_t GetChildCount() const;
+		std::vector< std::shared_ptr<GameObject>> getChildren() const;
+		std::shared_ptr<GameObject> GetChildAt(unsigned int index) const;
 
-		void SetPosition(float x, float y,float z);
+		void SetPosition(float x, float y, float z);
 		void SetRotation(float x, float y, float z);
 
-		template<class Type>
-		void AddComponent(Type* component);
+
 		template<class Type>
 		Type* AddComponent();
 
 		template<class Type>
-		Type* GetComponent(Type* component);
-		template<class Type>
 		Type* GetComponent();
 
 		template<class Type>
-		void RemoveComponent(Type* component);
-		template<class Type>
 		void RemoveComponent();
 
+		glm::vec3 GetLocalPosition() const;
+		const glm::vec3& GetWorldPosition();
 	private:
+		void SetLocalPosition(const glm::vec3& localPosition);
+		void SetPositionDirty();
+		void UpdateWorldPosition();
+
 		Transform m_Transform{};
 		std::vector<BaseComponent*> m_pComponents{};
 		std::shared_ptr<GameObject> m_pParent{};
 		std::vector<std::shared_ptr<GameObject>> m_pChildren{};
-	};
-	template<class Type>
-	inline void GameObject::AddComponent(Type* component)
-	{
-		auto it = std::find(m_pComponents.cbegin(), m_pComponents.cend(), component);
-		if (it == m_pComponents.cend())
-		{
-			component->Initialize(this);
 
-			m_pComponents.emplace_back(component);
-		}
-	}
+		glm::vec3 m_LocalPosition, m_WorldPosition;
+		bool m_PositionIsDirty;
+	};
+
 	template<class Type>
 	inline Type* GameObject::AddComponent()
 	{
 		Type* currentComponent = new Type();
 		auto it = std::find(m_pComponents.cbegin(), m_pComponents.cend(), currentComponent);
-
 		if (it == m_pComponents.cend())
 		{
-			currentComponent->Initialize(this);
-			
+			currentComponent->SetOwner(this);
 			m_pComponents.emplace_back(currentComponent);
 		}
 
 		return currentComponent;
 	}
-	template<class Type>
-	inline Type* GameObject::GetComponent(Type* searchedComponent)
-	{
-		for (const auto& component : m_pComponents)
-		{
-			if (component == searchedComponent)
-			{
-				return component;
-			}
-		}
-		return nullptr;
-	}
+
 	template<class Type>
 	inline Type* GameObject::GetComponent()
 	{
@@ -104,15 +83,7 @@ namespace dae
 		}
 		return nullptr;
 	}
-	template<class Type>
-	inline void GameObject::RemoveComponent(Type* component)
-	{
-		auto it = std::find(m_pComponents.cbegin(), m_pComponents.cend(), component);
-		if (it != m_pComponents.cend())
-		{
-			m_pComponents.erase(it);
-		}
-	}
+
 	template<class Type>
 	inline void GameObject::RemoveComponent()
 	{

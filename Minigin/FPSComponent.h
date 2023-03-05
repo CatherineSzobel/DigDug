@@ -13,15 +13,14 @@ namespace dae
 	{
 	public:
 		FPSComponent();
-		virtual ~FPSComponent();
+		virtual ~FPSComponent() = default;
 
 		FPSComponent(const FPSComponent&) = delete;
 		FPSComponent(FPSComponent&&) = delete;
 		FPSComponent& operator= (const FPSComponent&) = delete;
 		FPSComponent& operator= (const FPSComponent&&) = delete;
 
-
-		//virtual void Initialize() = 0;
+		virtual void Initialize();
 		virtual	void Render();
 		virtual void Update(float deltaTime);
 		virtual void FixedUpdate(float deltaTime);

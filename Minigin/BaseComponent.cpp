@@ -1,6 +1,12 @@
 #include "BaseComponent.h"
-
-void dae::BaseComponent::Initialize(GameObject* owner)
+#include "GameObject.h"
+void dae::BaseComponent::SetOwner(GameObject* owner)
 {
+	if (!owner)
+	{
+		return;
+	}
 	m_pOwner = owner;
 }
+
+void dae::BaseComponent::Initialize(){}
