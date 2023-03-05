@@ -41,7 +41,6 @@ void dae::GameObject::AddChild(const std::shared_ptr<GameObject>& child)
 	auto childIt = std::find(m_pChildren.cbegin(), m_pChildren.cend(), child);
 	if (childIt == m_pChildren.cend())
 	{
-		child->SetParent(std::make_shared<GameObject>(*this), true);
 		m_pChildren.emplace_back(child);
 	}
 	else
@@ -74,9 +73,8 @@ void dae::GameObject::SetParent(std::shared_ptr<GameObject> pParent, bool keepWo
 		if (keepWorldPosition)
 		{
 			SetLocalPosition(GetLocalPosition() - pParent->GetWorldPosition());
-
-			SetPositionDirty();
 		}
+		SetPositionDirty();
 	}
 	if (m_pParent)
 	{
@@ -85,7 +83,6 @@ void dae::GameObject::SetParent(std::shared_ptr<GameObject> pParent, bool keepWo
 	m_pParent = pParent;
 	if (m_pParent)
 	{
-
 		AddChild(std::make_shared<GameObject>(*this));
 	}
 }
@@ -107,21 +104,11 @@ std::vector<std::shared_ptr<dae::GameObject>> dae::GameObject::getChildren() con
 
 std::shared_ptr<dae::GameObject> dae::GameObject::GetChildAt(unsigned int index) const
 {
-	if (m_pChildren.size() - 1 != index)
+	if (m_pChildren.size() - 1 < index)
 	{
 		throw std::runtime_error(std::string("Index is out of bound. ") + SDL_GetError());
 	}
 	return m_pChildren[index];
-}
-
-void dae::GameObject::SetPosition(float x, float y, float z)
-{
-	m_Transform.SetPosition(x, y, z);
-}
-
-void dae::GameObject::SetRotation(float /*x*/, float/*y*/, float /*z*/)
-{
-
 }
 
 glm::vec3 dae::GameObject::GetLocalPosition() const
@@ -141,6 +128,7 @@ const glm::vec3& dae::GameObject::GetWorldPosition()
 void dae::GameObject::SetLocalPosition(const glm::vec3& localPosition)
 {
 	m_LocalPosition = localPosition;
+	SetPositionDirty();
 }
 
 void dae::GameObject::SetPositionDirty()
@@ -154,7 +142,7 @@ void dae::GameObject::UpdateWorldPosition()
 	{
 		if (m_pParent == nullptr)
 		{
-		m_WorldPosition = m_LocalPosition;
+			m_WorldPosition = m_LocalPosition;
 		}
 		else
 		{

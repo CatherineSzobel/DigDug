@@ -20,35 +20,32 @@ namespace dae
 		virtual void FixedUpdate(float deltaTime);
 		virtual void Render() const;
 
-		void AddChild(const std::shared_ptr<GameObject>& child);
-		void RemoveChild(std::shared_ptr<GameObject> child);
 		void SetParent(std::shared_ptr<GameObject> pParent, bool keepWorldPosition);
-		std::shared_ptr<GameObject> GetParent() const;
-		size_t GetChildCount() const;
-		std::vector< std::shared_ptr<GameObject>> getChildren() const;
-		std::shared_ptr<GameObject> GetChildAt(unsigned int index) const;
-
-		void SetPosition(float x, float y, float z);
-		void SetRotation(float x, float y, float z);
-
 
 		template<class Type>
 		Type* AddComponent();
-
 		template<class Type>
 		Type* GetComponent();
-
 		template<class Type>
 		void RemoveComponent();
 
 		glm::vec3 GetLocalPosition() const;
-		const glm::vec3& GetWorldPosition();
-	private:
 		void SetLocalPosition(const glm::vec3& localPosition);
+		const glm::vec3& GetWorldPosition();
+
+	private:
+		void AddChild(const std::shared_ptr<GameObject>& child);
+		void RemoveChild(std::shared_ptr<GameObject> child);
+		std::shared_ptr<GameObject> GetChildAt(unsigned int index) const;
+
+		std::shared_ptr<GameObject> GetParent() const;
+		size_t GetChildCount() const;
+		std::vector< std::shared_ptr<GameObject>> getChildren() const;
+
 		void SetPositionDirty();
 		void UpdateWorldPosition();
 
-		Transform m_Transform{};
+
 		std::vector<BaseComponent*> m_pComponents{};
 		std::shared_ptr<GameObject> m_pParent{};
 		std::vector<std::shared_ptr<GameObject>> m_pChildren{};

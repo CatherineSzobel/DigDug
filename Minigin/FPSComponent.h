@@ -9,7 +9,7 @@ namespace dae
 {
 	class Font;
 	class Texture2D;
-	class FPSComponent : public BaseComponent
+	class FPSComponent final : public BaseComponent
 	{
 	public:
 		FPSComponent();
