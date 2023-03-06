@@ -51,7 +51,7 @@ namespace dae
 		std::vector<std::shared_ptr<GameObject>> m_pChildren{};
 
 		glm::vec3 m_LocalPosition, m_WorldPosition;
-		bool m_PositionIsDirty;
+		bool m_PositionIsDirty{ true };
 	};
 
 	template<class Type>

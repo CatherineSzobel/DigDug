@@ -7,7 +7,7 @@
 
 void dae::RenderComponent::Render()
 {
-	const auto& pos = GetOwner()->GetLocalPosition();
+	const auto& pos = GetOwner()->GetWorldPosition();
 	dae::Renderer::GetInstance().RenderTexture(*m_Texture, pos.x, pos.y);
 }
 
