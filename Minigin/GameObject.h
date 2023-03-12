@@ -9,7 +9,9 @@ namespace dae
 	class GameObject final
 	{
 	public:
-		GameObject() = default;
+		GameObject()
+			:m_pChildren{}, m_pComponents{}, m_pParent{ nullptr }, m_LocalPosition{}, m_WorldPosition{}
+		{};
 		virtual ~GameObject();
 		GameObject(const GameObject& other) = default;
 		GameObject(GameObject&& other) = delete;
@@ -20,7 +22,7 @@ namespace dae
 		virtual void FixedUpdate(float deltaTime);
 		virtual void Render() const;
 
-		void SetParent(std::shared_ptr<GameObject> pParent, bool keepWorldPosition);
+		void SetParent(GameObject* pParent, bool keepWorldPosition);
 
 		template<class Type>
 		Type* AddComponent();
@@ -34,21 +36,22 @@ namespace dae
 		const glm::vec3& GetWorldPosition();
 
 	private:
-		void AddChild(const std::shared_ptr<GameObject>& child);
-		void RemoveChild(std::shared_ptr<GameObject> child);
-		std::shared_ptr<GameObject> GetChildAt(unsigned int index) const;
+		void AddChild(GameObject* child);
+		void RemoveChild(GameObject* child);
+		GameObject* GetChildAt(unsigned int index) const;
 
-		std::shared_ptr<GameObject> GetParent() const;
+		GameObject* GetParent() const;
 		size_t GetChildCount() const;
-		std::vector< std::shared_ptr<GameObject>> getChildren() const;
+		std::vector< GameObject*> getChildren() const;
 
 		void SetPositionDirty();
 		void UpdateWorldPosition();
 
+		std::vector<BaseComponent*> GetComponents() const { return m_pComponents; };
 
 		std::vector<BaseComponent*> m_pComponents{};
-		std::shared_ptr<GameObject> m_pParent{};
-		std::vector<std::shared_ptr<GameObject>> m_pChildren{};
+		GameObject* m_pParent{};
+		std::vector<GameObject*> m_pChildren{};
 
 		glm::vec3 m_LocalPosition, m_WorldPosition;
 		bool m_PositionIsDirty{ true };
