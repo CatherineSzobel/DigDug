@@ -1,9 +1,5 @@
 #include "SpriteComponent.h"
 
-dae::SpriteComponent::SpriteComponent()
-{
-}
-
 void dae::SpriteComponent::AddAnimationStrips(const std::string& texture, int nrCols, int nrRows, float frameSec, float frameTime, const std::string& animationName)
 {
 	std::shared_ptr<AnimationStrip> animationStrip = std::make_shared<AnimationStrip>(texture, nrCols, nrRows, frameSec, frameTime, animationName);
@@ -26,11 +22,13 @@ void dae::SpriteComponent::SetAnimationByName(std::string animationName)
 	if (animationStripIt != m_AnimationStrips.cend())
 	{
 		m_CurrentAnimationStrip = m_AnimationStrips[index];
+		m_IsAnimationSet = true;
 	}
 }
 
 void dae::SpriteComponent::Render()
 {
+	
 }
 
 void dae::SpriteComponent::Update(float deltaTime)

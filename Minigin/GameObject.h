@@ -50,7 +50,7 @@ namespace dae
 		std::vector<BaseComponent*> GetComponents() const { return m_pComponents; };
 
 		std::vector<BaseComponent*> m_pComponents{};
-		GameObject* m_pParent{};
+		GameObject* m_pParent{nullptr};
 		std::vector<GameObject*> m_pChildren{};
 
 		glm::vec3 m_LocalPosition, m_WorldPosition;

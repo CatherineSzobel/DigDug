@@ -12,7 +12,11 @@ dae::GameObject::~GameObject()
 	{
 		delete component;
 	}
-
+	for (auto& child : m_pChildren)
+	{
+		delete child;
+		child = nullptr;
+	}
 }
 void dae::GameObject::Update(float deltaTime)
 {
@@ -22,6 +26,7 @@ void dae::GameObject::Update(float deltaTime)
 	}
 	for (const auto& child : m_pChildren)
 	{
+		//assert(child->GetComponents().size() > 0);
 		for (const auto& component : child->GetComponents())
 		{
 			component->Update(deltaTime);
@@ -36,6 +41,7 @@ void dae::GameObject::FixedUpdate(float deltaTime)
 	}
 	for (const auto& child : m_pChildren)
 	{
+
 		for (const auto& component : child->GetComponents())
 		{
 			component->Update(deltaTime);
@@ -50,6 +56,7 @@ void dae::GameObject::Render() const
 	}
 	for (const auto& child : m_pChildren)
 	{
+		//assert(child->GetComponents().size() > 0);
 		for (const auto& component : child->GetComponents())
 		{
 			component->Render();
@@ -59,10 +66,12 @@ void dae::GameObject::Render() const
 
 void dae::GameObject::AddChild(GameObject* child)
 {
+
 	auto childIt = std::find(m_pChildren.begin(), m_pChildren.end(), child);
 	if (childIt == m_pChildren.end())
 	{
-		m_pChildren.emplace_back(child);
+	//	assert(child->GetComponents().size() > 0);
+		m_pChildren.push_back(child);
 	}
 	else
 	{
@@ -77,7 +86,6 @@ void dae::GameObject::RemoveChild(GameObject* child)
 	{
 		child->SetParent(nullptr, false);
 		m_pChildren.erase(std::remove(m_pChildren.begin(), m_pChildren.end(), child));
-
 	}
 }
 
@@ -86,7 +94,7 @@ void dae::GameObject::SetParent(GameObject* pParent, bool keepWorldPosition)
 	if (pParent == nullptr)
 	{
 		SetLocalPosition(GetWorldPosition());
-
+		return;
 	}
 	else
 	{
@@ -103,7 +111,7 @@ void dae::GameObject::SetParent(GameObject* pParent, bool keepWorldPosition)
 	m_pParent = pParent;
 	if (m_pParent)
 	{
-		m_pParent->AddChild(this);
+		pParent->AddChild(this);
 	}
 }
 
@@ -149,18 +157,16 @@ void dae::GameObject::SetLocalPosition(const glm::vec3& localPosition)
 {
 	m_LocalPosition = localPosition;
 	SetPositionDirty();
-
-	for (const auto& child : m_pChildren)
-	{
-		child->SetPositionDirty();
-		child->UpdateWorldPosition();
-	}
 }
 
 void dae::GameObject::SetPositionDirty()
 {
 	m_PositionIsDirty = true;
-
+	for (const auto& child : m_pChildren)
+	{
+		child->SetPositionDirty();
+		child->UpdateWorldPosition();
+	}
 }
 
 void dae::GameObject::UpdateWorldPosition()

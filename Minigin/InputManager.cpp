@@ -1,6 +1,6 @@
 #include <SDL.h>
 #include "InputManager.h"
-
+#include "..\3rdParty\imgui\imgui_impl_sdl2.h"
 bool dae::InputManager::ProcessInput()
 {
 	SDL_Event e;
@@ -14,8 +14,17 @@ bool dae::InputManager::ProcessInput()
 		if (e.type == SDL_MOUSEBUTTONDOWN) {
 			
 		}
-		// etc...
+		ImGui_ImplSDL2_ProcessEvent(&e);
 	}
 
 	return true;
 }
+
+void dae::InputManager::Initialize()
+{
+}
+
+//void dae::InputManager::BindControllerCommand(ControllerButton button, Command* command)
+//{
+//	m_ConsoleButtons.emplace(button, std::unique_ptr<Command>(command));
+//}

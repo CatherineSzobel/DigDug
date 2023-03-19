@@ -21,7 +21,7 @@ namespace dae
 	{
 	public:
 		
-		SpriteComponent();
+		SpriteComponent() = default;
 		virtual ~SpriteComponent() = default;
 
 		SpriteComponent(const SpriteComponent&) = delete;
