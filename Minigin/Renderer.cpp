@@ -227,7 +227,6 @@ void dae::Renderer::GenerateDataExercise01(const int& data) const
 
 	for (int stepsize = 1; stepsize <= 1024; stepsize *= 2)
 	{
-
 		const auto begin = std::chrono::high_resolution_clock::now();
 		for (int i = 0; i < data; i += stepsize)
 		{

@@ -7,9 +7,9 @@
 #include <vector>
 #include <map>
 #include <memory>
-//#include "Command.h"
-//#include "Controller.h"
-//#include "ControllerButton.h"
+#include "Command.h"
+#include "Controller.h"
+#include "ControllerButton.h"
 namespace dae
 {
 	class InputManager final : public Singleton<InputManager>
@@ -17,18 +17,21 @@ namespace dae
 	public:
 		bool ProcessInput();
 		void Initialize();
-		//void BindControllerCommand(ControllerButton button, Command* command);
-		//void BindKeyboardCommand();
+		void BindControllerCommand(ControllerButton button, Command* command);
+		void BindKeyboardCommand(SDL_KeyCode key, Command* command);
 	private:
 		XINPUT_STATE m_CurrentState[XUSER_MAX_COUNT];
 		XINPUT_STATE m_PreviousState{};
 
 		//XINPUT_KEYSTROKE m_CurrentKeyStroke[XUSER_MAX_COUNT];
 
-		//using ControllerCommandsMap = std::map<ControllerButton, std::unique_ptr<Command>>;
-		//ControllerCommandsMap m_ConsoleButtons{};
+		using ControllerCommandsMap = std::map<ControllerButton, std::unique_ptr<Command>>;
+		ControllerCommandsMap m_ConsoleButtons{};
+		
+		using KeyboardCommandsMap = std::map<SDL_KeyCode, std::unique_ptr<Command>>;
+		KeyboardCommandsMap m_KeyboardButtons{};
 
-		//std::vector<std::unique_ptr<Controller>> m_pControllers{};
+		std::vector<std::unique_ptr<Controller>> m_pControllers{};
 	};
 
 }

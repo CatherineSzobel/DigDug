@@ -1,5 +1,6 @@
 #include <SDL.h>
 #include "InputManager.h"
+#include <iostream>
 #include "..\3rdParty\imgui\imgui_impl_sdl2.h"
 bool dae::InputManager::ProcessInput()
 {
@@ -9,7 +10,7 @@ bool dae::InputManager::ProcessInput()
 			return false;
 		}
 		if (e.type == SDL_KEYDOWN) {
-			
+			std::cout << "e";
 		}
 		if (e.type == SDL_MOUSEBUTTONDOWN) {
 			
@@ -24,7 +25,12 @@ void dae::InputManager::Initialize()
 {
 }
 
-//void dae::InputManager::BindControllerCommand(ControllerButton button, Command* command)
-//{
-//	m_ConsoleButtons.emplace(button, std::unique_ptr<Command>(command));
-//}
+void dae::InputManager::BindControllerCommand(ControllerButton button, Command* command)
+{
+	m_ConsoleButtons.emplace(button, std::unique_ptr<Command>(command));
+}
+
+void dae::InputManager::BindKeyboardCommand(SDL_KeyCode key, Command* command)
+{
+	m_KeyboardButtons.emplace(key, std::unique_ptr<Command>(command));
+}
