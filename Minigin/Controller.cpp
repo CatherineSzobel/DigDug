@@ -27,7 +27,7 @@ bool dae::Controller::ControllerImpl::IsDownThisFrame(unsigned int button) const
 
 bool dae::Controller::ControllerImpl::IsUpThisFrame(unsigned int button) const
 {
-	return  buttonReleasedThisFrame & static_cast<int>(button);;
+	return  buttonReleasedThisFrame & static_cast<int>(button);
 }
 
 bool dae::Controller::ControllerImpl::IsPressed(unsigned int button) const

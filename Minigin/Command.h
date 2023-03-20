@@ -1,6 +1,5 @@
 #pragma once
 #include <iostream>
-#include "GameActor.h"
 namespace dae
 {
 	class Command
@@ -33,6 +32,18 @@ namespace dae
 	};
 
 	class FartCommand final : public Command
+	{
+	public:
+		void Execute() override { std::cout << "Fart!"; }
+	};
+
+	class MoveUpDownCommand final : public Command
+	{
+	public:
+		void Execute() override { std::cout << "Fart!"; }
+	};
+
+	class MoveLeftRightCommand final : public Command
 	{
 	public:
 		void Execute() override { std::cout << "Fart!"; }

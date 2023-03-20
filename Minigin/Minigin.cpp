@@ -10,6 +10,7 @@
 #include "Renderer.h"
 #include "ResourceManager.h"
 #include <chrono>
+#include <thread>
 SDL_Window* g_window{};
 
 void PrintSDLVersion()
@@ -90,28 +91,33 @@ void dae::Minigin::Run(const std::function<void()>& load)
 	input.BindControllerCommand(ControllerButton::ButtonA, new JumpCommand(),InputType::Press);
 	input.BindControllerCommand(ControllerButton::ButtonB, new FireCommand(), InputType::Press);
 	input.BindControllerCommand(ControllerButton::ButtonX, new DuckCommand(), InputType::Up);
-	input.BindControllerCommand(ControllerButton::ButtonY, new FartCommand(), InputType::Hold);
+	input.BindControllerCommand(ControllerButton::ButtonY, new FartCommand(), InputType::Down);
 
+	input.BindKeyboardCommand(SDLK_q, new JumpCommand(), InputType::Press);
+	input.BindKeyboardCommand(SDLK_w, new DuckCommand(), InputType::Up);
+	input.BindKeyboardCommand(SDLK_e, new FartCommand(), InputType::Down);
 	while (doContinue)
 	{
 		const auto currentTime = std::chrono::high_resolution_clock::now();
 
 		float elapsed = std::chrono::duration<float>(currentTime - previousTime).count();
 
-		previousTime = std::chrono::high_resolution_clock::now();
+		previousTime = currentTime;
 		lag += elapsed;
 
 		doContinue = input.ProcessInput();
 
 		sceneManager.Update(elapsed);
 
-		while (lag >= MsPerFrame)
-		{
-			sceneManager.FixedUpdate(MsPerFrame);
-			lag -= MsPerFrame;
-		}
-
+		//while (lag >= MsPerFrame)
+		//{
+		//	sceneManager.FixedUpdate(MsPerFrame);
+		//	lag -= MsPerFrame;
+		//}
 		renderer.Render();
+
+		auto sleepTime = currentTime + std::chrono::milliseconds(MsPerFrame) - std::chrono::high_resolution_clock::now();
+		std::this_thread::sleep_for(sleepTime);
 
 	}
 }

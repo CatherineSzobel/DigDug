@@ -9,33 +9,56 @@ bool dae::InputManager::ProcessInput()
 		if (e.type == SDL_QUIT) {
 			return false;
 		}
-		if (e.type == SDL_KEYDOWN) {
-			std::cout << "e";
+		if (e.type == SDL_KEYDOWN) 
+		{
+			for (auto& command : m_KeyboardButtons)
+			{
+				if (command.second == InputType::Down && e.key.keysym.sym == command.first.first)
+				{
+					command.first.second.get()->Execute();
+				}
+			}
+			for (auto& command : m_KeyboardButtons)
+			{
+				if (command.second == InputType::Up && e.key.keysym.sym == command.first.first)
+				{
+					command.first.second.get()->Execute();
+				}
+			}
+		}
+		if (e.type == SDL_KEYUP)
+		{
+	
+			for (auto& keyboardButton : m_KeyboardButtons)
+			{
+				if (keyboardButton.second == InputType::Press && e.key.keysym.sym == keyboardButton.first.first)
+				{
+					keyboardButton.first.second.get()->Execute();
+				}
+			}
 		}
 		if (e.type == SDL_MOUSEBUTTONDOWN) {
 			
 		}
+		
 		ImGui_ImplSDL2_ProcessEvent(&e);
 	}
 	for (auto& controller : m_pControllers)
 	{
 		controller->Update();
-		for (auto& command : m_ConsoleButtons)
+		for (auto& button : m_ConsoleButtons)
 		{
-			if ( command.second == InputType::Up && controller->IsUp(command.first.first))
+			if ( button.second == InputType::Up && controller->IsUp(button.first.first))
 			{
-				command.first.second.get()->Execute();
-				break;
+				button.first.second.get()->Execute();
 			}
-			if (command.second == InputType::Press && controller->IsPressed(command.first.first))
+			if (button.second == InputType::Press && controller->IsPressed(button.first.first))
 			{
-				command.first.second.get()->Execute();
-				break;
+				button.first.second.get()->Execute();
 			}
-			if (command.second == InputType::Down && controller->IsDown(command.first.first))
+			if (button.second == InputType::Down && controller->IsDown(button.first.first))
 			{
-				command.first.second.get()->Execute();
-				break;
+				button.first.second.get()->Execute();
 			}
 		}
 	}

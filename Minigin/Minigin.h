@@ -16,6 +16,6 @@ namespace dae
 		Minigin& operator=(const Minigin& other) = delete;
 		Minigin& operator=(Minigin&& other) = delete;
 	private:
-		const float MsPerFrame = 0.2f; //Fixed timestep frequently used in unity
+		const int MsPerFrame = 1000/60; //Fixed timestep frequently used in unity
 	};
 }
