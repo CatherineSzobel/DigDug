@@ -63,7 +63,7 @@ dae::Minigin::Minigin(const std::string& dataPath)
 	}
 
 	Renderer::GetInstance().Init(g_window);
-
+	InputManager::GetInstance().Initialize();
 	ResourceManager::GetInstance().Init(dataPath);
 }
 
@@ -87,6 +87,11 @@ void dae::Minigin::Run(const std::function<void()>& load)
 	auto previousTime = std::chrono::high_resolution_clock::now();
 	float lag = 0.0f;
 	bool doContinue = true;
+	input.BindControllerCommand(ControllerButton::ButtonA, new JumpCommand(),InputType::Press);
+	input.BindControllerCommand(ControllerButton::ButtonB, new FireCommand(), InputType::Press);
+	input.BindControllerCommand(ControllerButton::ButtonX, new DuckCommand(), InputType::Up);
+	input.BindControllerCommand(ControllerButton::ButtonY, new FartCommand(), InputType::Hold);
+
 	while (doContinue)
 	{
 		const auto currentTime = std::chrono::high_resolution_clock::now();

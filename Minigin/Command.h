@@ -1,15 +1,41 @@
 #pragma once
+#include <iostream>
+#include "GameActor.h"
 namespace dae
 {
 	class Command
 	{
-	protected:
+	//protected:
+	//	GameActor* GetGameActor() { return m_GameActor; }
 	public:
-		Command() = default;
-		~Command() = default;
+		virtual ~Command() = default;
+		virtual void Execute() = 0;
+	//private:
+	//	GameActor* m_GameActor{};
+	};
 
-		//virtual void Execute() = 0;
-	private:
+	class FireCommand final : public Command
+	{
+	public:
+		void Execute() override { std::cout << "Fire!"; }
+	};
+
+	class JumpCommand final : public Command
+	{
+	public:
+		void Execute() override { std::cout << "Jump!"; }
+	};
+
+	class DuckCommand final : public Command
+	{
+	public:
+		void Execute() override { std::cout << "Duck!"; }
+	};
+
+	class FartCommand final : public Command
+	{
+	public:
+		void Execute() override { std::cout << "Fart!"; }
 	};
 }
 

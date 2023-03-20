@@ -51,133 +51,133 @@ void dae::Renderer::Render() const
 	SceneManager::GetInstance().Render();
 
 
-	ImGui_ImplOpenGL2_NewFrame();
-	ImGui_ImplSDL2_NewFrame(m_window);
-	ImGui::NewFrame();
+	//ImGui_ImplOpenGL2_NewFrame();
+	//ImGui_ImplSDL2_NewFrame(m_window);
+	//ImGui::NewFrame();
 
-	ImGui::Begin("Exercise 1");
-	static int i0 = 10;
-	ImGui::InputInt("# samples", &i0);
-	static int firstButtonClick = 0;
-	static int secondButtonClick = 0;
-	static int thirdButtonClick = 0;
-	static int fourthButton = 0;
+	//ImGui::Begin("Exercise 1");
+	//static int i0 = 10;
+	//ImGui::InputInt("# samples", &i0);
+	//static int firstButtonClick = 0;
+	//static int secondButtonClick = 0;
+	//static int thirdButtonClick = 0;
+	//static int fourthButton = 0;
 
 
 
-	if (ImGui::Button("Trash the cache"))
-	{
-		ImGui::Text("Please wait...");
-		GenerateDataExercise01(i0);
-		firstButtonClick++;
-	}
-	if (firstButtonClick & 1)
-	{
-		ImGui::PlotConfig conf; 
-		conf.values.ys = y_data;
-		conf.values.count = buf_size;
-		conf.values.color = ImColor(0, 255, 0);
-		conf.scale.min = -1;
-		conf.scale.max = 1;
-		conf.tooltip.show = true;
-		conf.tooltip.format = "x=%.2f, y=%.2f";
-		conf.grid_x.show = true;
-		conf.grid_y.show = true;
-		conf.frame_size = ImVec2(200, 100);
-		conf.line_thickness = 2.f;
-		ImGui::Plot("plot", conf);
-		//ImGui::PlotLines("plot1", y_data, buf_size, 0, (const char*)0, 10.f, 50.f, ImVec2(200.f, 100.f));
-	}
+	//if (ImGui::Button("Trash the cache"))
+	//{
+	//	ImGui::Text("Please wait...");
+	//	GenerateDataExercise01(i0);
+	//	firstButtonClick++;
+	//}
+	//if (firstButtonClick & 1)
+	//{
+	//	ImGui::PlotConfig conf; 
+	//	conf.values.ys = y_data;
+	//	conf.values.count = buf_size;
+	//	conf.values.color = ImColor(0, 255, 0);
+	//	conf.scale.min = -1;
+	//	conf.scale.max = 1;
+	//	conf.tooltip.show = true;
+	//	conf.tooltip.format = "x=%.2f, y=%.2f";
+	//	conf.grid_x.show = true;
+	//	conf.grid_y.show = true;
+	//	conf.frame_size = ImVec2(200, 100);
+	//	conf.line_thickness = 2.f;
+	//	ImGui::Plot("plot", conf);
+	//	//ImGui::PlotLines("plot1", y_data, buf_size, 0, (const char*)0, 10.f, 50.f, ImVec2(200.f, 100.f));
+	//}
 
-	ImGui::End();
+	//ImGui::End();
 
-	ImGui::Begin("Exercise 2");
-	static int i1 = 100;
-	//	GenerateData(i1);
-	ImGui::InputInt("# samples", &i1);
-	if (ImGui::Button("Trash the cache with GameObject"))
-	{
-		ImGui::Text("Please wait...");
-		secondButtonClick++;
-		GenerateDataExercise02(i1);
-	}
-	if (secondButtonClick & 1)
-	{
-		ImGui::PlotConfig conf;
-		conf.values.ys = y_data2;
-		conf.values.count = buf_size;
-		conf.scale.min = -1;
-		conf.scale.max = 1;
-		conf.tooltip.show = true;
-		conf.values.color = ImColor(255, 0, 0);
-		conf.tooltip.format = "x=%.2f, y=%.2f";
-		conf.grid_x.show = true;
-		conf.grid_y.show = true;
-		conf.frame_size = ImVec2(200, 100);
-		conf.line_thickness = 2.f;
-		ImGui::Plot("plot", conf);
-		//ImGui::PlotLines("plot2", y_data2, buf_size, 0, (const char*)0, 10.f, 50.f, ImVec2(200.f, 100.f));
+	//ImGui::Begin("Exercise 2");
+	//static int i1 = 100;
+	////	GenerateData(i1);
+	//ImGui::InputInt("# samples", &i1);
+	//if (ImGui::Button("Trash the cache with GameObject"))
+	//{
+	//	ImGui::Text("Please wait...");
+	//	secondButtonClick++;
+	//	GenerateDataExercise02(i1);
+	//}
+	//if (secondButtonClick & 1)
+	//{
+	//	ImGui::PlotConfig conf;
+	//	conf.values.ys = y_data2;
+	//	conf.values.count = buf_size;
+	//	conf.scale.min = -1;
+	//	conf.scale.max = 1;
+	//	conf.tooltip.show = true;
+	//	conf.values.color = ImColor(255, 0, 0);
+	//	conf.tooltip.format = "x=%.2f, y=%.2f";
+	//	conf.grid_x.show = true;
+	//	conf.grid_y.show = true;
+	//	conf.frame_size = ImVec2(200, 100);
+	//	conf.line_thickness = 2.f;
+	//	ImGui::Plot("plot", conf);
+	//	//ImGui::PlotLines("plot2", y_data2, buf_size, 0, (const char*)0, 10.f, 50.f, ImVec2(200.f, 100.f));
 
-	}
+	//}
 
-	//start plot
+	////start plot
 
-	if (ImGui::Button("Trash the cache with GameObject3DAlt"))
-	{
-		//start plot
-		ImGui::Text("Please wait...");
-		GenerateDataExercise02Alt(i1);
-		thirdButtonClick++;
-	}
-	if (thirdButtonClick & 1)
-	{
-		ImGui::PlotConfig conf; 
-		conf.values.ys = y_data3;
-		conf.values.count = buf_size;
-		conf.values.color = ImColor(0, 255, 0);
-		conf.scale.min = -1;
-		conf.scale.max = 1;
-		conf.tooltip.show = true;
-		conf.tooltip.format = "x=%.2f, y=%.2f";
-		conf.grid_x.show = true;
-		conf.grid_y.show = true;
-		conf.frame_size = ImVec2(200, 100);
-		conf.line_thickness = 2.f;
-		ImGui::Plot("plot", conf);
-	
-		//ImGui::PlotLines("plot3", y_data3, buf_size,0,(const char*)0,10.f,50.f,ImVec2(200.f,100.f));
+	//if (ImGui::Button("Trash the cache with GameObject3DAlt"))
+	//{
+	//	//start plot
+	//	ImGui::Text("Please wait...");
+	//	GenerateDataExercise02Alt(i1);
+	//	thirdButtonClick++;
+	//}
+	//if (thirdButtonClick & 1)
+	//{
+	//	ImGui::PlotConfig conf; 
+	//	conf.values.ys = y_data3;
+	//	conf.values.count = buf_size;
+	//	conf.values.color = ImColor(0, 255, 0);
+	//	conf.scale.min = -1;
+	//	conf.scale.max = 1;
+	//	conf.tooltip.show = true;
+	//	conf.tooltip.format = "x=%.2f, y=%.2f";
+	//	conf.grid_x.show = true;
+	//	conf.grid_y.show = true;
+	//	conf.frame_size = ImVec2(200, 100);
+	//	conf.line_thickness = 2.f;
+	//	ImGui::Plot("plot", conf);
+	//
+	//	//ImGui::PlotLines("plot3", y_data3, buf_size,0,(const char*)0,10.f,50.f,ImVec2(200.f,100.f));
 
-	}
-	if (ImGui::Button("Trash the cache with Combined"))
-	{
-		//start plot
-		ImGui::Text("Please wait...");
-		fourthButton++;
-	}
-	if (fourthButton & 1)
-	{
-		const float* y_datas[] = { y_data2, y_data3 };
-		ImU32 colors[2] = { ImColor(255, 0, 0) ,ImColor(0, 255, 0) };
-		ImGui::PlotConfig conf; // this line is optional
-		conf.values.ys_list = y_datas;
-		conf.values.ys_count = 2;
-		conf.values.colors = colors;
-		conf.values.count = buf_size;
-		conf.scale.min = -1;
-		conf.scale.max = 1;
-		conf.grid_x.show = true;
-		conf.grid_y.size = 2.f;
-		conf.grid_y.show = true;
-		conf.frame_size = ImVec2(200, 100);
-		conf.line_thickness = 2.f;
-		ImGui::Plot("plot", conf);
+	//}
+	//if (ImGui::Button("Trash the cache with Combined"))
+	//{
+	//	//start plot
+	//	ImGui::Text("Please wait...");
+	//	fourthButton++;
+	//}
+	//if (fourthButton & 1)
+	//{
+	//	const float* y_datas[] = { y_data2, y_data3 };
+	//	ImU32 colors[2] = { ImColor(255, 0, 0) ,ImColor(0, 255, 0) };
+	//	ImGui::PlotConfig conf; // this line is optional
+	//	conf.values.ys_list = y_datas;
+	//	conf.values.ys_count = 2;
+	//	conf.values.colors = colors;
+	//	conf.values.count = buf_size;
+	//	conf.scale.min = -1;
+	//	conf.scale.max = 1;
+	//	conf.grid_x.show = true;
+	//	conf.grid_y.size = 2.f;
+	//	conf.grid_y.show = true;
+	//	conf.frame_size = ImVec2(200, 100);
+	//	conf.line_thickness = 2.f;
+	//	ImGui::Plot("plot", conf);
 
-	}
-	ImGui::End();
+	//}
+	//ImGui::End();
 
-	ImGui::ShowDemoWindow();
-	ImGui::Render();
-	ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
+	//ImGui::ShowDemoWindow();
+	//ImGui::Render();
+	//ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
 
 
 	SDL_RenderPresent(m_renderer);
