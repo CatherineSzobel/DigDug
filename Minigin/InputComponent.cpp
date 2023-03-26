@@ -2,12 +2,12 @@
 #include "Command.h"
 dae::InputComponent::~InputComponent()
 {
-	for (const auto button : m_ConsoleButtons)
+	for (const auto& button : m_ConsoleButtons)
 	{
 		delete button.first.second;
 	}
 
-	for (const auto button : m_KeyboardButtons)
+	for (const auto& button : m_KeyboardButtons)
 	{
 		delete button.first.second;
 	}

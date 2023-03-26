@@ -23,7 +23,6 @@ namespace dae
 		InputComponent& operator=(const InputComponent& other) = delete;
 		InputComponent& operator=(InputComponent&& other) = delete;
 
-		//virtual void Initialize() override;
 		virtual void Render() override;
 		virtual void Update(float deltaTime) override;
 		virtual void FixedUpdate(float deltaTime) override;
