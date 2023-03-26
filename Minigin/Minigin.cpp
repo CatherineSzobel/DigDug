@@ -88,14 +88,14 @@ void dae::Minigin::Run(const std::function<void()>& load)
 	auto previousTime = std::chrono::high_resolution_clock::now();
 	float lag = 0.0f;
 	bool doContinue = true;
-	input.BindControllerCommand(ControllerButton::ButtonA, new JumpCommand(),InputType::Press);
-	input.BindControllerCommand(ControllerButton::ButtonB, new FireCommand(), InputType::Press);
-	input.BindControllerCommand(ControllerButton::ButtonX, new DuckCommand(), InputType::Up);
-	input.BindControllerCommand(ControllerButton::ButtonY, new FartCommand(), InputType::Down);
+	//input.BindControllerCommand(ControllerButton::ButtonA, new JumpCommand(),InputType::Press);
+	//input.BindControllerCommand(ControllerButton::ButtonB, new FireCommand(), InputType::Press);
+	//input.BindControllerCommand(ControllerButton::ButtonX, new DuckCommand(), InputType::Up);
+	//input.BindControllerCommand(ControllerButton::ButtonY, new FartCommand(), InputType::Down);
 
-	input.BindKeyboardCommand(SDLK_q, new JumpCommand(), InputType::Press);
-	input.BindKeyboardCommand(SDLK_w, new DuckCommand(), InputType::Up);
-	input.BindKeyboardCommand(SDLK_e, new FartCommand(), InputType::Down);
+	//input.BindKeyboardCommand(SDLK_q, new JumpCommand(), InputType::Press);
+	//input.BindKeyboardCommand(SDLK_w, new DuckCommand(), InputType::Up);
+	//input.BindKeyboardCommand(SDLK_e, new FartCommand(), InputType::Down);
 	while (doContinue)
 	{
 		const auto currentTime = std::chrono::high_resolution_clock::now();

@@ -67,26 +67,26 @@ bool dae::InputManager::ProcessInput()
 
 void dae::InputManager::Initialize()
 {
-	for (DWORD i = 0; i < XUSER_MAX_COUNT; i++)
-	{
+	//for (DWORD i = 0; i < XUSER_MAX_COUNT; i++)
+	//{
 
-		ZeroMemory(&m_CurrentState[i], sizeof(XINPUT_STATE));
+	//	ZeroMemory(&m_CurrentState[i], sizeof(XINPUT_STATE));
 
-		auto dwResult = XInputGetState(i, &m_CurrentState[i]);
+	//	auto dwResult = XInputGetState(i, &m_CurrentState[i]);
 
-		//determine if the controller is connected
-		if (dwResult == ERROR_SUCCESS)
-		{
-			//Controller is connected
-			m_pControllers.emplace_back(new Controller(i));
-		}
-		else
-		{
-			ZeroMemory(&m_CurrentState[i], sizeof(XINPUT_STATE));
-			break;
-			//Controller is not connected
-		}
-	}
+	//	//determine if the controller is connected
+	//	if (dwResult == ERROR_SUCCESS)
+	//	{
+	//		//Controller is connected
+	//		m_pControllers.emplace_back(new Controller(i));
+	//	}
+	//	else
+	//	{
+	//		ZeroMemory(&m_CurrentState[i], sizeof(XINPUT_STATE));
+	//		break;
+	//		//Controller is not connected
+	//	}
+	//}
 }
 
 void dae::InputManager::BindControllerCommand(ControllerButton button, Command* command, InputType inputType)
@@ -96,5 +96,19 @@ void dae::InputManager::BindControllerCommand(ControllerButton button, Command* 
 
 void dae::InputManager::BindKeyboardCommand(SDL_KeyCode key, Command* command, InputType inputType)
 {
+	
 	m_KeyboardButtons.emplace(std::make_pair(key, std::unique_ptr<Command>(command)), inputType);
+}
+
+void dae::InputManager::AddController(GameObject* , int controllerID)
+{
+	ZeroMemory(&m_CurrentState[controllerID], sizeof(XINPUT_STATE));
+
+	auto dwResult = XInputGetState(controllerID, &m_CurrentState[controllerID]);
+	if (dwResult == ERROR_SUCCESS)
+	{
+		//Controller is connected
+		m_pControllers.emplace_back(new Controller(controllerID));
+	}
+	//m_ConsoleButtons = gameObject->GetComponent<InputComponent>()->GetConsoleButtons();
 }

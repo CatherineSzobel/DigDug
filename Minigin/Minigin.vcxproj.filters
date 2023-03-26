@@ -123,6 +123,9 @@
     <ClInclude Include="ControllerButton.h">
       <Filter>Header Files\Input</Filter>
     </ClInclude>
+    <ClInclude Include="InputComponent.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ResourceManager.cpp">
@@ -205,6 +208,9 @@
     </ClCompile>
     <ClCompile Include="Command.cpp">
       <Filter>Source Files\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="InputComponent.cpp">
+      <Filter>Source Files\Components</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

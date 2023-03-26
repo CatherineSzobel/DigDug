@@ -10,8 +10,11 @@
 #include "Command.h"
 #include "Controller.h"
 #include "ControllerButton.h"
+#include "InputComponent.h"
 namespace dae
 {
+	using ControllerCommandsMap = std::map<std::pair<ControllerButton, std::unique_ptr<Command>>, InputType>;
+	using KeyboardCommandsMap = std::map<std::pair<SDL_KeyCode, std::unique_ptr<Command>>, InputType>;
 	class InputManager final : public Singleton<InputManager>
 	{
 	public:
@@ -19,16 +22,17 @@ namespace dae
 		void Initialize();
 		void BindControllerCommand(ControllerButton button, Command* command, InputType inputType);
 		void BindKeyboardCommand(SDL_KeyCode key, Command* command, InputType inputType);
+
+		void AddController(GameObject* gameObject, int controllerID);
+
 	private:
 		XINPUT_STATE m_CurrentState[XUSER_MAX_COUNT];
 		XINPUT_STATE m_PreviousState{};
 
 		//XINPUT_KEYSTROKE m_CurrentKeyStroke[XUSER_MAX_COUNT];
 
-		using ControllerCommandsMap = std::map<std::pair<ControllerButton, std::unique_ptr<Command>>,InputType>;
 		ControllerCommandsMap m_ConsoleButtons{};
-		
-		using KeyboardCommandsMap = std::map<std::pair<SDL_KeyCode, std::unique_ptr<Command>>, InputType>;
+
 		KeyboardCommandsMap m_KeyboardButtons{};
 
 		std::vector<std::unique_ptr<Controller>> m_pControllers{};

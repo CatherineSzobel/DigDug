@@ -6,8 +6,11 @@
 #include <memory>
 #include "Command.h"
 #include "ControllerButton.h"
+#include <map>
+#include <SDL.h>
 namespace dae
 {
+
 	class Controller final
 	{
 		class ControllerImpl final
@@ -51,7 +54,6 @@ namespace dae
 	private:
 		//void DeadzoneLeftThumbstick();
 		//void DeadzoneRightThumbStick();
-
 		class ControllerImpl;
 		ControllerImpl* pImpl;
 	};
