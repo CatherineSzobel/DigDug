@@ -1,11 +1,12 @@
 #include "Controller.h"
 
 //Implementation
-dae::Controller::ControllerImpl::ControllerImpl(unsigned int controllerID)
+dae::Controller::ControllerImpl::ControllerImpl(unsigned int controllerID, ControllerCommandsMap consoleButtons)
 {
 	ZeroMemory(&m_PreviousState, sizeof(XINPUT_STATE));
 	ZeroMemory(&m_CurrentState, sizeof(XINPUT_STATE));
 	m_ControllerIndex = controllerID;
+	m_ConsoleButtons = std::move(consoleButtons);
 }
 
 void dae::Controller::ControllerImpl::Update()
@@ -35,9 +36,9 @@ bool dae::Controller::ControllerImpl::IsPressed(unsigned int button) const
 	return  ((m_CurrentState.Gamepad.wButtons & static_cast<int>(button)) != 0);
 }
 
-dae::Controller::Controller(int controllerID)
+dae::Controller::Controller(int controllerID, ControllerCommandsMap consoleButtons)
 {
-    pImpl = new ControllerImpl(controllerID);
+    pImpl = new ControllerImpl(controllerID, consoleButtons);
 }
 dae::Controller::~Controller()
 {
@@ -62,4 +63,9 @@ bool dae::Controller::IsUp(ControllerButton button) const
 bool dae::Controller::IsPressed(ControllerButton button) const
 {
 	return pImpl->IsPressed(static_cast<unsigned int>(button));
+}
+
+dae::ControllerCommandsMap dae::Controller::GetButtons()
+{
+	return pImpl->GetButtonsImpl();
 }

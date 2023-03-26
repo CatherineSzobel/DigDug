@@ -9,56 +9,57 @@ bool dae::InputManager::ProcessInput()
 		if (e.type == SDL_QUIT) {
 			return false;
 		}
-		if (e.type == SDL_KEYDOWN) 
+		if (e.type == SDL_KEYDOWN)
 		{
 			for (auto& command : m_KeyboardButtons)
 			{
-				if (command.second == InputType::Down && e.key.keysym.sym == command.first.first)
+				if (command.second == InputType::Press && e.key.keysym.sym == command.first.first)
 				{
-					command.first.second.get()->Execute();
+					command.first.second->Execute();
 				}
 			}
-			for (auto& command : m_KeyboardButtons)
-			{
-				if (command.second == InputType::Up && e.key.keysym.sym == command.first.first)
+			/*	for (auto& command : m_KeyboardButtons)
 				{
-					command.first.second.get()->Execute();
-				}
-			}
+					if (command.second == InputType::Up && e.key.keysym.sym == command.first.first)
+					{
+						command.first.second.get()->Execute();
+					}
+				}*/
 		}
 		if (e.type == SDL_KEYUP)
 		{
-	
+
 			for (auto& keyboardButton : m_KeyboardButtons)
 			{
-				if (keyboardButton.second == InputType::Press && e.key.keysym.sym == keyboardButton.first.first)
+				if (keyboardButton.second == InputType::Down && e.key.keysym.sym == keyboardButton.first.first)
 				{
-					keyboardButton.first.second.get()->Execute();
+					keyboardButton.first.second->Execute();
 				}
 			}
 		}
 		if (e.type == SDL_MOUSEBUTTONDOWN) {
-			
+
 		}
-		
+
 		ImGui_ImplSDL2_ProcessEvent(&e);
 	}
 	for (auto& controller : m_pControllers)
 	{
 		controller->Update();
-		for (auto& button : m_ConsoleButtons)
+		for (auto& button : controller->GetButtons())
 		{
-			if ( button.second == InputType::Up && controller->IsUp(button.first.first))
+			auto buttons = controller->GetButtons();
+			if (button.second == InputType::Up && controller->IsUp(button.first.first))
 			{
-				button.first.second.get()->Execute();
+				button.first.second->Execute();
 			}
 			if (button.second == InputType::Press && controller->IsPressed(button.first.first))
 			{
-				button.first.second.get()->Execute();
+				button.first.second->Execute();
 			}
 			if (button.second == InputType::Down && controller->IsDown(button.first.first))
 			{
-				button.first.second.get()->Execute();
+				button.first.second->Execute();
 			}
 		}
 	}
@@ -91,16 +92,16 @@ void dae::InputManager::Initialize()
 
 void dae::InputManager::BindControllerCommand(ControllerButton button, Command* command, InputType inputType)
 {
-	m_ConsoleButtons.emplace(std::make_pair(button, std::unique_ptr<Command>(command)),inputType);
+	m_ConsoleButtons.emplace(std::make_pair(button, command), inputType);
 }
 
 void dae::InputManager::BindKeyboardCommand(SDL_KeyCode key, Command* command, InputType inputType)
 {
-	
-	m_KeyboardButtons.emplace(std::make_pair(key, std::unique_ptr<Command>(command)), inputType);
+
+	m_KeyboardButtons.emplace(std::make_pair(key, command), inputType);
 }
 
-void dae::InputManager::AddController(GameObject* , int controllerID)
+void dae::InputManager::AddController(GameObject* gameObject, int controllerID)
 {
 	ZeroMemory(&m_CurrentState[controllerID], sizeof(XINPUT_STATE));
 
@@ -108,7 +109,11 @@ void dae::InputManager::AddController(GameObject* , int controllerID)
 	if (dwResult == ERROR_SUCCESS)
 	{
 		//Controller is connected
-		m_pControllers.emplace_back(new Controller(controllerID));
+		m_pControllers.emplace_back(new Controller(controllerID, gameObject->GetComponent<InputComponent>()->GetButtons()));
 	}
-	//m_ConsoleButtons = gameObject->GetComponent<InputComponent>()->GetConsoleButtons();
+}
+
+void dae::InputManager::AddKeyboardController(GameObject* gameObject)
+{
+	m_KeyboardButtons = gameObject->GetComponent<InputComponent>()->GetKeyboardButtons();
 }

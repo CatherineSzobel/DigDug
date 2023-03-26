@@ -5,17 +5,19 @@
 #include <map>
 #include <memory>
 #include "GameObject.h"
-//#include "Command.h"
 
 namespace dae
 {
+	class Command;
+	using ControllerCommandsMap = std::map<std::pair<ControllerButton, Command*>, InputType>;
+	using KeyboardCommandsMap = std::map<std::pair<SDL_KeyCode, Command*>, InputType>;
 	class InputComponent final : public BaseComponent
 	{
 	public:
 		// Inherited via BaseComponent
 		explicit InputComponent() {};
 
-		virtual ~InputComponent() = default;
+		virtual ~InputComponent();
 		InputComponent(const InputComponent& other) = delete;
 		InputComponent(InputComponent&& other) = delete;
 		InputComponent& operator=(const InputComponent& other) = delete;
@@ -31,10 +33,17 @@ namespace dae
 		void MoveRight();
 		void MoveDown();
 
-
+		void BindControllerCommand(ControllerButton button, Command* command, InputType inputType);
+		void BindKeyboardCommand(SDL_KeyCode key, Command* command, InputType inputType);
+		void SetMovementSpeed(float movementSpeed);
+		ControllerCommandsMap GetButtons();
+		KeyboardCommandsMap GetKeyboardButtons();
 	private:
-		//using ControllerCommandsMap = std::map<std::pair<ControllerButton, std::unique_ptr<Command>>, InputType>;
+
+		ControllerCommandsMap m_ConsoleButtons{};
+		KeyboardCommandsMap m_KeyboardButtons{};
+
 		float m_MovementSpeed{ 5.f };
-		
+
 	};
 }

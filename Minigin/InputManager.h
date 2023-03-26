@@ -13,8 +13,8 @@
 #include "InputComponent.h"
 namespace dae
 {
-	using ControllerCommandsMap = std::map<std::pair<ControllerButton, std::unique_ptr<Command>>, InputType>;
-	using KeyboardCommandsMap = std::map<std::pair<SDL_KeyCode, std::unique_ptr<Command>>, InputType>;
+	using ControllerCommandsMap = std::map<std::pair<ControllerButton, Command*>, InputType>;
+	using KeyboardCommandsMap = std::map<std::pair<SDL_KeyCode, Command*>, InputType>;
 	class InputManager final : public Singleton<InputManager>
 	{
 	public:
@@ -24,6 +24,7 @@ namespace dae
 		void BindKeyboardCommand(SDL_KeyCode key, Command* command, InputType inputType);
 
 		void AddController(GameObject* gameObject, int controllerID);
+		void AddKeyboardController(GameObject* gameObject);
 
 	private:
 		XINPUT_STATE m_CurrentState[XUSER_MAX_COUNT];
