@@ -90,16 +90,16 @@ void dae::InputManager::Initialize()
 	//}
 }
 
-void dae::InputManager::BindControllerCommand(ControllerButton button, Command* command, InputType inputType)
-{
-	m_ConsoleButtons.emplace(std::make_pair(button, command), inputType);
-}
-
-void dae::InputManager::BindKeyboardCommand(SDL_KeyCode key, Command* command, InputType inputType)
-{
-
-	m_KeyboardButtons.emplace(std::make_pair(key, command), inputType);
-}
+//void dae::InputManager::BindControllerCommand(ControllerButton button, Command* command, InputType inputType)
+//{
+//	m_ConsoleButtons.emplace(std::make_pair(button, command), inputType);
+//}
+//
+//void dae::InputManager::BindKeyboardCommand(SDL_KeyCode key, Command* command, InputType inputType)
+//{
+//
+//	m_KeyboardButtons.emplace(std::make_pair(key, command), inputType);
+//}
 
 void dae::InputManager::AddController(GameObject* gameObject, int controllerID)
 {

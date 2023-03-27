@@ -6,13 +6,21 @@ namespace dae
 {
 	class Command
 	{
+	public:
+		Command() {};
+		virtual ~Command() = default;
+		virtual void Execute() = 0;
+	};
+
+	class GameObjectCommand
+	{
 	protected:
 		GameObject* GetGameActor() { return m_GameActor; }
 	public:
-		Command(GameObject* owner)
-			:m_GameActor{owner}
+		GameObjectCommand(GameObject* owner)
+			:m_GameActor{ owner }
 		{};
-		virtual ~Command() = default;
+		virtual ~GameObjectCommand() = default;
 		virtual void Execute() = 0;
 	private:
 		GameObject* m_GameActor{};
@@ -39,46 +47,38 @@ namespace dae
 	//	void Execute() override { std::cout << "Fart!"; }
 	//};
 
-	class MoveUpDownCommand final : public Command
+	class MoveUpDownCommand final : public GameObjectCommand
 	{
 	public:
-		MoveUpDownCommand(GameObject* owner, bool moveUp) : Command{ owner }, m_MoveUp{ moveUp } {};
-		void Execute() override
+		MoveUpDownCommand(GameObject* owner, int direction ) : GameObjectCommand{ owner }, m_Direction{ direction } {};
+		virtual ~MoveUpDownCommand() = default;
+		virtual void Execute() override
 		{
+			auto pos = GetGameActor()->GetLocalPosition();
+			auto movementSpeed = GetGameActor()->GetComponent<InputComponent>()->GetMovementSpeed();
 
-			if (m_MoveUp)
-			{
-				GetGameActor()->GetComponent<InputComponent>()->MoveUp();
-			}
-			else
-			{
-				GetGameActor()->GetComponent<InputComponent>()->MoveDown();
-			}
+			GetGameActor()->SetLocalPosition({pos.x,pos.y + (movementSpeed * m_Direction) , pos.z});
 
 		}
 	private:
-		bool m_MoveUp{ false };
+		int m_Direction{ };
 	};
 
-	class MoveLeftRightCommand final : public Command
+	class MoveLeftRightCommand final : public GameObjectCommand
 	{
 	public:
-		MoveLeftRightCommand(GameObject* owner, bool moveLeft) : Command(owner), m_MoveLeft{ moveLeft } {};
-		void Execute() override
+		MoveLeftRightCommand(GameObject* owner, int direction) : GameObjectCommand(owner), m_Direction{ direction } {};
+		virtual ~MoveLeftRightCommand() = default;
+		virtual void Execute() override
 		{
+			auto pos = GetGameActor()->GetLocalPosition();
+			auto movementSpeed = GetGameActor()->GetComponent<InputComponent>()->GetMovementSpeed();
 
-			if (m_MoveLeft)
-			{
-				GetGameActor()->GetComponent<InputComponent>()->MoveLeft();
-			}
-			else
-			{
-				GetGameActor()->GetComponent<InputComponent>()->MoveRight();
-			}
+			GetGameActor()->SetLocalPosition({ pos.x + (movementSpeed * m_Direction),pos.y  , pos.z });
 
 		}
 	private:
-		bool m_MoveLeft { false };
+		int m_Direction{};
 	};
 }
 

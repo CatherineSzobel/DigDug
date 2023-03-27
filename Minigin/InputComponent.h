@@ -8,9 +8,9 @@
 
 namespace dae
 {
-	class Command;
-	using ControllerCommandsMap = std::map<std::pair<ControllerButton, Command*>, InputType>;
-	using KeyboardCommandsMap = std::map<std::pair<SDL_KeyCode, Command*>, InputType>;
+	class GameObjectCommand;
+	using ControllerCommandsMap = std::map<std::pair<ControllerButton, GameObjectCommand*>, InputType>;
+	using KeyboardCommandsMap = std::map<std::pair<SDL_KeyCode, GameObjectCommand*>, InputType>;
 	class InputComponent final : public BaseComponent
 	{
 	public:
@@ -27,22 +27,20 @@ namespace dae
 		virtual void Update(float deltaTime) override;
 		virtual void FixedUpdate(float deltaTime) override;
 
-		void MoveUp();
-		void MoveLeft();
-		void MoveRight();
-		void MoveDown();
+		void BindControllerCommand(ControllerButton button, GameObjectCommand* command, InputType inputType);
+		void BindKeyboardCommand(SDL_KeyCode key, GameObjectCommand* command, InputType inputType);
 
-		void BindControllerCommand(ControllerButton button, Command* command, InputType inputType);
-		void BindKeyboardCommand(SDL_KeyCode key, Command* command, InputType inputType);
+		ControllerCommandsMap GetButtons() const;
+		KeyboardCommandsMap GetKeyboardButtons() const;
+
 		void SetMovementSpeed(float movementSpeed);
-		ControllerCommandsMap GetButtons();
-		KeyboardCommandsMap GetKeyboardButtons();
+		const float GetMovementSpeed() { return m_MovementSpeed; }
 	private:
 
 		ControllerCommandsMap m_ConsoleButtons{};
 		KeyboardCommandsMap m_KeyboardButtons{};
 
-		float m_MovementSpeed{ 5.f };
+		float m_MovementSpeed{};
 
 	};
 }

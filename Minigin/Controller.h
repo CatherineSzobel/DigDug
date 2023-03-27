@@ -10,7 +10,7 @@
 #include <SDL.h>
 namespace dae
 {
-	using ControllerCommandsMap = std::map<std::pair<ControllerButton, Command*>, InputType>;
+	using ControllerCommandsMap = std::map<std::pair<ControllerButton, GameObjectCommand*>, InputType>;
 
 	class Controller final
 	{
