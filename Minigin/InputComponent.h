@@ -8,9 +8,9 @@
 
 namespace dae
 {
-	class GameObjectCommand;
-	using ControllerCommandsMap = std::map<std::pair<ControllerButton, GameObjectCommand*>, InputType>;
-	using KeyboardCommandsMap = std::map<std::pair<SDL_KeyCode, GameObjectCommand*>, InputType>;
+	class Command;
+	using ControllerCommandsMap = std::map<std::pair<ControllerButton, Command*>, InputType>;
+	using KeyboardCommandsMap = std::map<std::pair<SDL_KeyCode, Command*>, InputType>;
 	class InputComponent final : public BaseComponent
 	{
 	public:
@@ -27,8 +27,8 @@ namespace dae
 		virtual void Update(float deltaTime) override;
 		virtual void FixedUpdate(float deltaTime) override;
 
-		void BindControllerCommand(ControllerButton button, GameObjectCommand* command, InputType inputType);
-		void BindKeyboardCommand(SDL_KeyCode key, GameObjectCommand* command, InputType inputType);
+		void BindControllerCommand(ControllerButton button, Command* command, InputType inputType);
+		void BindKeyboardCommand(SDL_KeyCode key, Command* command, InputType inputType);
 
 		ControllerCommandsMap GetButtons() const;
 		KeyboardCommandsMap GetKeyboardButtons() const;

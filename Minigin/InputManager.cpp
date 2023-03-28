@@ -5,6 +5,10 @@
 bool dae::InputManager::ProcessInput()
 {
 	SDL_Event e;
+	//sdl keyboard state
+	//keycode to scancode -> held
+	//not exit when execute command
+
 	while (SDL_PollEvent(&e)) {
 		if (e.type == SDL_QUIT) {
 			return false;
@@ -13,7 +17,7 @@ bool dae::InputManager::ProcessInput()
 		{
 			for (auto& command : m_KeyboardButtons)
 			{
-				if (command.second == InputType::Press && e.key.keysym.sym == command.first.first)
+				if (command.second == InputType::Press and e.key.keysym.sym == command.first.first )
 				{
 					command.first.second->Execute();
 				}

@@ -1,8 +1,5 @@
 #pragma once
-#define WIN32_LEAN_AND_MEAN
-#include <Windows.h>
-#include <Xinput.h>
-#pragma comment(lib, "xinput.lib")
+
 #include <memory>
 #include "Command.h"
 #include "ControllerButton.h"
@@ -10,11 +7,10 @@
 #include <SDL.h>
 namespace dae
 {
-	using ControllerCommandsMap = std::map<std::pair<ControllerButton, GameObjectCommand*>, InputType>;
+	using ControllerCommandsMap = std::map<std::pair<ControllerButton, Command*>, InputType>;
 
 	class Controller final
 	{
-		//using ControllerCommandsMap = std::map<std::pair<ControllerButton, std::unique_ptr<Command>>, InputType>;
 		class ControllerImpl final
 		{
 		public:

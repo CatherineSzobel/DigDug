@@ -2,6 +2,7 @@
 #include <iostream>
 #include "GameObject.h"
 #include "InputComponent.h"
+#include "Time.h"
 namespace dae
 {
 	class Command
@@ -12,7 +13,7 @@ namespace dae
 		virtual void Execute() = 0;
 	};
 
-	class GameObjectCommand
+	class GameObjectCommand : public Command
 	{
 	protected:
 		GameObject* GetGameActor() { return m_GameActor; }
@@ -56,8 +57,8 @@ namespace dae
 		{
 			auto pos = GetGameActor()->GetLocalPosition();
 			auto movementSpeed = GetGameActor()->GetComponent<InputComponent>()->GetMovementSpeed();
-
-			GetGameActor()->SetLocalPosition({pos.x,pos.y + (movementSpeed * m_Direction) , pos.z});
+			auto elapsed = Time::GetInstance().GetDeltaTime();
+			GetGameActor()->SetLocalPosition({pos.x,pos.y + ((movementSpeed * m_Direction) * elapsed)  , pos.z});
 
 		}
 	private:
@@ -67,14 +68,16 @@ namespace dae
 	class MoveLeftRightCommand final : public GameObjectCommand
 	{
 	public:
-		MoveLeftRightCommand(GameObject* owner, int direction) : GameObjectCommand(owner), m_Direction{ direction } {};
+		MoveLeftRightCommand(GameObject* owner, int direction) : GameObjectCommand(owner), m_Direction{ direction } 
+		{};
 		virtual ~MoveLeftRightCommand() = default;
 		virtual void Execute() override
 		{
 			auto pos = GetGameActor()->GetLocalPosition();
 			auto movementSpeed = GetGameActor()->GetComponent<InputComponent>()->GetMovementSpeed();
+			auto elapsed = Time::GetInstance().GetDeltaTime();
 
-			GetGameActor()->SetLocalPosition({ pos.x + (movementSpeed * m_Direction),pos.y  , pos.z });
+			GetGameActor()->SetLocalPosition({ pos.x + ((movementSpeed * m_Direction) * elapsed) ,pos.y  , pos.z });
 
 		}
 	private:

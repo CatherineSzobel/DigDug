@@ -25,12 +25,12 @@ void dae::InputComponent::FixedUpdate(float)
 {
 }
 
-void dae::InputComponent::BindControllerCommand(ControllerButton button, GameObjectCommand* command, InputType inputType)
+void dae::InputComponent::BindControllerCommand(ControllerButton button, Command* command, InputType inputType)
 {
 	m_ConsoleButtons.emplace(std::make_pair(button, command), inputType);
 }
 
-void dae::InputComponent::BindKeyboardCommand(SDL_KeyCode key, GameObjectCommand* command, InputType inputType)
+void dae::InputComponent::BindKeyboardCommand(SDL_KeyCode key, Command* command, InputType inputType)
 {
 	m_KeyboardButtons.emplace(std::make_pair(key, command), inputType);
 }
