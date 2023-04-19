@@ -2,38 +2,55 @@
 #include "InputManager.h"
 #include <iostream>
 #include "..\3rdParty\imgui\imgui_impl_sdl2.h"
+dae::InputManager::~InputManager()
+{
+	for (const auto& buttons : m_GlobalKeyboardButtons)
+	{
+		delete buttons.first.second;
+	}
+}
 bool dae::InputManager::ProcessInput()
 {
 	SDL_Event e;
+	//sdl keyboard state
+	//keycode to scancode -> held
+	//not exit when execute command
+	const Uint8* State = SDL_GetKeyboardState(NULL);
+	for (auto& button : m_GlobalKeyboardButtons)
+	{
+		if (State[button.first.first] && button.second == InputType::Press)
+		{
+			button.first.second->Execute();
+		}
+	}
+	for (auto& button : m_KeyboardButtons)
+	{
+		if (State[button.first.first] && button.second == InputType::Press)
+		{
+			button.first.second->Execute();
+		}
+	}
+
 	while (SDL_PollEvent(&e)) {
 		if (e.type == SDL_QUIT) {
 			return false;
 		}
-		if (e.type == SDL_KEYDOWN)
-		{
-			for (auto& command : m_KeyboardButtons)
-			{
-				if (command.second == InputType::Press && e.key.keysym.sym == command.first.first)
-				{
-					command.first.second->Execute();
-				}
-			}
-			/*	for (auto& command : m_KeyboardButtons)
-				{
-					if (command.second == InputType::Up && e.key.keysym.sym == command.first.first)
-					{
-						command.first.second.get()->Execute();
-					}
-				}*/
-		}
+
 		if (e.type == SDL_KEYUP)
 		{
 
 			for (auto& keyboardButton : m_KeyboardButtons)
 			{
-				if (keyboardButton.second == InputType::Down && e.key.keysym.sym == keyboardButton.first.first)
+				if (keyboardButton.second == InputType::Down && e.key.keysym.scancode == keyboardButton.first.first)
 				{
 					keyboardButton.first.second->Execute();
+				}
+			}
+			for (auto& globalkeyboardButton : m_GlobalKeyboardButtons)
+			{
+				if (globalkeyboardButton.second == InputType::Down && e.key.keysym.scancode == globalkeyboardButton.first.first)
+				{
+					globalkeyboardButton.first.second->Execute();
 				}
 			}
 		}
@@ -68,9 +85,9 @@ bool dae::InputManager::ProcessInput()
 
 void dae::InputManager::Initialize()
 {
+
 	//for (DWORD i = 0; i < XUSER_MAX_COUNT; i++)
 	//{
-
 	//	ZeroMemory(&m_CurrentState[i], sizeof(XINPUT_STATE));
 
 	//	auto dwResult = XInputGetState(i, &m_CurrentState[i]);
@@ -90,15 +107,15 @@ void dae::InputManager::Initialize()
 	//}
 }
 
-void dae::InputManager::BindControllerCommand(ControllerButton button, Command* command, InputType inputType)
+//void dae::InputManager::BindControllerCommand(ControllerButton button, Command* command, InputType inputType)
+//{
+//	m_ConsoleButtons.emplace(std::make_pair(button, command), inputType);
+//}
+//
+void dae::InputManager::BindKeyboardCommand(SDL_Scancode key, Command* command, InputType inputType)
 {
-	m_ConsoleButtons.emplace(std::make_pair(button, command), inputType);
-}
 
-void dae::InputManager::BindKeyboardCommand(SDL_KeyCode key, Command* command, InputType inputType)
-{
-
-	m_KeyboardButtons.emplace(std::make_pair(key, command), inputType);
+	m_GlobalKeyboardButtons.emplace(std::make_pair(key, command), inputType);
 }
 
 void dae::InputManager::AddController(GameObject* gameObject, int controllerID)
