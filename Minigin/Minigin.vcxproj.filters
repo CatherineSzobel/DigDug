@@ -31,6 +31,12 @@
     <Filter Include="Source Files\Imgui">
       <UniqueIdentifier>{768afdad-a0a3-4223-9ba7-3e2e64780f62}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\EventHandler">
+      <UniqueIdentifier>{86ebf5c0-b04d-4190-be76-488c5d62c250}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\EventHandler\Observers">
+      <UniqueIdentifier>{0216afc3-30fc-4885-acf2-f03e27ab887a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Singleton.h">
@@ -126,6 +132,33 @@
     <ClInclude Include="InputComponent.h">
       <Filter>Header Files\Components</Filter>
     </ClInclude>
+<<<<<<< HEAD
+    <ClInclude Include="HealthComponent.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Observer.h">
+      <Filter>Header Files\EventHandler</Filter>
+    </ClInclude>
+    <ClInclude Include="Event.h">
+      <Filter>Header Files\EventHandler\Observers</Filter>
+    </ClInclude>
+    <ClInclude Include="PointsComponent.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Time.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ExtraStructs.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+=======
+    <ClInclude Include="Time.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+>>>>>>> 2c0c54a1826fa96f259d51f05e4c66d7afc2865b
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ResourceManager.cpp">
@@ -212,5 +245,29 @@
     <ClCompile Include="InputComponent.cpp">
       <Filter>Source Files\Components</Filter>
     </ClCompile>
+<<<<<<< HEAD
+    <ClCompile Include="Observer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Event.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Time.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Texture.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="HealthComponent.cpp">
+      <Filter>Source Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="PointsComponent.cpp">
+      <Filter>Source Files\Components</Filter>
+    </ClCompile>
+=======
+    <ClCompile Include="Time.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+>>>>>>> 2c0c54a1826fa96f259d51f05e4c66d7afc2865b
   </ItemGroup>
 </Project>

@@ -1,8 +1,12 @@
 #pragma once
-#define WIN32_LEAN_AND_MEAN
+<<<<<<< HEAD
+//#define WIN32_LEAN_AND_MEAN
 #include <Windows.h>
 #include <Xinput.h>
 #pragma comment(lib, "xinput.lib")
+=======
+
+>>>>>>> 2c0c54a1826fa96f259d51f05e4c66d7afc2865b
 #include <memory>
 #include "Command.h"
 #include "ControllerButton.h"
@@ -14,7 +18,6 @@ namespace dae
 
 	class Controller final
 	{
-		//using ControllerCommandsMap = std::map<std::pair<ControllerButton, std::unique_ptr<Command>>, InputType>;
 		class ControllerImpl final
 		{
 		public:

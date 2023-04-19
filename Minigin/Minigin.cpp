@@ -83,7 +83,7 @@ void dae::Minigin::Run(const std::function<void()>& load)
 	auto& renderer = Renderer::GetInstance();
 	auto& sceneManager = SceneManager::GetInstance();
 	auto& input = InputManager::GetInstance();
-
+	auto& time = Time::GetInstance();
 	// todo: this update loop could use some work.
 	auto previousTime = std::chrono::high_resolution_clock::now();
 	float lag = 0.0f;
@@ -94,7 +94,7 @@ void dae::Minigin::Run(const std::function<void()>& load)
 		const auto currentTime = std::chrono::high_resolution_clock::now();
 
 		float elapsed = std::chrono::duration<float>(currentTime - previousTime).count();
-
+		time.SetDeltaTime(elapsed);
 		previousTime = currentTime;
 		lag += elapsed;
 

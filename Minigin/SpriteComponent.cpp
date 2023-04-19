@@ -4,6 +4,7 @@ void dae::SpriteComponent::AddAnimationStrips(const std::string& texture, int nr
 {
 	std::shared_ptr<AnimationStrip> animationStrip = std::make_shared<AnimationStrip>(texture, nrCols, nrRows, frameSec, frameTime, animationName);
 	m_AnimationStrips.emplace_back(animationStrip);
+
 }
 
 void dae::SpriteComponent::SetAnimationByName(std::string animationName)
@@ -13,7 +14,7 @@ void dae::SpriteComponent::SetAnimationByName(std::string animationName)
 	{
 		if (strip->m_AnimationName != animationName)
 		{
-			 ++index;
+			++index;
 			return false;
 		}
 		return true;
@@ -26,9 +27,36 @@ void dae::SpriteComponent::SetAnimationByName(std::string animationName)
 	}
 }
 
+void dae::SpriteComponent::Draw(float scale)
+{
+	auto pos = GetOwner()->GetLocalPosition();
+	Rectf srcRect{};
+
+	srcRect.width = m_CurrentAnimationStrip->m_pSprite->GetWidth() / m_CurrentAnimationStrip->m_Cols;
+	srcRect.height = m_CurrentAnimationStrip->m_pSprite->GetHeight() / m_CurrentAnimationStrip->m_Rows;
+	srcRect.left = float((m_CurrentAnimationStrip->m_ActFrame) % m_CurrentAnimationStrip->m_Cols) * srcRect.width;
+	srcRect.bottom = float(m_CurrentAnimationStrip->m_ActFrame / m_CurrentAnimationStrip->m_Cols) * srcRect.height;
+	Rectf posRect{};
+	posRect.left = pos.x;
+	posRect.bottom = pos.y;
+	posRect.width = srcRect.width * scale;
+	posRect.height = srcRect.height * scale;
+	m_CurrentAnimationStrip->m_pSprite->Draw(posRect, srcRect);
+}
+
+dae::SpriteComponent::~SpriteComponent()
+{
+	for (auto& strip : m_AnimationStrips)
+	{
+		delete strip->m_pSprite;
+	}
+}
+
 void dae::SpriteComponent::Render()
 {
-	
+
+
+	Draw(5.f);
 }
 
 void dae::SpriteComponent::Update(float deltaTime)

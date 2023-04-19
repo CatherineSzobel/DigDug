@@ -25,30 +25,7 @@ namespace dae
 
 		const SDL_Color& GetBackgroundColor() const { return m_clearColor; }
 		void SetBackgroundColor(const SDL_Color& color) { m_clearColor = color; }
-		void GenerateDataExercise01(const int& data) const;
-		void GenerateDataExercise02(const int& data) const;
-		void GenerateDataExercise02Alt(const int& data) const;
-		struct Transform
-		{
-			float matrix[16] = {
-				1,0,0,0,
-				0,1,0,0,
-				0,0,1,0,
-				0,0,0,1
-			};
-		};
-		class GameObject3D
-		{
-		public:
-			Transform transform;
-			int ID = 0;
-		};
-		class GameObject3DAlternative
-		{
-		public:
-			Transform* transform;
-			int ID = 0;
-		};
+
 	};
 }
 
