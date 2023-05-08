@@ -12,7 +12,7 @@ namespace dae
 	public:
 
 		explicit TextComponent(const std::string& text, const std::shared_ptr<Font>& font);
-		explicit TextComponent(const std::shared_ptr<Font>& font) : m_Font{ font } {}
+		explicit TextComponent(const std::shared_ptr<Font>& font) : m_Font{ font }, m_NeedsUpdate{ false } {}
 		explicit TextComponent() : m_Font{}, m_NeedsUpdate{ false }, m_TextTexture{} {}
 		virtual ~TextComponent() = default;
 		TextComponent(const TextComponent& other) = delete;

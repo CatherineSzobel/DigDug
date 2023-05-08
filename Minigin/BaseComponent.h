@@ -4,7 +4,7 @@ namespace dae
 	class GameObject;
 	class BaseComponent
 	{
-		GameObject* m_pOwner;
+		GameObject* m_pOwner = nullptr;
 	public:
 		explicit BaseComponent() = default;
 		virtual ~BaseComponent() = default;

@@ -3,24 +3,15 @@
 #include <memory>
 #include <string>
 #include <vector>
-
-struct AnimationStrip
-{
-	AnimationStrip(const std::string&, int nrCols,
-		int nrRows, float frameSec, float frameTime, const std::string& animationName)
-		: m_Cols{ nrCols }, m_Rows{ nrRows }, m_FrameSec{ frameSec }, m_AccuSec{}, m_ActFrame{}, m_FrameTime{ frameTime }, m_AnimationName{ animationName } {}
-
-	float m_FrameTime, m_AccuSec, m_FrameSec;
-	int m_ActFrame,m_Cols,m_Rows;
-	std::string m_AnimationName;
-};
+#include "Sprite.h"
+#include "GameObject.h"
 namespace dae
 {
 
 	class SpriteComponent : public BaseComponent
 	{
 	public:
-		
+
 		SpriteComponent() = default;
 		virtual ~SpriteComponent() = default;
 
@@ -35,14 +26,13 @@ namespace dae
 		virtual void FixedUpdate(float deltaTime) override;
 		virtual void Initialize() override;
 
-		void AddAnimationStrips(const std::string&, int nrCols,int nrRows, float frameSec, float frameTime, const std::string& animationName);
+		void AddAnimationStrips(const std::string&, int nrCols, int nrRows, float frameSec, float frameTime, const std::string& animationName);
+		void AddAnimationStrips(std::vector<std::shared_ptr<Sprite>>& animationStrips);
 		void SetAnimationByName(std::string animationName);
 
 	private:
-		std::vector<std::shared_ptr<AnimationStrip>> m_AnimationStrips{};
-		std::shared_ptr<AnimationStrip> m_CurrentAnimationStrip;
-		
-		float m_AccuSec, m_ActFrame, m_FrameTime, m_FrameSec;
+		std::vector<std::shared_ptr<Sprite>> m_AnimationStrips{};
+		std::shared_ptr<Sprite> m_CurrentAnimationStrip;
 		bool m_IsAnimationSet{ false };
 	};
 }
