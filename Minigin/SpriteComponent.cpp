@@ -2,11 +2,11 @@
 
 void dae::SpriteComponent::AddAnimationStrips(const std::string& texture, int nrCols, int nrRows, float frameSec, float frameTime, const std::string& animationName)
 {
-	std::shared_ptr<Sprite> animationStrip = std::make_shared<Sprite>(texture, nrCols, nrRows, frameSec, frameTime, animationName);
+	Sprite* animationStrip = new Sprite(texture, nrCols, nrRows, frameSec, frameTime, animationName);
 	m_AnimationStrips.emplace_back(animationStrip);
 }
 
-void dae::SpriteComponent::AddAnimationStrips(std::vector<std::shared_ptr<Sprite>>& animationStrips)
+void dae::SpriteComponent::AddAnimationStrips(std::vector<Sprite*>& animationStrips)
 {
 	m_AnimationStrips = animationStrips;
 }
@@ -14,7 +14,7 @@ void dae::SpriteComponent::AddAnimationStrips(std::vector<std::shared_ptr<Sprite
 void dae::SpriteComponent::SetAnimationByName(std::string animationName)
 {
 	int index = 0;
-	auto findByName = [&](std::shared_ptr<Sprite> strip)
+	auto findByName = [&](Sprite* strip)
 	{
 		if (strip->GetAnimationName() != animationName)
 		{
@@ -31,10 +31,19 @@ void dae::SpriteComponent::SetAnimationByName(std::string animationName)
 	}
 }
 
+dae::SpriteComponent::~SpriteComponent()
+{
+	for ( auto& sprite : m_AnimationStrips)
+	{
+		delete sprite;
+		sprite = nullptr;
+	}
+}
+
 void dae::SpriteComponent::Render()
 {
 	glm::vec2 position = GetOwner()->GetLocalPosition();
-	m_CurrentAnimationStrip->Draw(position, 1.f);
+	m_CurrentAnimationStrip->Draw(position, 2.f);
 }
 
 void dae::SpriteComponent::Update(float elapsed)

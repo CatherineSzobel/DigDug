@@ -8,12 +8,12 @@
 namespace dae
 {
 
-	class SpriteComponent : public BaseComponent
+	class SpriteComponent final : public BaseComponent
 	{
 	public:
 
 		SpriteComponent() = default;
-		virtual ~SpriteComponent() = default;
+		virtual ~SpriteComponent();
 
 		SpriteComponent(const SpriteComponent&) = delete;
 		SpriteComponent(SpriteComponent&&) = delete;
@@ -27,12 +27,12 @@ namespace dae
 		virtual void Initialize() override;
 
 		void AddAnimationStrips(const std::string&, int nrCols, int nrRows, float frameSec, float frameTime, const std::string& animationName);
-		void AddAnimationStrips(std::vector<std::shared_ptr<Sprite>>& animationStrips);
+		void AddAnimationStrips(std::vector<Sprite*>& animationStrips);
 		void SetAnimationByName(std::string animationName);
 
 	private:
-		std::vector<std::shared_ptr<Sprite>> m_AnimationStrips{};
-		std::shared_ptr<Sprite> m_CurrentAnimationStrip;
+		std::vector<Sprite*> m_AnimationStrips{};
+		Sprite* m_CurrentAnimationStrip;
 		bool m_IsAnimationSet{ false };
 	};
 }

@@ -1,15 +1,9 @@
 #include "Sprite.h"
 
 Sprite::Sprite(const std::string& path, int nrCols, int nrRows, float frameSec, float frameTime, const std::string& animationName)
-	:m_Cols{ nrCols }, m_Rows{ nrRows }, m_FrameSec{ frameSec }, m_FrameTime{ frameTime }, m_AnimationName{ animationName }
+	:m_Cols{ nrCols }, m_Rows{ nrRows }, m_FrameSec{ frameSec }, m_FrameTime{ frameTime }, m_AnimationName{ animationName }, m_AccuSec{ 0.f }, m_ActFrame{ 0 }
 {
-    CreateTexture(path);
-}
-
-Sprite::~Sprite()
-{
-    delete m_pSpriteTexture;
-    m_pSpriteTexture = nullptr;
+	CreateTexture(path);
 }
 
 void Sprite::Update(float elapsedSec)
@@ -26,31 +20,21 @@ void Sprite::Update(float elapsedSec)
 	}
 }
 
-void Sprite::Draw(const glm::vec2& pos, float scale)
+void Sprite::Draw(const glm::vec2& pos, float)
 {
-	Rectf srcRect{};
-
-	srcRect.width = GetFrameWidth() / m_Cols;
-	srcRect.height = GetFrameHeight() / m_Rows;
-	srcRect.left = float(m_ActFrame % (int)m_Cols) * srcRect.width;
-	srcRect.bottom = float(m_ActFrame / (int)m_Cols + 1) * srcRect.height;
-
-	Rectf posRect{};
-	posRect.left = pos.x;
-	posRect.bottom = pos.y;
-	posRect.width = srcRect.width * scale;
-	posRect.height = srcRect.height * scale;
-	m_pSpriteTexture->Draw(posRect, srcRect);
+	auto spriteLeft = m_ActFrame * (GetFrameWidth() / m_Cols);
+	auto SpriteBottom = float(m_ActFrame / (int)m_Rows + 1);
+	dae::Renderer::GetInstance().RenderSprite(*m_pSpriteTexture, pos.x, pos.y, spriteLeft, SpriteBottom, GetFrameWidth() / m_Cols, GetFrameHeight() / m_Rows);
 }
 
 float Sprite::GetFrameWidth() const
 {
-	return m_pSpriteTexture->GetWidth();
+	return float(m_pSpriteTexture->GetSize().x);
 }
 
 float Sprite::GetFrameHeight() const
 {
-    return  m_pSpriteTexture->GetHeight();
+	return float(m_pSpriteTexture->GetSize().y);
 }
 
 std::string Sprite::GetAnimationName() const
@@ -62,8 +46,10 @@ void Sprite::ResetAnimation()
 {
 }
 
-Texture* Sprite::CreateTexture(const std::string& path)
+std::shared_ptr<dae::Texture2D> Sprite::CreateTexture(std::string path)
 {
-	m_pSpriteTexture = new Texture(Texture(path));
+	auto fullPath = dae::ResourceManager::GetInstance().GetDataPath() + path;
+	m_pSpriteTexture = dae::ResourceManager::GetInstance().LoadTexture(path);
+
 	return m_pSpriteTexture;
 }
