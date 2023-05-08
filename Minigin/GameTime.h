@@ -2,11 +2,11 @@
 #include "Singleton.h"
 namespace dae
 {
-	class Time final : public Singleton<Time>
+	class GameTime final : public Singleton<GameTime>
 	{
 	public:
-		Time() = default;
-		~Time() = default;
+		GameTime() = default;
+		~GameTime() = default;
 		const float& GetDeltaTime() { return m_DeltaTime; };
 		void SetDeltaTime(float deltaTime) { m_DeltaTime = deltaTime; }
 	private:

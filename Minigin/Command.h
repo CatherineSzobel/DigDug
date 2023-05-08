@@ -5,7 +5,7 @@
 #include "HealthComponent.h"
 #include "PointsComponent.h"
 #include "SpriteComponent.h"
-#include "Time.h"
+#include "GameTime.h"
 namespace dae
 {
 	class Command
@@ -41,7 +41,7 @@ namespace dae
 		{
 			auto pos = GetGameActor()->GetLocalPosition();
 			auto movementSpeed = GetGameActor()->GetComponent<InputComponent>()->GetMovementSpeed();
-			auto elapsed = Time::GetInstance().GetDeltaTime();
+			auto elapsed = GameTime::GetInstance().GetDeltaTime();
 			GetGameActor()->SetLocalPosition({ pos.x,pos.y + ((movementSpeed * m_Direction) * elapsed)  , pos.z });
 		///	m_OriginalPos = pos;
 			if (m_Direction < 0)
@@ -73,7 +73,7 @@ namespace dae
 		{
 			auto pos = GetGameActor()->GetLocalPosition();
 			auto movementSpeed = GetGameActor()->GetComponent<InputComponent>()->GetMovementSpeed();
-			auto elapsed = Time::GetInstance().GetDeltaTime();
+			auto elapsed = GameTime::GetInstance().GetDeltaTime();
 
 			GetGameActor()->SetLocalPosition({ pos.x + ((movementSpeed * m_Direction) * elapsed) ,pos.y  , pos.z });
 		//	m_OriginalPos = pos;

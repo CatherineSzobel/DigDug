@@ -83,7 +83,7 @@ void dae::Minigin::Run(const std::function<void()>& load)
 	auto& renderer = Renderer::GetInstance();
 	auto& sceneManager = SceneManager::GetInstance();
 	auto& input = InputManager::GetInstance();
-	auto& time = Time::GetInstance();
+	auto& time = GameTime::GetInstance();
 	// todo: this update loop could use some work.
 	auto previousTime = std::chrono::high_resolution_clock::now();
 	float lag = 0.0f;

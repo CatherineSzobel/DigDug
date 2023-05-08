@@ -5,6 +5,7 @@
 #include <vector>
 #include "Sprite.h"
 #include "GameObject.h"
+#include "ExtraStructs.h"
 namespace dae
 {
 
@@ -29,6 +30,7 @@ namespace dae
 		void AddAnimationStrips(const std::string&, int nrCols, int nrRows, float frameSec, float frameTime, const std::string& animationName);
 		void AddAnimationStrips(std::vector<Sprite*>& animationStrips);
 		void SetAnimationByName(std::string animationName);
+		Rectf GetCurrentSpriteSize();
 
 	private:
 		std::vector<Sprite*> m_AnimationStrips{};

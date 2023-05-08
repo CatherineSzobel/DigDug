@@ -36,6 +36,11 @@ void dae::SpriteComponent::SetAnimationByName(std::string animationName)
 	}
 }
 
+Rectf dae::SpriteComponent::GetCurrentSpriteSize()
+{
+	return Rectf(GetOwner()->GetLocalPosition().x,GetOwner()->GetLocalPosition().y, m_CurrentAnimationStrip->GetFrameWidth(),m_CurrentAnimationStrip->GetFrameHeight());
+}
+
 dae::SpriteComponent::~SpriteComponent()
 {
 	for ( auto& sprite : m_AnimationStrips)
