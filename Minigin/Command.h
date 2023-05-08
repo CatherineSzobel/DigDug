@@ -4,6 +4,7 @@
 #include "InputComponent.h"
 #include "HealthComponent.h"
 #include "PointsComponent.h"
+#include "SpriteComponent.h"
 #include "Time.h"
 namespace dae
 {
@@ -31,27 +32,6 @@ namespace dae
 		GameObject* m_GameActor{};
 	};
 
-	//class FireCommand final : public Command
-	//{
-	//public:
-	//	void Execute() override { std::cout << "Fire!"; }
-	//};
-	//class JumpCommand final : public Command
-	//{
-	//public:
-	//	void Execute() override { std::cout << "Jump!"; }
-	//};
-	//class DuckCommand final : public Command
-	//{
-	//public:
-	//	void Execute() override { std::cout << "Duck!"; }
-	//};
-	//class FartCommand final : public Command
-	//{
-	//public:
-	//	void Execute() override { std::cout << "Fart!"; }
-	//};
-
 	class MoveUpDownCommand final : public GameObjectCommand
 	{
 	public:
@@ -63,7 +43,16 @@ namespace dae
 			auto movementSpeed = GetGameActor()->GetComponent<InputComponent>()->GetMovementSpeed();
 			auto elapsed = Time::GetInstance().GetDeltaTime();
 			GetGameActor()->SetLocalPosition({ pos.x,pos.y + ((movementSpeed * m_Direction) * elapsed)  , pos.z });
+		///	m_OriginalPos = pos;
+			if (m_Direction < 0)
+			{
+				GetGameActor()->GetComponent<SpriteComponent>()->SetAnimationByName("PlayerWalkUp");
 
+			}
+			else
+			{
+				GetGameActor()->GetComponent<SpriteComponent>()->SetAnimationByName("PlayerWalkDown");
+			}
 		}
 		virtual void Undo() override
 		{
@@ -87,7 +76,16 @@ namespace dae
 			auto elapsed = Time::GetInstance().GetDeltaTime();
 
 			GetGameActor()->SetLocalPosition({ pos.x + ((movementSpeed * m_Direction) * elapsed) ,pos.y  , pos.z });
-			m_OriginalPos = pos;
+		//	m_OriginalPos = pos;
+			if (m_Direction < 0)
+			{
+				GetGameActor()->GetComponent<SpriteComponent>()->SetAnimationByName("PlayerWalkLeft");
+
+			}
+			else
+			{
+				GetGameActor()->GetComponent<SpriteComponent>()->SetAnimationByName("PlayerWalkRight");
+			}
 		}
 		virtual void Undo() override
 		{

@@ -14,7 +14,7 @@ void dae::DigDugComponent::Update(float)
 	IsPlayerDeadCheck();
 	if (!m_IsDead)
 	{
-
+		
 	}
 }
 
@@ -34,6 +34,7 @@ void dae::DigDugComponent::Initialize()
 	{
 		throw std::runtime_error(std::string("Current GameObject has no SpriteComponent. ") + SDL_GetError());
 	}
+	playerType = Player;
 }
 
 void dae::DigDugComponent::IsPlayerDeadCheck()

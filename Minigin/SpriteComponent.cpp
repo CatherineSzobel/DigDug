@@ -1,5 +1,6 @@
 #include "SpriteComponent.h"
-
+#include <stdexcept>
+#include <SDL_ttf.h>
 void dae::SpriteComponent::AddAnimationStrips(const std::string& texture, int nrCols, int nrRows, float frameSec, float frameTime, const std::string& animationName)
 {
 	Sprite* animationStrip = new Sprite(texture, nrCols, nrRows, frameSec, frameTime, animationName);
@@ -28,6 +29,10 @@ void dae::SpriteComponent::SetAnimationByName(std::string animationName)
 	{
 		m_CurrentAnimationStrip = m_AnimationStrips[index];
 		m_IsAnimationSet = true;
+	}
+	else
+	{
+		throw std::runtime_error(std::string("Animation with the name " +  animationName + " does not exist.") +SDL_GetError());
 	}
 }
 

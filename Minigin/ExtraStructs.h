@@ -11,3 +11,9 @@ struct Rectf
 	float height;
 
 };
+enum CollisionType
+{
+	Player,
+	Enemy,
+	Sand
+};

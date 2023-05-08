@@ -5,8 +5,12 @@ class CollisionComponent
 public:
 	void CreateCollision(Rectf& collision);
 	void CreateCollision(float left, float bottom, float width, float height);
-	Rectf GetCollision() {return m_Collision;};
+	bool Collide(Rectf otherCollider);
+	Rectf GetCollision() const { return m_Collision; };
+	void SetCollision(bool flag) { m_IsEnabled = flag; };
+	bool GetCollisionStatus() const { return m_IsEnabled; };
 private:
 	Rectf m_Collision;
+	bool m_IsEnabled;
 };
 

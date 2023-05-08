@@ -9,3 +9,8 @@ void CollisionComponent::CreateCollision(float left, float bottom, float width, 
 {
 	m_Collision = Rectf(left, bottom, width, height);
 }
+
+bool CollisionComponent::Collide(Rectf)
+{
+	return false;
+}

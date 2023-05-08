@@ -2,6 +2,7 @@
 #include "BaseComponent.h"
 #include "HealthComponent.h"
 #include "SpriteComponent.h"
+#include "ExtraStructs.h"
 namespace dae
 {
 	class DigDugComponent : public BaseComponent
@@ -24,6 +25,7 @@ namespace dae
 		bool m_IsDigging = false, m_IsDead = false;
 		HealthComponent* m_HealthComponent{};
 		SpriteComponent* m_SpriteSheet{};
+		CollisionType playerType{};
 	};
 
 }
