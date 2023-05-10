@@ -6,6 +6,7 @@
 #include "PointsComponent.h"
 #include "SpriteComponent.h"
 #include "GameTime.h"
+#include "servicelocator.h"
 namespace dae
 {
 	class Command
@@ -121,6 +122,48 @@ namespace dae
 		}
 		virtual void Undo() override
 		{}
+	};
+	class PlaySoundCommand final : public Command
+	{
+	public:
+		PlaySoundCommand(std::string path, int volume) :m_Path{path}, m_Volume{volume}
+		{
+			auto fullPath = dae::ResourceManager::GetInstance().GetDataPath() + path;
+			m_Path = fullPath;
+		};
+		virtual ~PlaySoundCommand() = default;
+		virtual void Execute() override
+		{
+			auto& ss = servicelocator::get_sound_system();
+			ss.Play(m_Path, m_Volume);
+		}
+		virtual void Undo() override
+		{}
+	private:
+		std::string m_Path;
+		int m_Volume;
+	};
+	class PlayMusicCommand final : public Command
+	{
+	public:
+		PlayMusicCommand(std::string path, int volume) : m_Path{ path }, m_Volume{ volume }
+		{
+			auto fullPath = dae::ResourceManager::GetInstance().GetDataPath() + path;
+			m_Path = fullPath;
+		};
+		virtual ~PlayMusicCommand() = default;
+		virtual void Execute() override
+		{
+		auto& ss = servicelocator::get_sound_system();
+		ss.PlayMusic(m_Path, m_Volume);
+		}
+		virtual void Undo() override
+		{
+			//servicelocator::get_sound_system().PlaySoundA(0, 5);
+		}
+	private:
+		std::string m_Path;
+		int m_Volume;
 	};
 }
 

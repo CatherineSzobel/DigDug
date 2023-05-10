@@ -10,6 +10,8 @@
 #include "Renderer.h"
 #include "ResourceManager.h"
 #include <chrono>
+//#include "SoundSystem.h"
+#include "sdl_sound_system.h"
 #include <thread>
 SDL_Window* g_window{};
 
@@ -66,6 +68,7 @@ dae::Minigin::Minigin(const std::string& dataPath)
 	Renderer::GetInstance().Init(g_window);
 	InputManager::GetInstance().Initialize();
 	ResourceManager::GetInstance().Init(dataPath);
+	servicelocator::register_sound_system(new sdl_sound_system());
 }
 
 dae::Minigin::~Minigin()
@@ -74,6 +77,7 @@ dae::Minigin::~Minigin()
 	SDL_DestroyWindow(g_window);
 	g_window = nullptr;
 	SDL_Quit();
+	servicelocator::destroy_sound_system();
 }
 
 void dae::Minigin::Run(const std::function<void()>& load)

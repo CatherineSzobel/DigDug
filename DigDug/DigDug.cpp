@@ -115,6 +115,10 @@ void load()
 
 	input.BindKeyboardCommand(SDL_SCANCODE_G, new IncreasePointsCommand(PlayerOnePointshHUD.get()), InputType::Down);
 	input.BindKeyboardCommand(SDL_SCANCODE_H, new IncreasePointsCommand(PlayerTwoPointsHUD.get()), InputType::Down);
+	std::string path = "Sounds/Music/Theme.mp3";
+	std::string soundPath = "button.wav";
+	input.BindKeyboardCommand(SDL_SCANCODE_0, new PlayMusicCommand(path, 5), InputType::Down);
+	input.BindKeyboardCommand(SDL_SCANCODE_1, new PlaySoundCommand(soundPath, 5), InputType::Down);
 
 	scene.Add(std::move(firstSprite));
 	scene.Add(std::move(secondSprite));
