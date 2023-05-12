@@ -24,8 +24,8 @@ namespace dae
 		void SetMoving(bool flag) { m_IsMoving = flag; };
 		void ResetDigger();
 	private:
-		bool m_IsDigging = false, m_IsDead = false, m_IsMoving = false, m_CreatedOwnHealthComponent = false;
-		HealthComponent* m_HealthComponent{};
+		bool m_IsDigging = false, m_IsDead = false, m_IsMoving = false;// m_CreatedOwnHealthComponent = false;
+	//	HealthComponent* m_HealthComponent{};
 		SpriteComponent* m_SpriteSheet{};
 		CollisionType playerType{};
 	};

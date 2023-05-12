@@ -3,8 +3,6 @@
 #include <SDL_ttf.h>
 dae::DigDugComponent::~DigDugComponent()
 {
-	if (m_CreatedOwnHealthComponent)
-		GetOwner()->RemoveComponent<HealthComponent>();
 }
 
 void dae::DigDugComponent::Render()
@@ -31,12 +29,6 @@ void dae::DigDugComponent::FixedUpdate(float)
 
 void dae::DigDugComponent::Initialize()
 {
-	m_HealthComponent = GetOwner()->GetComponent<HealthComponent>();
-	if (m_HealthComponent == nullptr)
-	{
-		m_HealthComponent = GetOwner()->AddComponent<HealthComponent>();
-		m_CreatedOwnHealthComponent = true;
-	}
 	m_SpriteSheet = GetOwner()->GetComponent<SpriteComponent>();
 	if (m_SpriteSheet == nullptr)
 	{
@@ -55,9 +47,8 @@ void dae::DigDugComponent::IsPlayerDeadCheck()
 
 int dae::DigDugComponent::GetLives() const
 {
-	return m_HealthComponent->GetHealth();
+	return 0;
 }
-
 void dae::DigDugComponent::ResetDigger()
 {
 	m_IsDead = false;

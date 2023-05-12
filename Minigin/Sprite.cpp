@@ -24,12 +24,12 @@ void Sprite::Draw(const glm::vec2& pos, float)
 {
 	auto spriteLeft = m_ActFrame * (GetFrameWidth());
 	auto SpriteBottom = float(m_ActFrame / (int)m_Rows + 1);
-	dae::Renderer::GetInstance().RenderSprite(*m_pSpriteTexture, pos.x, pos.y, spriteLeft, SpriteBottom, GetFrameWidth(), GetFrameHeight());
+	dae::Renderer::GetInstance().RenderSprite(*m_pSpriteTexture, pos.x, pos.y, spriteLeft, SpriteBottom,GetFrameWidth(), GetFrameHeight());
 }
 
 void Sprite::Draw(const glm::vec2& pos, float width, float height)
 {
-	dae::Renderer::GetInstance().RenderSprite(*m_pSpriteTexture, pos.x, pos.y, width, height,width,height);
+	dae::Renderer::GetInstance().RenderSprite(*m_pSpriteTexture, pos.x, pos.y, GetFrameWidth(), GetFrameHeight(), width, height);
 }
 
 float Sprite::GetFrameWidth() const

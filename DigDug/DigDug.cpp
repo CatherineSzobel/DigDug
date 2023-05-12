@@ -20,6 +20,7 @@
 #include "SpriteComponent.h"
 #include "InputComponent.h"
 #include "CollisionComponent.h"
+#include "LivesDisplay.h"
 #include "InputManager.h"
 using namespace dae;
 void MakePlayerAnimation(std::vector<Sprite*>& listOfAnimation);
@@ -69,7 +70,7 @@ void load()
 	input.AddKeyboardController(firstSprite.get());
 
 	secondSprite->SetLocalPosition(glm::vec3(250.f, 250.f, 0.f));
-	secondSprite->AddComponent<RenderComponent>()->SetTexture("Sprites/singleSpriteTwo.png");
+	secondSprite->AddComponent<RenderComponent>()->SetTexture("Sprites/livesSprite.png");
 
 	input.BindKeyboardCommand(SDL_SCANCODE_0, new PlayMusicCommand("Sounds/Music/Theme.mp3", 5), InputType::Down);
 	input.BindKeyboardCommand(SDL_SCANCODE_1, new PlaySoundCommand("button.wav", 5), InputType::Down);
@@ -77,13 +78,15 @@ void load()
 	scene.Add(std::move(firstSprite));
 	scene.Add(std::move(secondSprite));
 
-	//auto UIHUD = std::make_unique<GameObject>();
-	//UIHUD->AddComponent<HealthComponent>();
-	//UIHUD->AddComponent<SpriteComponent>()->AddAnimationStrips("Sprites/livesSprite.png",4,1,1.f,1.f,"lives");
-	//UIHUD->GetComponent<SpriteComponent>()->SetAnimationByName("lives");
-	//UIHUD->SetLocalPosition({0.f,0.f,0.f});
-
-	//scene.Add(std::move(UIHUD));
+	auto UIHUD = std::make_unique<GameObject>();
+	UIHUD->AddComponent<LivesDisplay>();
+	UIHUD->AddComponent<HealthComponent>();
+	UIHUD->GetComponent<HealthComponent>()->Initialize();
+	UIHUD->AddComponent<SpriteComponent>()->AddAnimationStrips("Sprites/livesSprite.png",1,1,1.f,1.f,"lives");
+	UIHUD->GetComponent<SpriteComponent>()->SetAnimationByName("lives");
+	UIHUD->SetLocalPosition({0.f,450.f,0.f});
+	input.BindKeyboardCommand(SDL_SCANCODE_R, new KillCommand(UIHUD.get()), InputType::Down);
+	scene.Add(std::move(UIHUD));
 }
 
 int main(int, char* []) {
