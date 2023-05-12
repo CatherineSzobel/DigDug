@@ -17,7 +17,7 @@ public:
 
 	void Update(float elapsedSec);
 	void Draw(const glm::vec2& pos, float scale);
-//	void Draw(const glm::vec2& pos, float width,float height);
+	void Draw(const glm::vec2& pos, float width,float height);
 	float GetFrameWidth() const;
 	float GetFrameHeight() const;
 

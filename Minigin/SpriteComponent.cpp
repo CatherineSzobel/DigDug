@@ -46,12 +46,12 @@ Sprite* dae::SpriteComponent::GetCurrentSprite()
 	return m_CurrentAnimationStrip;
 }
 
-//void dae::SpriteComponent::SetFrameSize(float width, float height)
-//{
-//	m_SingularFrame = true;
-//	m_Width = width;
-//	m_Height = height;
-//}
+void dae::SpriteComponent::SetFrameSize(float width, float height)
+{
+	m_SingularFrame = true;
+	m_Width = width;
+	m_Height = height;
+}
 
 dae::SpriteComponent::~SpriteComponent()
 {
@@ -65,14 +65,14 @@ dae::SpriteComponent::~SpriteComponent()
 void dae::SpriteComponent::Render()
 {
 	glm::vec2 position = GetOwner()->GetLocalPosition();
-	//if (!m_SingularFrame)
-	//{
+	if (!m_SingularFrame)
+	{
 		m_CurrentAnimationStrip->Draw(position, 2.f);
-	//}
-	//else
-	//{
-	//	m_CurrentAnimationStrip->Draw(position, m_Width,m_Height);
-	//}
+	}
+	else
+	{
+		m_CurrentAnimationStrip->Draw(position, m_Width,m_Height);
+	}
 }
 
 void dae::SpriteComponent::Update(float elapsed)

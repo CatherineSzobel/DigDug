@@ -25,9 +25,9 @@ void dae::HealthComponent::Update(float)
 
 void dae::HealthComponent::FixedUpdate(float) {}
 
-void dae::HealthComponent::Notify(dae::GameObject*  , Event  )
+void dae::HealthComponent::Notify(dae::GameObject*   , Event  )
 {
-//	m_LivesDisplayObserver.Notify(actor, event);
+	//m_LivesDisplayObserver.Notify(actor, event);
 }
 
 void dae::HealthComponent::DecreaseHealth()

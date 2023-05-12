@@ -68,7 +68,7 @@ void load()
 	input.AddController(secondSprite.get(), 0);
 	input.AddKeyboardController(firstSprite.get());
 
-	secondSprite->SetLocalPosition(glm::vec3(250.f, 300.f, 0.f));
+	secondSprite->SetLocalPosition(glm::vec3(250.f, 250.f, 0.f));
 	secondSprite->AddComponent<RenderComponent>()->SetTexture("Sprites/singleSpriteTwo.png");
 
 	input.BindKeyboardCommand(SDL_SCANCODE_0, new PlayMusicCommand("Sounds/Music/Theme.mp3", 5), InputType::Down);

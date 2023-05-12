@@ -33,12 +33,12 @@ namespace dae
 		Rectf GetCurrentSpriteSize();
 		Sprite* GetCurrentSprite();
 		std::string GetCurrentAnimation() {return m_CurrentAnimationStrip->GetAnimationName();};
-		//void SetFrameSize(float width,float height);
+		void SetFrameSize(float width,float height);
 		
 	private:
 		std::vector<Sprite*> m_AnimationStrips{};
 		Sprite* m_CurrentAnimationStrip;
 		bool m_IsAnimationSet{ false }, m_SingularFrame{ false };
-		//float m_Width, m_Height;
+		float m_Width, m_Height;
 	};
 }
