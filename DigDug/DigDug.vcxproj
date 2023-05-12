@@ -174,14 +174,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="DigDug.cpp" />
-    <ClCompile Include="Component\DigDugComponent.cpp" />
-    <ClCompile Include="Component\HealthComponent.cpp" />
-    <ClCompile Include="Component\PointsComponent.cpp" />
+    <ClCompile Include="HealthComponent.cpp" />
+    <ClCompile Include="LivesDisplay.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Component\DigDugComponent.h" />
-    <ClInclude Include="Component\HealthComponent.h" />
-    <ClInclude Include="Component\PointsComponent.h" />
+    <ClInclude Include="HealthComponent.h" />
+    <ClInclude Include="LivesDisplay.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

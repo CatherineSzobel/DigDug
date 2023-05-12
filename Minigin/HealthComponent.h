@@ -22,6 +22,7 @@ namespace dae
 		void ForceDeath();
 
 	private:
+		
 		int m_CurrentHealth;
 		int m_RemainingLives;
 	};

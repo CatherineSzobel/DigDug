@@ -27,6 +27,11 @@ void Sprite::Draw(const glm::vec2& pos, float)
 	dae::Renderer::GetInstance().RenderSprite(*m_pSpriteTexture, pos.x, pos.y, spriteLeft, SpriteBottom, GetFrameWidth(), GetFrameHeight());
 }
 
+//void Sprite::Draw(const glm::vec2& pos, float width, float height)
+//{
+//	dae::Renderer::GetInstance().RenderSprite(*m_pSpriteTexture, pos.x, pos.y, width, height,width,height);
+//}
+
 float Sprite::GetFrameWidth() const
 {
 	return float(m_pSpriteTexture->GetSize().x) / m_Cols;
@@ -35,6 +40,16 @@ float Sprite::GetFrameWidth() const
 float Sprite::GetFrameHeight() const
 {
 	return float(m_pSpriteTexture->GetSize().y) / m_Rows;
+}
+
+float Sprite::GetWidth() const
+{
+	return float(m_pSpriteTexture->GetSize().x);
+}
+
+float Sprite::GetHeight() const
+{
+	return float(m_pSpriteTexture->GetSize().y);
 }
 
 std::string Sprite::GetAnimationName() const

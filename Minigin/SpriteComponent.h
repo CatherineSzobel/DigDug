@@ -31,10 +31,14 @@ namespace dae
 		void AddAnimationStrips(std::vector<Sprite*>& animationStrips);
 		void SetAnimationByName(std::string animationName);
 		Rectf GetCurrentSpriteSize();
-
+		Sprite* GetCurrentSprite();
+		std::string GetCurrentAnimation() {return m_CurrentAnimationStrip->GetAnimationName();};
+		//void SetFrameSize(float width,float height);
+		
 	private:
 		std::vector<Sprite*> m_AnimationStrips{};
 		Sprite* m_CurrentAnimationStrip;
-		bool m_IsAnimationSet{ false };
+		bool m_IsAnimationSet{ false }, m_SingularFrame{ false };
+		//float m_Width, m_Height;
 	};
 }

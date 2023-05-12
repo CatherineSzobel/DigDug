@@ -9,16 +9,14 @@ void dae::ServiceLogger::Play(const sound_id m_Id, int volume)
 	std::cout << "playing sound id " << m_Id << " at volume" << volume << " \n";
 }
 
-void dae::ServiceLogger::AddAudioClip(std::string path)
+void dae::ServiceLogger::AddAudioClip(std::string path,std::string name)
 {
-	std::string::size_type format = path.find('.');
-	std::cout << "Audio name: " << path.substr(0, format) << " added.\n";
+	std::cout << "Audio name: " << name << " added.\n";
 }
 
-void dae::ServiceLogger::AddMusicClip(std::string path, bool /*loop*/)
+void dae::ServiceLogger::AddMusicClip(std::string path,std::string name, bool /*loop*/)
 {
-	std::string::size_type format = path.find('.');
-	std::cout << "Music name: " << path.substr(0, format) << " added.\n";
+	std::cout << "Music name: " << name << " added.\n";
 }
 
 void dae::ServiceLogger::SetVolume(int volume)
@@ -47,4 +45,9 @@ void dae::ServiceLogger::LowerVolume()
 
 void dae::ServiceLogger::IncreaseVolume()
 {
+}
+
+void dae::ServiceLogger::HaltMusic()
+{
+	std::cout << "Stopping music";
 }

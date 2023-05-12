@@ -32,18 +32,30 @@ void dae::SpriteComponent::SetAnimationByName(std::string animationName)
 	}
 	else
 	{
-		throw std::runtime_error(std::string("Animation with the name " +  animationName + " does not exist.") +SDL_GetError());
+		throw std::runtime_error(std::string("Animation with the name " + animationName + " does not exist.") + SDL_GetError());
 	}
 }
 
 Rectf dae::SpriteComponent::GetCurrentSpriteSize()
 {
-	return Rectf(GetOwner()->GetLocalPosition().x,GetOwner()->GetLocalPosition().y, m_CurrentAnimationStrip->GetFrameWidth(),m_CurrentAnimationStrip->GetFrameHeight());
+	return Rectf(GetOwner()->GetLocalPosition().x, GetOwner()->GetLocalPosition().y, m_CurrentAnimationStrip->GetFrameWidth(), m_CurrentAnimationStrip->GetFrameHeight());
 }
+
+Sprite* dae::SpriteComponent::GetCurrentSprite()
+{
+	return m_CurrentAnimationStrip;
+}
+
+//void dae::SpriteComponent::SetFrameSize(float width, float height)
+//{
+//	m_SingularFrame = true;
+//	m_Width = width;
+//	m_Height = height;
+//}
 
 dae::SpriteComponent::~SpriteComponent()
 {
-	for ( auto& sprite : m_AnimationStrips)
+	for (auto& sprite : m_AnimationStrips)
 	{
 		delete sprite;
 		sprite = nullptr;
@@ -53,7 +65,14 @@ dae::SpriteComponent::~SpriteComponent()
 void dae::SpriteComponent::Render()
 {
 	glm::vec2 position = GetOwner()->GetLocalPosition();
-	m_CurrentAnimationStrip->Draw(position, 2.f);
+	//if (!m_SingularFrame)
+	//{
+		m_CurrentAnimationStrip->Draw(position, 2.f);
+	//}
+	//else
+	//{
+	//	m_CurrentAnimationStrip->Draw(position, m_Width,m_Height);
+	//}
 }
 
 void dae::SpriteComponent::Update(float elapsed)

@@ -4,6 +4,7 @@
 #include "InputComponent.h"
 #include "HealthComponent.h"
 #include "PointsComponent.h"
+#include "DigDugComponent.h"
 #include "SpriteComponent.h"
 #include "GameTime.h"
 #include "servicelocator.h"
@@ -44,7 +45,7 @@ namespace dae
 			auto movementSpeed = GetGameActor()->GetComponent<InputComponent>()->GetMovementSpeed();
 			auto elapsed = GameTime::GetInstance().GetDeltaTime();
 			GetGameActor()->SetLocalPosition({ pos.x,pos.y + ((movementSpeed * m_Direction) * elapsed)  , pos.z });
-		///	m_OriginalPos = pos;
+			///	m_OriginalPos = pos;
 			if (m_Direction < 0)
 			{
 				GetGameActor()->GetComponent<SpriteComponent>()->SetAnimationByName("PlayerWalkUp");
@@ -54,6 +55,7 @@ namespace dae
 			{
 				GetGameActor()->GetComponent<SpriteComponent>()->SetAnimationByName("PlayerWalkDown");
 			}
+			GetGameActor()->GetComponent<DigDugComponent>()->SetMoving(true);
 		}
 		virtual void Undo() override
 		{
@@ -77,7 +79,7 @@ namespace dae
 			auto elapsed = GameTime::GetInstance().GetDeltaTime();
 
 			GetGameActor()->SetLocalPosition({ pos.x + ((movementSpeed * m_Direction) * elapsed) ,pos.y  , pos.z });
-		//	m_OriginalPos = pos;
+			//	m_OriginalPos = pos;
 			if (m_Direction < 0)
 			{
 				GetGameActor()->GetComponent<SpriteComponent>()->SetAnimationByName("PlayerWalkLeft");
@@ -87,6 +89,7 @@ namespace dae
 			{
 				GetGameActor()->GetComponent<SpriteComponent>()->SetAnimationByName("PlayerWalkRight");
 			}
+			GetGameActor()->GetComponent<DigDugComponent>()->SetMoving(true);
 		}
 		virtual void Undo() override
 		{
@@ -126,7 +129,7 @@ namespace dae
 	class PlaySoundCommand final : public Command
 	{
 	public:
-		PlaySoundCommand(std::string path, int volume) :m_Path{path}, m_Volume{volume}
+		PlaySoundCommand(std::string path, int volume) :m_Path{ path }, m_Volume{ volume }
 		{
 			auto fullPath = dae::ResourceManager::GetInstance().GetDataPath() + path;
 			m_Path = fullPath;
@@ -146,7 +149,7 @@ namespace dae
 	class PlayMusicCommand final : public Command
 	{
 	public:
-		PlayMusicCommand(std::string path, int volume) : m_Path{ path }, m_Volume{ volume }
+		PlayMusicCommand(std::string path, int volume) :m_Volume{ volume }
 		{
 			auto fullPath = dae::ResourceManager::GetInstance().GetDataPath() + path;
 			m_Path = fullPath;
@@ -154,8 +157,8 @@ namespace dae
 		virtual ~PlayMusicCommand() = default;
 		virtual void Execute() override
 		{
-		auto& ss = servicelocator::get_sound_system();
-		ss.PlayMusic(m_Path, m_Volume);
+			auto& ss = servicelocator::get_sound_system();
+			ss.PlayMusic(m_Path, m_Volume);
 		}
 		virtual void Undo() override
 		{
@@ -164,6 +167,56 @@ namespace dae
 	private:
 		std::string m_Path;
 		int m_Volume;
+	};
+	class PumpCommand final : public GameObjectCommand
+	{
+	public:
+		PumpCommand(GameObject* owner, std::string path, int volume)
+			: GameObjectCommand(owner), m_Path{ path }, currentState {PlayerState::none}, m_Volume{ volume }
+		{
+			m_pSpriteComponent = GetGameActor()->GetComponent<SpriteComponent>();
+		};
+		virtual ~PumpCommand() = default;
+		virtual void Execute() override
+		{
+			if (m_pSpriteComponent->GetCurrentAnimation()== "PlayerWalkLeft")
+			{
+				m_pSpriteComponent->SetAnimationByName("WaterPumpLeft");
+			}
+			else if (m_pSpriteComponent->GetCurrentAnimation() == "PlayerWalkRight")
+			{
+				m_pSpriteComponent->SetAnimationByName("WaterPumpRight");
+
+			}
+			else if (m_pSpriteComponent->GetCurrentAnimation() == "PlayerWalkUp")
+			{
+				m_pSpriteComponent->SetAnimationByName("WaterPumpUp");
+
+			}
+			else if (m_pSpriteComponent->GetCurrentAnimation() == "PlayerWalkDown")
+			{
+				m_pSpriteComponent->SetAnimationByName("WaterPumpDown");
+
+			}
+			servicelocator::get_sound_system().Play(m_Path, m_Volume);
+			GetGameActor()->GetComponent<DigDugComponent>()->SetMoving(false);
+			servicelocator::get_sound_system().HaltMusic();
+		}
+		virtual void Undo() override
+		{}
+	private:
+		SpriteComponent* m_pSpriteComponent;
+		enum class PlayerState
+		{
+			none,
+			walkLeft,
+			walkRight,
+			walkUp,
+			walkDown
+		};
+		PlayerState currentState;
+		int m_Volume;
+		std::string m_Path;
 	};
 }
 

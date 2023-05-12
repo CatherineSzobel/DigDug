@@ -25,19 +25,9 @@ void dae::HealthComponent::Update(float)
 
 void dae::HealthComponent::FixedUpdate(float) {}
 
-void dae::HealthComponent::Notify(dae::GameObject* actor, Event event)
+void dae::HealthComponent::Notify(dae::GameObject*  , Event  )
 {
-	std::string text = "";
-	switch (event)
-	{
-	case Event::OnPlayerDeath:
-		--m_RemainingLives;
-		text = "Lives: " + std::to_string(m_RemainingLives);
-		break;
-	case Event::OnGameOver:
-		text = "Game Over";
-	}
-	actor->GetComponent<TextComponent>()->SetText(text);
+//	m_LivesDisplayObserver.Notify(actor, event);
 }
 
 void dae::HealthComponent::DecreaseHealth()

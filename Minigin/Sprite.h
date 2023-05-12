@@ -17,8 +17,13 @@ public:
 
 	void Update(float elapsedSec);
 	void Draw(const glm::vec2& pos, float scale);
+//	void Draw(const glm::vec2& pos, float width,float height);
 	float GetFrameWidth() const;
 	float GetFrameHeight() const;
+
+	float GetWidth() const;
+	float GetHeight() const;
+
 	std::string GetAnimationName() const;
 	void ResetAnimation();
 	std::shared_ptr<dae::Texture2D> CreateTexture(std::string path);

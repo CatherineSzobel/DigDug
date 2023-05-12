@@ -3,6 +3,8 @@
 #include <SDL_ttf.h>
 dae::DigDugComponent::~DigDugComponent()
 {
+	if (m_CreatedOwnHealthComponent)
+		GetOwner()->RemoveComponent<HealthComponent>();
 }
 
 void dae::DigDugComponent::Render()
@@ -14,7 +16,12 @@ void dae::DigDugComponent::Update(float)
 	IsPlayerDeadCheck();
 	if (!m_IsDead)
 	{
-		
+
+	}
+	if (m_IsMoving && !servicelocator::get_sound_system().IsPlaying())
+	{
+
+		servicelocator::get_sound_system().PlayMusic("Theme", 5);
 	}
 }
 
@@ -28,6 +35,7 @@ void dae::DigDugComponent::Initialize()
 	if (m_HealthComponent == nullptr)
 	{
 		m_HealthComponent = GetOwner()->AddComponent<HealthComponent>();
+		m_CreatedOwnHealthComponent = true;
 	}
 	m_SpriteSheet = GetOwner()->GetComponent<SpriteComponent>();
 	if (m_SpriteSheet == nullptr)

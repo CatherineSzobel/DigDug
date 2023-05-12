@@ -17,7 +17,7 @@ namespace dae
 	public:
 		explicit SoundSystem() = default;
 		virtual ~SoundSystem() = default;
-		SoundSystem(const SoundSystem& other) = delete;
+		SoundSystem(const SoundSystem& other) = default;
 		SoundSystem(SoundSystem&& other) = delete;
 		SoundSystem& operator=(const SoundSystem& other) = delete;
 		SoundSystem& operator=(SoundSystem&& other) noexcept = delete;
@@ -26,6 +26,7 @@ namespace dae
 		virtual void Cleanup() = 0;
 
 		//Playing
+		virtual bool IsPlaying() const = 0;
 		virtual void Play(const sound_id id, int volume) = 0;
 		virtual void PlayMusic(const sound_id id, int volume) = 0;
 
@@ -33,13 +34,18 @@ namespace dae
 		virtual void PlayMusic(const std::string path, int volume) = 0;
 
 		//Adding
-		virtual void AddAudioClip(std::string path) = 0;
-		virtual void AddMusicClip(std::string path, bool loop) = 0;
+		virtual void AddAudioClip(std::string path,std::string name ) = 0;
+		virtual void AddMusicClip(std::string path, std::string name, bool loop) = 0;
 
 		//Volume
 		virtual void SetVolume(int volume) = 0;
 		virtual void LowerVolume() = 0;
 		virtual void IncreaseVolume() = 0;
+
+		//Stopping
+		virtual void HaltMusic() = 0;
+		virtual void Resume() = 0;
+		virtual void Update() = 0;
 
 	};
 
@@ -56,17 +62,23 @@ namespace dae
 		// Inherited via SoundSystem
 		virtual void Cleanup() override {};
 
+		virtual bool IsPlaying() const override { return false; };
 		virtual void Play(const sound_id, int) override {};
 		virtual void PlayMusic(const sound_id, int) override {};
+
 		virtual void Play(const std::string , int ) override {};
 		virtual void PlayMusic(const std::string , int ) override {};
 
-		virtual void AddAudioClip(std::string) override {};
-		virtual void AddMusicClip(std::string, bool) override {};
+		virtual void AddAudioClip(std::string,std::string) override {};
+		virtual void AddMusicClip(std::string, std::string,bool) override {};
 
 		virtual void SetVolume(int) override {};
 		virtual void LowerVolume() override {};
 		virtual void IncreaseVolume() override {};
+
+		virtual void HaltMusic() override {};
+		virtual void Resume() override {};
+		virtual void Update() override {};
 	};
 }
 

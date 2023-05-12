@@ -69,6 +69,7 @@ dae::Minigin::Minigin(const std::string& dataPath)
 	InputManager::GetInstance().Initialize();
 	ResourceManager::GetInstance().Init(dataPath);
 	servicelocator::register_sound_system(new sdl_sound_system());
+	servicelocator::get_sound_system().PlayMusic(dae::ResourceManager::GetInstance().GetDataPath() + "Sounds/Music/Theme.mp3", 5);
 }
 
 dae::Minigin::~Minigin()
@@ -88,6 +89,7 @@ void dae::Minigin::Run(const std::function<void()>& load)
 	auto& sceneManager = SceneManager::GetInstance();
 	auto& input = InputManager::GetInstance();
 	auto& time = GameTime::GetInstance();
+	auto& sound = servicelocator::get_sound_system();
 	// todo: this update loop could use some work.
 	auto previousTime = std::chrono::high_resolution_clock::now();
 	float lag = 0.0f;
@@ -105,7 +107,7 @@ void dae::Minigin::Run(const std::function<void()>& load)
 		doContinue = input.ProcessInput();
 
 		sceneManager.Update(elapsed);
-
+		sound.Update();
 		//while (lag >= MsPerFrame)
 		//{
 		//	sceneManager.FixedUpdate(MsPerFrame);
