@@ -29,7 +29,7 @@ void CreateInput(std::unique_ptr<GameObject>& firstSprite, std::unique_ptr<GameO
 void load()
 {
 	AddMusicAndSounds();
-	servicelocator::get_sound_system().PlayMusic("Theme", 5);
+	servicelocator::get_sound_system().PlayMusic("Sounds/Music/Theme.mp3", 1);
 	auto& input = InputManager::GetInstance();
 	auto& scene = dae::SceneManager::GetInstance().CreateScene("Demo");
 
@@ -128,12 +128,12 @@ void MakePlayerAnimation(std::vector<Sprite*>& listOfAnimation)
 
 void AddMusicAndSounds()
 {
-	auto& ss = servicelocator::get_sound_system();
-	
-	ss.AddAudioClip("Sounds/Sound/PumpSound.wav","PumpSound");
-	ss.AddMusicClip("Sounds/Music/Theme.mp3", "Theme", true);
-	ss.AddMusicClip("Sounds/Music/EntranceSong.mp3", "Entrance", true);
-	
+	//auto& ss = servicelocator::get_sound_system();
+	//
+	//ss.AddAudioClip("Sounds/Sound/PumpSound.wav","PumpSound");
+	//ss.AddMusicClip("Sounds/Music/Theme.mp3", "Theme", true);
+	//ss.AddMusicClip("Sounds/Music/EntranceSong.mp3", "Entrance", true);
+	//
 }
 
 void CreateInput(std::unique_ptr<GameObject>& firstSprite, std::unique_ptr<GameObject>& secondSprite)
@@ -143,7 +143,7 @@ void CreateInput(std::unique_ptr<GameObject>& firstSprite, std::unique_ptr<GameO
 	firstSprite->GetComponent<InputComponent>()->BindKeyboardCommand(SDL_SCANCODE_W, new MoveUpDownCommand(firstSprite.get(), -1), InputType::Press);
 	firstSprite->GetComponent<InputComponent>()->BindKeyboardCommand(SDL_SCANCODE_A, new MoveLeftRightCommand(firstSprite.get(), -1), InputType::Press);
 	firstSprite->GetComponent<InputComponent>()->BindKeyboardCommand(SDL_SCANCODE_D, new MoveLeftRightCommand(firstSprite.get(), 1), InputType::Press);
-	firstSprite->GetComponent<InputComponent>()->BindKeyboardCommand(SDL_SCANCODE_F, new PumpCommand(firstSprite.get(),"PumpSound", 4), InputType::Down);
+	firstSprite->GetComponent<InputComponent>()->BindKeyboardCommand(SDL_SCANCODE_F, new PumpCommand(firstSprite.get(),"Sounds/Sound/PumpSound.wav", 4), InputType::Down);
 	firstSprite->GetComponent<InputComponent>()->SetMovementSpeed(120.f);
 
 	secondSprite->AddComponent<InputComponent>();

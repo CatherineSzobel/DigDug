@@ -19,7 +19,7 @@ void dae::DigDugComponent::Update(float)
 	if (m_IsMoving && !servicelocator::get_sound_system().IsPlaying())
 	{
 
-		servicelocator::get_sound_system().PlayMusic("Theme", 5);
+		servicelocator::get_sound_system().PlayMusic("Sounds/Music/Theme.mp3",1, true);
 	}
 }
 

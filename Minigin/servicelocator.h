@@ -11,8 +11,8 @@ namespace dae
 		static void register_sound_system(SoundSystem* ss) { m_pSoundSystem = ss == nullptr ? &m_pDefaultSystem : ss; }
 		static void destroy_sound_system()
 		{
-			
-				delete m_pSoundSystem;
+			m_pSoundSystem->Cleanup();
+			delete m_pSoundSystem;
 			m_pSoundSystem = nullptr;
 		}
 	};

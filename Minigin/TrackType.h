@@ -30,7 +30,6 @@ struct Song_Nr
 
 	void EmptyMusic() { songPath = "", musicTrack = nullptr, volume = 0; };
 	void SetId(sound_id id) { m_Id = id; };
-
 	std::string songPath, songName;
 	Mix_Music* musicTrack{ nullptr };
 

@@ -21,27 +21,19 @@ namespace dae
 		virtual void Cleanup() override;
 
 		virtual bool IsPlaying() const override { return Mix_PlayingMusic(); };
-		virtual void Play(const sound_id m_Id, int volume) override;
-		virtual void PlayMusic(const sound_id m_Id, int volume) override;
-
-		virtual void AddAudioClip(std::string path,std::string name) override;
-		virtual void AddMusicClip(std::string path, std::string name, bool loop) override;
-
-		virtual void Play(const std::string name, int volume) override;
-		virtual void PlayMusic(const std::string name, int volume) override;
-
-		int GetVolume();
-		virtual void SetVolume(int volume) override;
-		virtual void LowerVolume() override;
-		virtual void IncreaseVolume() override;
-		virtual void Resume() override;
-
-		virtual void HaltMusic() override;
 		virtual void Update() override;
 
+		virtual void Play(const std::string name, int volume) override;
+		virtual void PlayMusic(const std::string name, int volume,bool loop,int amountOfLoops = 1) override;
+
+		//virtual void SetVolume(int volume) override;
+		//virtual void LowerVolume() override;
+		//virtual void IncreaseVolume() override;
+		virtual void Resume() override;
+		virtual void HaltMusic() override;
+
 	private:
-		int m_Volume;
-		bool m_IsStopping, m_IsPlaying = false;
+		bool m_IsPlaying = false;
 
 		std::vector<Sound_Nr> m_pSoundList;
 		std::vector<Song_Nr> m_pSongList;
@@ -50,12 +42,11 @@ namespace dae
 		std::deque<Song_Nr> m_MusicQueue;
 
 		Sound_Nr m_pCurrentPlayingSound;
-		std::mutex m_SoundMutex;
-		std::mutex m_SongMutex;
+		std::mutex m_Mutex;
 
 		std::condition_variable m_SoundConditionalVariable;
 		std::condition_variable m_SongConditionalVariable;
-		//std::thread m_Thread;
+		std::thread m_Thread;
 
 
 

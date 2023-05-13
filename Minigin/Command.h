@@ -146,28 +146,6 @@ namespace dae
 		std::string m_Path;
 		int m_Volume;
 	};
-	class PlayMusicCommand final : public Command
-	{
-	public:
-		PlayMusicCommand(std::string path, int volume) :m_Volume{ volume }
-		{
-			auto fullPath = dae::ResourceManager::GetInstance().GetDataPath() + path;
-			m_Path = fullPath;
-		};
-		virtual ~PlayMusicCommand() = default;
-		virtual void Execute() override
-		{
-			auto& ss = servicelocator::get_sound_system();
-			ss.PlayMusic(m_Path, m_Volume);
-		}
-		virtual void Undo() override
-		{
-			//servicelocator::get_sound_system().PlaySoundA(0, 5);
-		}
-	private:
-		std::string m_Path;
-		int m_Volume;
-	};
 	class PumpCommand final : public GameObjectCommand
 	{
 	public:

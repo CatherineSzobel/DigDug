@@ -69,7 +69,6 @@ dae::Minigin::Minigin(const std::string& dataPath)
 	InputManager::GetInstance().Initialize();
 	ResourceManager::GetInstance().Init(dataPath);
 	servicelocator::register_sound_system(new sdl_sound_system());
-	servicelocator::get_sound_system().PlayMusic(dae::ResourceManager::GetInstance().GetDataPath() + "Sounds/Music/Theme.mp3", 5);
 }
 
 dae::Minigin::~Minigin()
