@@ -14,34 +14,9 @@ namespace dae
 
 	class Controller final
 	{
-		//using ControllerCommandsMap = std::map<std::pair<ControllerButton, std::unique_ptr<Command>>, InputType>;
-		class ControllerImpl final
-		{
-		public:
-			ControllerImpl(unsigned int controllerID, ControllerCommandsMap consoleButtons);
-			void Update();
-
-			bool IsDownThisFrame(unsigned int button) const;
-			bool IsUpThisFrame(unsigned int button) const;
-			bool IsPressed(unsigned int button) const;
-
-			ControllerCommandsMap GetButtonsImpl() {return m_ConsoleButtons;}
-
-		private:
-
-			XINPUT_STATE m_CurrentState{};
-			XINPUT_STATE m_PreviousState{};
-			XINPUT_KEYSTROKE m_CurrentKeyStroke{};
-
-			int m_ControllerIndex{ 0 };
-			ControllerCommandsMap m_ConsoleButtons{};
-			WORD buttonPressedThisFrame{ 0 };
-			WORD buttonReleasedThisFrame{ 0 };
-		};
-
 	public:
 
-		Controller(int controllerID,ControllerCommandsMap consoleButtons);
+		explicit Controller(int controllerID,ControllerCommandsMap consoleButtons);
 		virtual ~Controller();
 		Controller(const Controller& other) = delete;
 		Controller(Controller&& other) = delete;
@@ -58,11 +33,6 @@ namespace dae
 		ControllerCommandsMap GetButtons();
 
 	private:
-
-		
-
-		//void DeadzoneLeftThumbstick();
-		//void DeadzoneRightThumbStick();
 		class ControllerImpl;
 		ControllerImpl* pImpl;
 	};

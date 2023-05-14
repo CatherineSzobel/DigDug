@@ -3,43 +3,32 @@
 dae::HealthComponent::HealthComponent()
 	:m_CurrentHealth{ 10 }, m_RemainingLives{ 3 }
 {
-}
 
+
+}
+dae::HealthComponent::~HealthComponent()
+{
+}
 void dae::HealthComponent::Render() {}
 
 void dae::HealthComponent::Update(float)
 {
-	if (m_CurrentHealth <= 0)
+	if (m_RemainingLives < 0)
 	{
-		Notify(GetOwner(), Event::OnPlayerDeath);
-		if (m_RemainingLives > 0)
-		{
-			m_CurrentHealth = 10;
-		}
-		else
-		{
-			Notify(GetOwner(), Event::OnGameOver);
-		}
+		m_pSubject->Notify(GetOwner(), Event::OnGameOver);
 	}
 }
 
 void dae::HealthComponent::FixedUpdate(float) {}
-
-void dae::HealthComponent::Notify(dae::GameObject* actor, Event event)
+void dae::HealthComponent::Initialize()
 {
-	std::string text = "";
-	switch (event)
+	auto livesDisplay = GetOwner()->GetComponent<LivesDisplay>();
+	if (livesDisplay != nullptr)
 	{
-	case Event::OnPlayerDeath:
-		--m_RemainingLives;
-		text = "Lives: " + std::to_string(m_RemainingLives);
-		break;
-	case Event::OnGameOver:
-		text = "Game Over";
+		m_pSubject->AddObserver(GetOwner()->GetComponent<LivesDisplay>());
+		livesDisplay->SetCurrentLives(m_RemainingLives);
 	}
-	actor->GetComponent<TextComponent>()->SetText(text);
 }
-
 void dae::HealthComponent::DecreaseHealth()
 {
 	m_CurrentHealth -= 5;
@@ -47,5 +36,5 @@ void dae::HealthComponent::DecreaseHealth()
 
 void dae::HealthComponent::ForceDeath()
 {
-	m_CurrentHealth = 0;
+	m_pSubject->Notify(GetOwner(), Event::OnPlayerDeath);
 }

@@ -26,29 +26,13 @@ namespace dae
 		virtual void Play(const std::string name, int volume) override;
 		virtual void PlayMusic(const std::string name, int volume,bool loop,int amountOfLoops = 1) override;
 
-		//virtual void SetVolume(int volume) override;
-		//virtual void LowerVolume() override;
-		//virtual void IncreaseVolume() override;
 		virtual void Resume() override;
 		virtual void HaltMusic() override;
 
 	private:
-		bool m_IsPlaying = false;
 
-		std::vector<Sound_Nr> m_pSoundList;
-		std::vector<Song_Nr> m_pSongList;
-
-		std::deque<Sound_Nr> m_SoundQueue;
-		std::deque<Song_Nr> m_MusicQueue;
-
-		Sound_Nr m_pCurrentPlayingSound;
-		std::mutex m_Mutex;
-
-		std::condition_variable m_SoundConditionalVariable;
-		std::condition_variable m_SongConditionalVariable;
-		std::thread m_Thread;
-
-
+		class sdl_sound_systemImpl;
+		std::unique_ptr<sdl_sound_systemImpl> m_pImpl;
 
 
 	};

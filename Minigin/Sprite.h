@@ -15,7 +15,7 @@ public:
 	Sprite(Sprite&&) = delete;
 	Sprite& operator=(Sprite&&) = delete;
 
-	void Update(float elapsedSec);
+	void Update(float elapsedSec, bool loop);
 	void Draw(const glm::vec2& pos, float scale);
 	void Draw(const glm::vec2& pos, float width,float height);
 	float GetFrameWidth() const;
@@ -29,6 +29,7 @@ public:
 	std::shared_ptr<dae::Texture2D> CreateTexture(std::string path);
 private:
 	float m_FrameTime, m_AccuSec, m_FrameSec;
+	bool m_LoopFinished{ false };
 	int m_ActFrame, m_Cols, m_Rows;
 	std::string m_AnimationName;
 	std::shared_ptr<dae::Texture2D> m_pSpriteTexture;

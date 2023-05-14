@@ -103,15 +103,29 @@ namespace dae
 	{
 	public:
 		KillCommand(GameObject* owner) : GameObjectCommand(owner)
-		{};
+		{
+			m_pSpriteComponent = GetGameActor()->GetComponent<SpriteComponent>();
+		};
 		virtual ~KillCommand() = default;
 		virtual void Execute() override
 		{
-			GetGameActor()->GetComponent<HealthComponent>()->ForceDeath();
+			auto digdugComp = GetGameActor()->GetComponent<DigDugComponent>();
+			auto healthcomp = GetGameActor()->GetComponent<HealthComponent>();
+			healthcomp->ForceDeath();
+			if (healthcomp->GetLives() > 0 && digdugComp != nullptr)
+			{
+				servicelocator::get_sound_system().Play("Sounds/Sound/GetHitSound.wav", 2);
+				GetGameActor()->GetComponent<DigDugComponent>()->SetMoving(false);
+				GetGameActor()->GetComponent<DigDugComponent>()->SetDeath(true);
+				servicelocator::get_sound_system().HaltMusic();
+
+			}
+
 		}
 		virtual void Undo() override
 		{}
 	private:
+		SpriteComponent* m_pSpriteComponent;
 	};
 	class IncreasePointsCommand final : public GameObjectCommand
 	{
@@ -150,35 +164,41 @@ namespace dae
 	{
 	public:
 		PumpCommand(GameObject* owner, std::string path, int volume)
-			: GameObjectCommand(owner), m_Path{ path }, currentState {PlayerState::none}, m_Volume{ volume }
+			: GameObjectCommand(owner), m_Path{ path }, currentState{ PlayerState::none }, m_Volume{ volume }
 		{
 			m_pSpriteComponent = GetGameActor()->GetComponent<SpriteComponent>();
 		};
 		virtual ~PumpCommand() = default;
 		virtual void Execute() override
 		{
-			if (m_pSpriteComponent->GetCurrentAnimation()== "PlayerWalkLeft")
+			if (!GetGameActor()->GetComponent<DigDugComponent>()->IsPlayerDeadCheck())
 			{
-				m_pSpriteComponent->SetAnimationByName("WaterPumpLeft");
-			}
-			else if (m_pSpriteComponent->GetCurrentAnimation() == "PlayerWalkRight")
-			{
-				m_pSpriteComponent->SetAnimationByName("WaterPumpRight");
+
+				if (m_pSpriteComponent->GetCurrentAnimation() == "PlayerWalkLeft")
+				{
+					m_pSpriteComponent->SetAnimationByName("WaterPumpLeft");
+				}
+				else if (m_pSpriteComponent->GetCurrentAnimation() == "PlayerWalkRight")
+				{
+					m_pSpriteComponent->SetAnimationByName("WaterPumpRight");
+
+				}
+				else if (m_pSpriteComponent->GetCurrentAnimation() == "PlayerWalkUp")
+				{
+					m_pSpriteComponent->SetAnimationByName("WaterPumpUp");
+
+				}
+				else if (m_pSpriteComponent->GetCurrentAnimation() == "PlayerWalkDown")
+				{
+					m_pSpriteComponent->SetAnimationByName("WaterPumpDown");
+
+				}
+
+				servicelocator::get_sound_system().Play(m_Path, m_Volume);
+				GetGameActor()->GetComponent<DigDugComponent>()->SetMoving(false);
+				servicelocator::get_sound_system().HaltMusic();
 
 			}
-			else if (m_pSpriteComponent->GetCurrentAnimation() == "PlayerWalkUp")
-			{
-				m_pSpriteComponent->SetAnimationByName("WaterPumpUp");
-
-			}
-			else if (m_pSpriteComponent->GetCurrentAnimation() == "PlayerWalkDown")
-			{
-				m_pSpriteComponent->SetAnimationByName("WaterPumpDown");
-
-			}
-			servicelocator::get_sound_system().Play(m_Path, m_Volume);
-			GetGameActor()->GetComponent<DigDugComponent>()->SetMoving(false);
-			servicelocator::get_sound_system().HaltMusic();
 		}
 		virtual void Undo() override
 		{}

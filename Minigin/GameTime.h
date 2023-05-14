@@ -9,8 +9,11 @@ namespace dae
 		~GameTime() = default;
 		const float& GetDeltaTime() { return m_DeltaTime; };
 		void SetDeltaTime(float deltaTime) { m_DeltaTime = deltaTime; }
+		void Wait(float amount);
 	private:
 		float m_DeltaTime = 0.f;
+		float m_CurrentTime = 0.f;
+		float m_WaitTime = 0.f;
 	};
 
 }

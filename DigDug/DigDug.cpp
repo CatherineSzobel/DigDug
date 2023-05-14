@@ -29,7 +29,7 @@ void CreateInput(std::unique_ptr<GameObject>& firstSprite, std::unique_ptr<GameO
 void load()
 {
 	AddMusicAndSounds();
-	servicelocator::get_sound_system().PlayMusic("Sounds/Music/Theme.mp3", 1);
+	servicelocator::get_sound_system().PlayMusic("Sounds/Music/Theme.mp3",1,true);
 	auto& input = InputManager::GetInstance();
 	auto& scene = dae::SceneManager::GetInstance().CreateScene("Demo");
 
@@ -52,6 +52,7 @@ void load()
 
 	firstSprite->SetLocalPosition(glm::vec3(290.f, 300.f, 0.f));
 	firstSprite->AddComponent<SpriteComponent>();
+	firstSprite->AddComponent<HealthComponent>()->Initialize();
 
 	const auto spriteRenderer = firstSprite->GetComponent<SpriteComponent>();
 	spriteRenderer->AddAnimationStrips(DiggerAnimations);
@@ -60,7 +61,8 @@ void load()
 	//auto spriteRender = firstSprite->GetComponent<SpriteComponent>();
 //	firstSprite->AddComponent<CollisionComponent>()->CreateCollision(spriteRender->GetCurrentSpriteSize());
 
-
+	std::cout << "Play sounds with 0 - 4 \n";
+	std::cout << "Use the pump command F -> music stops but when u walk it resumes";
 
 
 	auto secondSprite = std::make_unique<GameObject>();
@@ -72,8 +74,11 @@ void load()
 	secondSprite->SetLocalPosition(glm::vec3(250.f, 250.f, 0.f));
 	secondSprite->AddComponent<RenderComponent>()->SetTexture("Sprites/livesSprite.png");
 
-	input.BindKeyboardCommand(SDL_SCANCODE_0, new PlayMusicCommand("Sounds/Music/Theme.mp3", 5), InputType::Down);
-	input.BindKeyboardCommand(SDL_SCANCODE_1, new PlaySoundCommand("button.wav", 5), InputType::Down);
+	input.BindKeyboardCommand(SDL_SCANCODE_0, new PlaySoundCommand("button.wav", 5), InputType::Down);
+	input.BindKeyboardCommand(SDL_SCANCODE_1, new PlaySoundCommand("Sounds/Sound/DeathSound.wav", 5), InputType::Down);
+	input.BindKeyboardCommand(SDL_SCANCODE_2, new PlaySoundCommand("Sounds/Sound/GetHitSound.wav", 5), InputType::Down);
+	input.BindKeyboardCommand(SDL_SCANCODE_3, new PlaySoundCommand("Sounds/Sound/PumpSound.wav", 5), InputType::Down);
+	input.BindKeyboardCommand(SDL_SCANCODE_4, new PlaySoundCommand("Sounds/Sound/PumpingSound.wav", 5), InputType::Down);
 
 	scene.Add(std::move(firstSprite));
 	scene.Add(std::move(secondSprite));
@@ -86,6 +91,7 @@ void load()
 	UIHUD->GetComponent<SpriteComponent>()->SetAnimationByName("lives");
 	UIHUD->SetLocalPosition({0.f,450.f,0.f});
 	input.BindKeyboardCommand(SDL_SCANCODE_R, new KillCommand(UIHUD.get()), InputType::Down);
+
 	scene.Add(std::move(UIHUD));
 }
 
@@ -116,7 +122,7 @@ void MakePlayerAnimation(std::vector<Sprite*>& listOfAnimation)
 
 	listOfAnimation.emplace_back(new Sprite{ "Sprites/walkAnimationWithArrow.png", 2, 1, 2.f, 1.f, "walkingWithArrow" });
 	listOfAnimation.emplace_back(new Sprite{ "Sprites/underGroundWalkAnimationOne.png", 2, 1, 2.f, 1.f, "undergroundWalkingWithArrow" });
-	listOfAnimation.emplace_back(new Sprite{ "Sprites/deathAnimationTwo.png", 2, 1, 2.f, 1.f, "deathAnimation" });
+	listOfAnimation.emplace_back(new Sprite{ "Sprites/deathAnimationPlayer.png", 4, 1, 4.f, 1.f / 3.f, "deathAnimation" });
 
 
 	listOfAnimation.emplace_back(new Sprite{ "Sprites/PlayerThrowLeft.png",1, 1,1.f, 1.f, "WaterPumpLeft" });
@@ -143,6 +149,7 @@ void CreateInput(std::unique_ptr<GameObject>& firstSprite, std::unique_ptr<GameO
 	firstSprite->GetComponent<InputComponent>()->BindKeyboardCommand(SDL_SCANCODE_W, new MoveUpDownCommand(firstSprite.get(), -1), InputType::Press);
 	firstSprite->GetComponent<InputComponent>()->BindKeyboardCommand(SDL_SCANCODE_A, new MoveLeftRightCommand(firstSprite.get(), -1), InputType::Press);
 	firstSprite->GetComponent<InputComponent>()->BindKeyboardCommand(SDL_SCANCODE_D, new MoveLeftRightCommand(firstSprite.get(), 1), InputType::Press);
+	firstSprite->GetComponent<InputComponent>()->BindKeyboardCommand(SDL_SCANCODE_R, new KillCommand(firstSprite.get()), InputType::Down);
 	firstSprite->GetComponent<InputComponent>()->BindKeyboardCommand(SDL_SCANCODE_F, new PumpCommand(firstSprite.get(),"Sounds/Sound/PumpSound.wav", 4), InputType::Down);
 	firstSprite->GetComponent<InputComponent>()->SetMovementSpeed(120.f);
 

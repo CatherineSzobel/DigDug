@@ -6,15 +6,21 @@ Sprite::Sprite(const std::string& path, int nrCols, int nrRows, float frameSec, 
 	CreateTexture(path);
 }
 
-void Sprite::Update(float elapsedSec)
+void Sprite::Update(float elapsedSec, bool loop)
 {
 	m_AccuSec += elapsedSec;
 	if (m_AccuSec > m_FrameTime)
 	{
-		++m_ActFrame;
-		if (m_ActFrame == m_FrameSec)
+		if (!m_LoopFinished)
+			++m_ActFrame;
+
+		if (!loop && m_ActFrame == m_FrameSec)
+			m_LoopFinished = true;
+
+		if (m_ActFrame == m_FrameSec && loop)
 		{
 			m_ActFrame = 0;
+		//	m_LoopFinished = true;
 		}
 		m_AccuSec -= m_FrameTime;
 	}
@@ -24,7 +30,7 @@ void Sprite::Draw(const glm::vec2& pos, float)
 {
 	auto spriteLeft = m_ActFrame * (GetFrameWidth());
 	auto SpriteBottom = float(m_ActFrame / (int)m_Rows + 1);
-	dae::Renderer::GetInstance().RenderSprite(*m_pSpriteTexture, pos.x, pos.y, spriteLeft, SpriteBottom,GetFrameWidth(), GetFrameHeight());
+	dae::Renderer::GetInstance().RenderSprite(*m_pSpriteTexture, pos.x, pos.y, spriteLeft, SpriteBottom, GetFrameWidth(), GetFrameHeight());
 }
 
 void Sprite::Draw(const glm::vec2& pos, float width, float height)
@@ -59,6 +65,8 @@ std::string Sprite::GetAnimationName() const
 
 void Sprite::ResetAnimation()
 {
+	m_ActFrame = 0;
+	m_LoopFinished = false;
 }
 
 std::shared_ptr<dae::Texture2D> Sprite::CreateTexture(std::string path)

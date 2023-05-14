@@ -12,7 +12,7 @@ void dae::SpriteComponent::AddAnimationStrips(std::vector<Sprite*>& animationStr
 	m_AnimationStrips = animationStrips;
 }
 
-void dae::SpriteComponent::SetAnimationByName(std::string animationName)
+void dae::SpriteComponent::SetAnimationByName(std::string animationName, bool loop)
 {
 	int index = 0;
 	auto findByName = [&](Sprite* strip)
@@ -29,6 +29,7 @@ void dae::SpriteComponent::SetAnimationByName(std::string animationName)
 	{
 		m_CurrentAnimationStrip = m_AnimationStrips[index];
 		m_IsAnimationSet = true;
+		m_Loop = loop;
 	}
 	else
 	{
@@ -51,6 +52,11 @@ void dae::SpriteComponent::SetFrameSize(float width, float height)
 	m_SingularFrame = true;
 	m_Width = width;
 	m_Height = height;
+}
+
+void dae::SpriteComponent::ResetSpriteAnimation()
+{
+	m_CurrentAnimationStrip->ResetAnimation();
 }
 
 dae::SpriteComponent::~SpriteComponent()
@@ -78,13 +84,13 @@ void dae::SpriteComponent::Render()
 void dae::SpriteComponent::Update(float elapsed)
 {
 	if (m_IsAnimationSet)
-		m_CurrentAnimationStrip->Update(elapsed);
+		m_CurrentAnimationStrip->Update(elapsed, m_Loop);
 }
 
 void dae::SpriteComponent::FixedUpdate(float elapsed)
 {
 	if (m_IsAnimationSet)
-		m_CurrentAnimationStrip->Update(elapsed);
+		m_CurrentAnimationStrip->Update(elapsed, m_Loop);
 }
 
 void dae::SpriteComponent::Initialize()
