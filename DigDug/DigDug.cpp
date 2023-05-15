@@ -58,21 +58,22 @@ void load()
 	spriteRenderer->AddAnimationStrips(DiggerAnimations);
 	spriteRenderer->SetAnimationByName("PlayerWalkRight");
 	firstSprite->AddComponent<DigDugComponent>()->Initialize();
-	//auto spriteRender = firstSprite->GetComponent<SpriteComponent>();
-//	firstSprite->AddComponent<CollisionComponent>()->CreateCollision(spriteRender->GetCurrentSpriteSize());
+	auto spriteRender = firstSprite->GetComponent<SpriteComponent>();
+	firstSprite->AddComponent<CollisionComponent>()->CreateCollision(spriteRender->GetCurrentSpriteSize(),true);
 
 	std::cout << "Play sounds with 0 - 4 \n";
 	std::cout << "Use the pump command F -> music stops but when u walk it resumes";
 
 
 	auto secondSprite = std::make_unique<GameObject>();
-	//secondSprite->AddComponent<CollisionComponent>();
 	CreateInput(firstSprite, secondSprite);
 	input.AddController(secondSprite.get(), 0);
 	input.AddKeyboardController(firstSprite.get());
 
 	secondSprite->SetLocalPosition(glm::vec3(250.f, 250.f, 0.f));
-	secondSprite->AddComponent<RenderComponent>()->SetTexture("Sprites/livesSprite.png");
+	secondSprite->AddComponent<SpriteComponent>()->AddAnimationStrips("Sprites/PlayerMoveRight.png",2,1,2,1/2.f,"walkRight");
+	secondSprite->GetComponent<SpriteComponent>()->Initialize();
+	secondSprite->AddComponent<CollisionComponent>()->CreateCollision(secondSprite->GetComponent<SpriteComponent>()->GetCurrentSpriteSize(),true);
 
 	input.BindKeyboardCommand(SDL_SCANCODE_0, new PlaySoundCommand("button.wav", 5), InputType::Down);
 	input.BindKeyboardCommand(SDL_SCANCODE_1, new PlaySoundCommand("Sounds/Sound/DeathSound.wav", 5), InputType::Down);
@@ -80,6 +81,7 @@ void load()
 	input.BindKeyboardCommand(SDL_SCANCODE_3, new PlaySoundCommand("Sounds/Sound/PumpSound.wav", 5), InputType::Down);
 	input.BindKeyboardCommand(SDL_SCANCODE_4, new PlaySoundCommand("Sounds/Sound/PumpingSound.wav", 5), InputType::Down);
 
+	firstSprite->GetComponent<CollisionComponent>()->SetOtherCollision(secondSprite->GetComponent<CollisionComponent>()->GetCollision());
 	scene.Add(std::move(firstSprite));
 	scene.Add(std::move(secondSprite));
 
@@ -95,21 +97,12 @@ void load()
 	scene.Add(std::move(UIHUD));
 }
 
-int main(int, char* []) {
-
-	//if (!SteamAPI_Init())
-	//{
-	//	std::cerr << "Fatal Error - Steam must be running to play this game (SteamAPI_Init() failed)." << std::endl;
-	//	return 1;
-	//}
-	//else
-	//	std::cout << "Successfully initialized steam." << std::endl;
-
+int main(int, char* []) 
+{
 
 	dae::Minigin engine("../Data/");
 	engine.Run(load);
-
-	//SteamAPI_Shutdown();
+	
 	return 0;
 }
 
