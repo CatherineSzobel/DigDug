@@ -4,6 +4,7 @@
 #include "SpriteComponent.h"
 #include "ExtraStructs.h"
 #include "servicelocator.h"
+#include "CollisionComponent.h"
 namespace dae
 {
 	class DigDugComponent : public BaseComponent

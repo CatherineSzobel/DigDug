@@ -37,7 +37,11 @@ namespace dae
 	class MoveUpDownCommand final : public GameObjectCommand
 	{
 	public:
-		MoveUpDownCommand(GameObject* owner, int direction) : GameObjectCommand{ owner }, m_Direction{ direction } {};
+		MoveUpDownCommand(GameObject* owner, int direction) : GameObjectCommand{ owner }, m_Direction{ direction }
+		{
+			m_pSpriteComp = GetGameActor()->GetComponent<SpriteComponent>();
+			m_pDigDugComp = GetGameActor()->GetComponent<DigDugComponent>();
+		};
 		virtual ~MoveUpDownCommand() = default;
 		virtual void Execute() override
 		{
@@ -48,14 +52,14 @@ namespace dae
 			///	m_OriginalPos = pos;
 			if (m_Direction < 0)
 			{
-				GetGameActor()->GetComponent<SpriteComponent>()->SetAnimationByName("PlayerWalkUp");
+				m_pSpriteComp->SetAnimationByName("PlayerWalkUp");
 
 			}
 			else
 			{
-				GetGameActor()->GetComponent<SpriteComponent>()->SetAnimationByName("PlayerWalkDown");
+				m_pSpriteComp->SetAnimationByName("PlayerWalkDown");
 			}
-			GetGameActor()->GetComponent<DigDugComponent>()->SetMoving(true);
+			m_pDigDugComp->SetMoving(true);
 		}
 		virtual void Undo() override
 		{
@@ -64,13 +68,18 @@ namespace dae
 	private:
 		int m_Direction{ };
 		glm::vec3 m_OriginalPos{};
+		SpriteComponent* m_pSpriteComp = nullptr;
+		DigDugComponent* m_pDigDugComp = nullptr;
 	};
 
 	class MoveLeftRightCommand final : public GameObjectCommand
 	{
 	public:
 		MoveLeftRightCommand(GameObject* owner, int direction) : GameObjectCommand(owner), m_Direction{ direction }
-		{};
+		{
+			m_pSpriteComp = GetGameActor()->GetComponent<SpriteComponent>();
+			m_pDigDugComp = GetGameActor()->GetComponent<DigDugComponent>();
+		};
 		virtual ~MoveLeftRightCommand() = default;
 		virtual void Execute() override
 		{
@@ -82,14 +91,13 @@ namespace dae
 			//	m_OriginalPos = pos;
 			if (m_Direction < 0)
 			{
-				GetGameActor()->GetComponent<SpriteComponent>()->SetAnimationByName("PlayerWalkLeft");
-
+				m_pSpriteComp->SetAnimationByName("PlayerWalkLeft");
 			}
 			else
 			{
-				GetGameActor()->GetComponent<SpriteComponent>()->SetAnimationByName("PlayerWalkRight");
+				m_pSpriteComp->SetAnimationByName("PlayerWalkRight");
 			}
-			GetGameActor()->GetComponent<DigDugComponent>()->SetMoving(true);
+			m_pDigDugComp->SetMoving(true);
 		}
 		virtual void Undo() override
 		{
@@ -98,6 +106,8 @@ namespace dae
 	private:
 		int m_Direction{};
 		glm::vec3 m_OriginalPos{};
+		SpriteComponent* m_pSpriteComp = nullptr;
+		DigDugComponent* m_pDigDugComp = nullptr;
 	};
 	class KillCommand final : public GameObjectCommand
 	{
@@ -105,6 +115,7 @@ namespace dae
 		KillCommand(GameObject* owner) : GameObjectCommand(owner)
 		{
 			m_pSpriteComponent = GetGameActor()->GetComponent<SpriteComponent>();
+			m_pDigDugComp = GetGameActor()->GetComponent<DigDugComponent>();
 		};
 		virtual ~KillCommand() = default;
 		virtual void Execute() override
@@ -115,8 +126,8 @@ namespace dae
 			if (healthcomp->GetLives() > 0 && digdugComp != nullptr)
 			{
 				servicelocator::get_sound_system().Play("Sounds/Sound/GetHitSound.wav", 2);
-				GetGameActor()->GetComponent<DigDugComponent>()->SetMoving(false);
-				GetGameActor()->GetComponent<DigDugComponent>()->SetDeath(true);
+				m_pDigDugComp->SetMoving(false);
+				m_pDigDugComp->SetDeath(true);
 				servicelocator::get_sound_system().HaltMusic();
 
 			}
@@ -126,6 +137,7 @@ namespace dae
 		{}
 	private:
 		SpriteComponent* m_pSpriteComponent;
+		DigDugComponent* m_pDigDugComp = nullptr;
 	};
 	class IncreasePointsCommand final : public GameObjectCommand
 	{
@@ -164,9 +176,10 @@ namespace dae
 	{
 	public:
 		PumpCommand(GameObject* owner, std::string path, int volume)
-			: GameObjectCommand(owner), m_Path{ path }, currentState{ PlayerState::none }, m_Volume{ volume }
+			: GameObjectCommand(owner), m_Path{ path }, m_Volume{ volume }
 		{
 			m_pSpriteComponent = GetGameActor()->GetComponent<SpriteComponent>();
+			m_pDigDugComp = GetGameActor()->GetComponent<DigDugComponent>();
 		};
 		virtual ~PumpCommand() = default;
 		virtual void Execute() override
@@ -195,7 +208,7 @@ namespace dae
 				}
 
 				servicelocator::get_sound_system().Play(m_Path, m_Volume);
-				GetGameActor()->GetComponent<DigDugComponent>()->SetMoving(false);
+				m_pDigDugComp->SetMoving(false);
 				servicelocator::get_sound_system().HaltMusic();
 
 			}
@@ -204,15 +217,7 @@ namespace dae
 		{}
 	private:
 		SpriteComponent* m_pSpriteComponent;
-		enum class PlayerState
-		{
-			none,
-			walkLeft,
-			walkRight,
-			walkUp,
-			walkDown
-		};
-		PlayerState currentState;
+		DigDugComponent* m_pDigDugComp = nullptr;
 		int m_Volume;
 		std::string m_Path;
 	};

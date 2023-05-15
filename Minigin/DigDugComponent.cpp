@@ -80,7 +80,7 @@ void dae::DigDugComponent::DeathCountdown(float elapsed)
 		if (m_DeathCountdown <= 0)
 		{
 			servicelocator::get_sound_system().Play("Sounds/Sound/DeathSound.wav", 2);
-			GetOwner()->GetComponent<SpriteComponent>()->SetAnimationByName("deathAnimation", false);
+			m_SpriteComponent->SetAnimationByName("deathAnimation", false);
 
 			m_DeathCountdownFinished = true;
 			m_RespawnCountdown = 3.f;
