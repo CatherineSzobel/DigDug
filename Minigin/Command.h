@@ -48,18 +48,22 @@ namespace dae
 			auto pos = GetGameActor()->GetLocalPosition();
 			auto movementSpeed = GetGameActor()->GetComponent<InputComponent>()->GetMovementSpeed();
 			auto elapsed = GameTime::GetInstance().GetDeltaTime();
-			GetGameActor()->SetLocalPosition({ pos.x,pos.y + ((movementSpeed * m_Direction) * elapsed)  , pos.z });
-			///	m_OriginalPos = pos;
-			if (m_Direction < 0)
+			auto isDead = m_pDigDugComp->IsPlayerDeadCheck();
+			if (!isDead)
 			{
-				m_pSpriteComp->SetAnimationByName("PlayerWalkUp");
+				GetGameActor()->SetLocalPosition({ pos.x,pos.y + ((movementSpeed * m_Direction) * elapsed)  , pos.z });
+				///	m_OriginalPos = pos;
+				if (m_Direction < 0)
+				{
+					m_pSpriteComp->SetAnimationByName("PlayerWalkUp");
 
+				}
+				else
+				{
+					m_pSpriteComp->SetAnimationByName("PlayerWalkDown");
+				}
+				m_pDigDugComp->SetMoving(true);
 			}
-			else
-			{
-				m_pSpriteComp->SetAnimationByName("PlayerWalkDown");
-			}
-			m_pDigDugComp->SetMoving(true);
 		}
 		virtual void Undo() override
 		{
@@ -86,18 +90,23 @@ namespace dae
 			auto pos = GetGameActor()->GetLocalPosition();
 			auto movementSpeed = GetGameActor()->GetComponent<InputComponent>()->GetMovementSpeed();
 			auto elapsed = GameTime::GetInstance().GetDeltaTime();
+			auto isDead = m_pDigDugComp->IsPlayerDeadCheck();
+			if (!isDead)
+			{
 
-			GetGameActor()->SetLocalPosition({ pos.x + ((movementSpeed * m_Direction) * elapsed) ,pos.y  , pos.z });
-			//	m_OriginalPos = pos;
-			if (m_Direction < 0)
-			{
-				m_pSpriteComp->SetAnimationByName("PlayerWalkLeft");
+
+				GetGameActor()->SetLocalPosition({ pos.x + ((movementSpeed * m_Direction) * elapsed) ,pos.y  , pos.z });
+				//	m_OriginalPos = pos;
+				if (m_Direction < 0)
+				{
+					m_pSpriteComp->SetAnimationByName("PlayerWalkLeft");
+				}
+				else
+				{
+					m_pSpriteComp->SetAnimationByName("PlayerWalkRight");
+				}
+				m_pDigDugComp->SetMoving(true);
 			}
-			else
-			{
-				m_pSpriteComp->SetAnimationByName("PlayerWalkRight");
-			}
-			m_pDigDugComp->SetMoving(true);
 		}
 		virtual void Undo() override
 		{
@@ -109,36 +118,36 @@ namespace dae
 		SpriteComponent* m_pSpriteComp = nullptr;
 		DigDugComponent* m_pDigDugComp = nullptr;
 	};
-	class KillCommand final : public GameObjectCommand
-	{
-	public:
-		KillCommand(GameObject* owner) : GameObjectCommand(owner)
-		{
-			m_pSpriteComponent = GetGameActor()->GetComponent<SpriteComponent>();
-			m_pDigDugComp = GetGameActor()->GetComponent<DigDugComponent>();
-		};
-		virtual ~KillCommand() = default;
-		virtual void Execute() override
-		{
-			auto digdugComp = GetGameActor()->GetComponent<DigDugComponent>();
-			auto healthcomp = GetGameActor()->GetComponent<HealthComponent>();
-			healthcomp->ForceDeath();
-			if (healthcomp->GetLives() > 0 && digdugComp != nullptr)
-			{
-				servicelocator::get_sound_system().Play("Sounds/Sound/GetHitSound.wav", 2);
-				m_pDigDugComp->SetMoving(false);
-				m_pDigDugComp->SetDeath(true);
-				servicelocator::get_sound_system().HaltMusic();
+	//class KillCommand final : public GameObjectCommand
+	//{
+	//public:
+	//	KillCommand(GameObject* owner) : GameObjectCommand(owner)
+	//	{
+	//		m_pSpriteComponent = GetGameActor()->GetComponent<SpriteComponent>();
+	//		m_pDigDugComp = GetGameActor()->GetComponent<DigDugComponent>();
+	//	};
+	//	virtual ~KillCommand() = default;
+	//	virtual void Execute() override
+	//	{
+	//		auto digdugComp = GetGameActor()->GetComponent<DigDugComponent>();
+	//		auto healthcomp = GetGameActor()->GetComponent<HealthComponent>();
+	//		healthcomp->ForceDeath();
+	//		if (healthcomp->GetLives() > 0 && digdugComp != nullptr)
+	//		{
+	//			servicelocator::get_sound_system().Play("Sounds/Sound/GetHitSound.wav", 2);
+	//			m_pDigDugComp->SetMoving(false);
+	//			m_pDigDugComp->SetDeath(true);
+	//			servicelocator::get_sound_system().HaltMusic();
 
-			}
+	//		}
 
-		}
-		virtual void Undo() override
-		{}
-	private:
-		SpriteComponent* m_pSpriteComponent;
-		DigDugComponent* m_pDigDugComp = nullptr;
-	};
+	//	}
+	//	virtual void Undo() override
+	//	{}
+	//private:
+	//	SpriteComponent* m_pSpriteComponent;
+	//	DigDugComponent* m_pDigDugComp = nullptr;
+	//};
 	class IncreasePointsCommand final : public GameObjectCommand
 	{
 	public:

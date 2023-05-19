@@ -1,8 +1,16 @@
 #include "DigDugComponent.h"
 #include <stdexcept>
 #include <SDL_ttf.h>
+#include "CollisionManager.h"
 dae::DigDugComponent::DigDugComponent()
-	:m_RespawnCountdown{ 3.f }, m_DeathCountdown{ 1.f }
+	:
+	m_IsDead{ false },
+	m_RespawnCountdown{ 3.f },
+	m_DeathCountdown{ 1.f },
+	m_SpriteComponent{ nullptr },
+	m_pCollisionComponent{ nullptr },
+	m_CollisionType{},
+	m_OriginalPos{}
 {
 
 }
@@ -17,14 +25,31 @@ void dae::DigDugComponent::Render()
 void dae::DigDugComponent::Update(float elapsed)
 {
 	if (m_IsDead)
-	{
 		DeathCountdown(elapsed);
-	}
-	RespawnCountDown(elapsed);
-	if (m_IsMoving && !servicelocator::get_sound_system().IsPlaying())
-	{
 
-		servicelocator::get_sound_system().PlayMusic("Sounds/Music/Theme.mp3", 1, true);
+	if (GetOwner()->GetLocalPosition() == m_OriginalPos)
+		m_IsDead = false;
+
+	RespawnCountDown(elapsed);
+	if (!m_IsDead)
+	{
+		if (m_IsMoving && !servicelocator::get_sound_system().IsPlaying())
+		{
+			servicelocator::get_sound_system().PlayMusic("Sounds/Music/Theme.mp3", 1, true);
+		}
+		for (const auto& collsion : CollisionManager::GetInstance().GetCollisions())
+		{
+			if (collsion->GetCollisionType() == Enemy && collsion->Collide(m_pCollisionComponent->GetCollision()))
+			{
+				servicelocator::get_sound_system().Play("Sounds/Sound/GetHitSound.wav", 2);
+				m_IsDead = true;
+				m_IsMoving = false;
+				servicelocator::get_sound_system().HaltMusic();
+				m_pCollisionComponent->SetCollision(false);
+				m_HealthComponent->NotifyHealthSubject();
+				//character dies
+			}
+		}
 	}
 }
 
@@ -39,7 +64,14 @@ void dae::DigDugComponent::Initialize()
 	{
 		throw std::runtime_error(std::string("Current GameObject has no SpriteComponent. ") + SDL_GetError());
 	}
-	playerType = Player;
+	m_CollisionType = Player;
+	m_pCollisionComponent = GetOwner()->GetComponent<CollisionComponent>();
+	if (m_SpriteComponent == nullptr)
+	{
+		throw std::runtime_error(std::string("Current GameObject has no SpriteComponent. ") + SDL_GetError());
+	}
+	m_OriginalPos = GetOwner()->GetLocalPosition();
+	m_HealthComponent = GetOwner()->GetComponent<HealthComponent>();
 }
 
 bool dae::DigDugComponent::IsPlayerDeadCheck()
@@ -53,8 +85,9 @@ int dae::DigDugComponent::GetLives() const
 }
 void dae::DigDugComponent::ResetDigger()
 {
-	m_IsDead = false;
 	m_SpriteComponent->SetAnimationByName("PlayerWalkRight");
+	GetOwner()->SetLocalPosition(m_OriginalPos);
+
 }
 
 void dae::DigDugComponent::RespawnCountDown(float elapsed)
@@ -66,6 +99,7 @@ void dae::DigDugComponent::RespawnCountDown(float elapsed)
 		if (m_RespawnCountdown <= 0)
 		{
 			ResetDigger();
+			m_pCollisionComponent->SetCollision(true);
 			m_DeathCountdownFinished = false;
 		}
 	}

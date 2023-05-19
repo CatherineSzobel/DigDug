@@ -20,25 +20,29 @@
 #include "SpriteComponent.h"
 #include "InputComponent.h"
 #include "CollisionComponent.h"
+#include "CollisionManager.h"
 #include "LivesDisplay.h"
 #include "InputManager.h"
+#include "TileComponent.h"
 using namespace dae;
 void MakePlayerAnimation(std::vector<Sprite*>& listOfAnimation);
 void AddMusicAndSounds();
 void CreateInput(std::unique_ptr<GameObject>& firstSprite, std::unique_ptr<GameObject>& secondSprite);
+void SaveAllCollision(std::vector<Rectf>& m_pCollision, std::unique_ptr<GameObject>& go);
 void load()
 {
 	AddMusicAndSounds();
 	servicelocator::get_sound_system().PlayMusic("Sounds/Music/Theme.mp3",1,true);
 	auto& input = InputManager::GetInstance();
 	auto& scene = dae::SceneManager::GetInstance().CreateScene("Demo");
+	auto& collisions = CollisionManager::GetInstance();
 
 	auto go = std::make_unique<GameObject>();
 	go->AddComponent<RenderComponent>();
 	go->GetComponent<RenderComponent>()->SetTexture("background.tga");
 	scene.Add(std::move(go));
 
-	auto font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 36);
+	auto font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 21);
 	go = std::make_unique<GameObject>();
 	go->SetLocalPosition(glm::vec3(0.f, 0.f, 0.f));
 	go->AddComponent<TextComponent>()->SetText("FPS: ");
@@ -55,12 +59,12 @@ void load()
 	firstSprite->AddComponent<HealthComponent>()->Initialize();
 
 	const auto spriteRenderer = firstSprite->GetComponent<SpriteComponent>();
+	auto spriteRender = firstSprite->GetComponent<SpriteComponent>();
 	spriteRenderer->AddAnimationStrips(DiggerAnimations);
 	spriteRenderer->SetAnimationByName("PlayerWalkRight");
+	firstSprite->AddComponent<CollisionComponent>()->CreateCollision(spriteRender->GetCurrentSpriteSize(),Player,true);
+	collisions.AddCollision(firstSprite->GetComponent<CollisionComponent>());
 	firstSprite->AddComponent<DigDugComponent>()->Initialize();
-	auto spriteRender = firstSprite->GetComponent<SpriteComponent>();
-	firstSprite->AddComponent<CollisionComponent>()->CreateCollision(spriteRender->GetCurrentSpriteSize(),true);
-
 	std::cout << "Play sounds with 0 - 4 \n";
 	std::cout << "Use the pump command F -> music stops but when u walk it resumes";
 
@@ -73,15 +77,15 @@ void load()
 	secondSprite->SetLocalPosition(glm::vec3(250.f, 250.f, 0.f));
 	secondSprite->AddComponent<SpriteComponent>()->AddAnimationStrips("Sprites/PlayerMoveRight.png",2,1,2,1/2.f,"walkRight");
 	secondSprite->GetComponent<SpriteComponent>()->Initialize();
-	secondSprite->AddComponent<CollisionComponent>()->CreateCollision(secondSprite->GetComponent<SpriteComponent>()->GetCurrentSpriteSize(),true);
+	secondSprite->AddComponent<CollisionComponent>()->CreateCollision(secondSprite->GetComponent<SpriteComponent>()->GetCurrentSpriteSize(),Enemy,true);
+	collisions.AddCollision(secondSprite->GetComponent<CollisionComponent>());
+
 
 	input.BindKeyboardCommand(SDL_SCANCODE_0, new PlaySoundCommand("button.wav", 5), InputType::Down);
 	input.BindKeyboardCommand(SDL_SCANCODE_1, new PlaySoundCommand("Sounds/Sound/DeathSound.wav", 5), InputType::Down);
 	input.BindKeyboardCommand(SDL_SCANCODE_2, new PlaySoundCommand("Sounds/Sound/GetHitSound.wav", 5), InputType::Down);
 	input.BindKeyboardCommand(SDL_SCANCODE_3, new PlaySoundCommand("Sounds/Sound/PumpSound.wav", 5), InputType::Down);
 	input.BindKeyboardCommand(SDL_SCANCODE_4, new PlaySoundCommand("Sounds/Sound/PumpingSound.wav", 5), InputType::Down);
-
-	firstSprite->GetComponent<CollisionComponent>()->SetOtherCollision(secondSprite->GetComponent<CollisionComponent>()->GetCollision());
 	scene.Add(std::move(firstSprite));
 	scene.Add(std::move(secondSprite));
 
@@ -89,11 +93,16 @@ void load()
 	UIHUD->AddComponent<LivesDisplay>();
 	UIHUD->AddComponent<HealthComponent>();
 	UIHUD->GetComponent<HealthComponent>()->Initialize();
-	UIHUD->AddComponent<SpriteComponent>()->AddAnimationStrips("Sprites/livesSprite.png",1,1,1.f,1.f,"lives");
+	UIHUD->AddComponent<SpriteComponent>()->AddAnimationStrips("Sprites/livesSprite.png",1,4,4.f,1.f,"lives",true);
 	UIHUD->GetComponent<SpriteComponent>()->SetAnimationByName("lives");
 	UIHUD->SetLocalPosition({0.f,450.f,0.f});
-	input.BindKeyboardCommand(SDL_SCANCODE_R, new KillCommand(UIHUD.get()), InputType::Down);
 
+	auto tile = std::make_unique<GameObject>();
+	tile->SetLocalPosition({ 250.f,200.f,0.f});
+	tile->AddComponent<TileComponent>()->Initialize();
+	tile->GetComponent<TileComponent>()->SetSandType(TileType::YellowSand);
+	//input.BindKeyboardCommand(SDL_SCANCODE_R, new KillCommand(UIHUD.get()), InputType::Down);
+	scene.Add(std::move(tile));
 	scene.Add(std::move(UIHUD));
 }
 
@@ -102,7 +111,6 @@ int main(int, char* [])
 
 	dae::Minigin engine("../Data/");
 	engine.Run(load);
-	
 	return 0;
 }
 
@@ -142,7 +150,7 @@ void CreateInput(std::unique_ptr<GameObject>& firstSprite, std::unique_ptr<GameO
 	firstSprite->GetComponent<InputComponent>()->BindKeyboardCommand(SDL_SCANCODE_W, new MoveUpDownCommand(firstSprite.get(), -1), InputType::Press);
 	firstSprite->GetComponent<InputComponent>()->BindKeyboardCommand(SDL_SCANCODE_A, new MoveLeftRightCommand(firstSprite.get(), -1), InputType::Press);
 	firstSprite->GetComponent<InputComponent>()->BindKeyboardCommand(SDL_SCANCODE_D, new MoveLeftRightCommand(firstSprite.get(), 1), InputType::Press);
-	firstSprite->GetComponent<InputComponent>()->BindKeyboardCommand(SDL_SCANCODE_R, new KillCommand(firstSprite.get()), InputType::Down);
+//	firstSprite->GetComponent<InputComponent>()->BindKeyboardCommand(SDL_SCANCODE_R, new KillCommand(firstSprite.get()), InputType::Down);
 	firstSprite->GetComponent<InputComponent>()->BindKeyboardCommand(SDL_SCANCODE_F, new PumpCommand(firstSprite.get(),"Sounds/Sound/PumpSound.wav", 4), InputType::Down);
 	firstSprite->GetComponent<InputComponent>()->SetMovementSpeed(120.f);
 
@@ -153,4 +161,9 @@ void CreateInput(std::unique_ptr<GameObject>& firstSprite, std::unique_ptr<GameO
 	secondSprite->GetComponent<InputComponent>()->BindControllerCommand(ControllerButton::DPadRight, new MoveLeftRightCommand(secondSprite.get(), 1), InputType::Press);
 
 	secondSprite->GetComponent<InputComponent>()->SetMovementSpeed(240.f);
+}
+
+void SaveAllCollision(std::vector<Rectf>& m_pCollision, std::unique_ptr<GameObject>& go)
+{
+	m_pCollision.emplace_back(go->GetComponent<CollisionComponent>()->GetCollision());
 }

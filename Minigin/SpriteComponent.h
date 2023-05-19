@@ -27,19 +27,20 @@ namespace dae
 		virtual void FixedUpdate(float deltaTime) override;
 		virtual void Initialize() override;
 
-		void AddAnimationStrips(const std::string&, int nrCols, int nrRows, float frameSec, float frameTime, const std::string& animationName);
+		void AddAnimationStrips(const std::string&, int nrCols, int nrRows, float frameSec, float frameTime, const std::string& animationName,bool singleFrame = false,float scale = 1.f);
 		void AddAnimationStrips(std::vector<Sprite*>& animationStrips);
 		void SetAnimationByName(std::string animationName, bool loop = true);
+		void IncreaseSpriteFrame();
 		Rectf GetCurrentSpriteSize();
 		Sprite* GetCurrentSprite();
 		std::string GetCurrentAnimation() {return m_CurrentAnimationStrip->GetAnimationName();};
-		void SetFrameSize(float width,float height);
 		void ResetSpriteAnimation();
+		void SetRender(bool flag) { m_ShouldRender = flag; };
 		
 	private:
 		std::vector<Sprite*> m_AnimationStrips{};
 		Sprite* m_CurrentAnimationStrip;
-		bool m_IsAnimationSet{ false }, m_SingularFrame{ false }, m_Loop{ true };
+		bool m_IsAnimationSet{ false }, m_Loop{ true }, m_ShouldRender{ true };
 		float m_Width, m_Height;
 	};
 }

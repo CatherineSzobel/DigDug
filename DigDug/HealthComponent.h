@@ -18,8 +18,9 @@ namespace dae
 		virtual void Initialize() override;
 		int GetLives() const { return m_RemainingLives; }
 		void DecreaseHealth();
-		void ForceDeath();
+		void NotifyHealthSubject();
 		bool GetIsDead() { return m_IsDead; }
+		std::unique_ptr<Subject> GetSubject() { return std::move(m_pSubject); };
 		
 
 	private:

@@ -47,7 +47,8 @@ public:
 
 			std::lock_guard<std::mutex> mutexLock{ m_Mutex };
 			m_SoundQueue.emplace_back(sound_nr);
-			//m_ConditionalVariable.notify_one();
+			m_QueueChoice = QueueType::sound;
+			m_ConditionalVariable.notify_one();
 		}
 		else
 		{
@@ -76,7 +77,8 @@ public:
 
 			std::lock_guard<std::mutex> mutexLock{ m_Mutex };
 			m_MusicQueue.emplace_back(song_nr);
-			//m_ConditionalVariable.notify_one();
+			m_QueueChoice = QueueType::music;
+			m_ConditionalVariable.notify_one();
 		}
 
 
@@ -98,40 +100,46 @@ public:
 	}
 	void Update()
 	{
-		while (!m_SoundQueue.empty() || !m_MusicQueue.empty())
+		while (!m_MusicQueue.empty() || !m_SoundQueue.empty())
 		{
-
+			//one thing and use the conditional lambda wait
 			std::unique_lock<std::mutex> mutexUniqueLock{ m_Mutex };
-			if (!m_SoundQueue.empty())
+			m_ConditionalVariable.wait(mutexUniqueLock, [&] { return !m_SoundQueue.empty() || !m_MusicQueue.empty() || !m_IsStopping; });
+			if (m_QueueChoice == QueueType::sound)
 			{
-				auto& currentSound = m_SoundQueue.front();
-				m_SoundQueue.pop_front();
+				if (!m_SoundQueue.empty())
+				{
+					auto& currentSound = m_SoundQueue.front();
+					m_SoundQueue.pop_front();
+					mutexUniqueLock.unlock();
 
-				Mix_VolumeChunk(currentSound.soundTrack, currentSound.volume);
-				Mix_PlayChannel(-1, currentSound.soundTrack, 0);
+					Mix_VolumeChunk(currentSound.soundTrack, currentSound.volume);
+					Mix_PlayChannel(-1, currentSound.soundTrack, 0);
+				}
+			}
+			else if (m_QueueChoice == QueueType::music)
+			{
+				if (!m_MusicQueue.empty())
+				{
+					auto& currentSong = m_MusicQueue.front();
+					m_MusicQueue.pop_front();
+					mutexUniqueLock.unlock();
 
+					Mix_VolumeMusic(currentSong.volume);
+					Mix_PlayMusic(currentSong.musicTrack, currentSong.loop);
+				}
 			}
-			else
-			{
-				//m_ConditionalVariable.wait(mutexUniqueLock);
-			}
-			if (!m_MusicQueue.empty())
-			{
-				auto& currentSong = m_MusicQueue.front();
-				m_MusicQueue.pop_front();
 
-				Mix_VolumeMusic(currentSong.volume);
-				Mix_PlayMusic(currentSong.musicTrack, currentSong.loop);
-			}
-			else
-			{
-			//	m_ConditionalVariable.wait(mutexUniqueLock);
-			}
 		}
 	}
 private:
-	bool m_IsPlaying = false;
-
+	bool m_IsPlaying = false, m_IsStopping = false;
+	enum class QueueType
+	{
+		sound,
+		music
+	};
+	QueueType m_QueueChoice;
 	std::vector<Sound_Nr> m_pSoundList;
 	std::vector<Song_Nr> m_pSongList;
 

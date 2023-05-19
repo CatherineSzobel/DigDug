@@ -1,6 +1,7 @@
 #pragma once
 #include "SceneManager.h"
 #include "GameObject.h"
+#include "CollisionComponent.h"
 namespace dae
 {
 	class GameObject;
@@ -15,7 +16,6 @@ namespace dae
 		void Update(float deltaTime);
 		void FixedUpdate(float deltaTime);
 		void Render() const;
-
 		~Scene();
 		Scene(const Scene& other) = delete;
 		Scene(Scene&& other) = delete;
@@ -29,6 +29,7 @@ namespace dae
 		std::vector < std::unique_ptr<GameObject>> m_objects{};
 
 		static unsigned int m_idCounter;
+	
 	};
 
 }

@@ -21,21 +21,23 @@ namespace dae
 		virtual void FixedUpdate(float deltaTime) override;
 
 
-		void CreateCollision(const Rectf& collision, bool debug = false);
-		void CreateCollision(float left, float bottom, float width, float height, bool debug = false);
+		void CreateCollision(const Rectf& collision, CollisionType type, bool debug = false);
+		void CreateCollision(float left, float bottom, float width, float height, CollisionType type, bool debug = false);
 
 		bool Collide( Rectf rect1);
 
 		Rectf GetCollision() const { return m_Collision; };
 		Rectf GetOtherCollision() const { return m_OtherPlayerCollision; };
 		void SetCollision(bool flag) { m_IsEnabled = flag; };
-		void SetOtherCollision(const Rectf& rect) { m_OtherPlayerCollision = rect; };
 		bool GetCollisionStatus() const { return m_IsEnabled; };
+		CollisionType GetCollisionType() { return m_CollisionType; };
+		void SetCollisionType(CollisionType type) { m_CollisionType = type; };
 
 		void DrawDebug(float left, float bottom, float width, float height);
 	private:
 		Rectf m_Collision, m_OtherPlayerCollision;
 		bool m_IsEnabled = true, m_DebugOn = false;
+		CollisionType m_CollisionType;
 
 
 	};

@@ -176,10 +176,14 @@
     <ClCompile Include="DigDug.cpp" />
     <ClCompile Include="HealthComponent.cpp" />
     <ClCompile Include="LivesDisplay.cpp" />
+    <ClCompile Include="PointsDisplayComponent.cpp" />
+    <ClCompile Include="TileComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="HealthComponent.h" />
     <ClInclude Include="LivesDisplay.h" />
+    <ClInclude Include="PointsDisplayComponent.h" />
+    <ClInclude Include="TileComponent.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

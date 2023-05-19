@@ -34,7 +34,7 @@ void dae::HealthComponent::DecreaseHealth()
 	m_CurrentHealth -= 5;
 }
 
-void dae::HealthComponent::ForceDeath()
+void dae::HealthComponent::NotifyHealthSubject()
 {
 	m_pSubject->Notify(GetOwner(), Event::OnPlayerDeath);
 	if (m_RemainingLives < 0)
@@ -43,7 +43,6 @@ void dae::HealthComponent::ForceDeath()
 	}
 	else
 	{
-
 		m_IsDead = true;
 	}
 }
