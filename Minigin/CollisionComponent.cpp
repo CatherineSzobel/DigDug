@@ -7,14 +7,18 @@ void dae::CollisionComponent::Render()
 	{
 		DrawDebug(m_Collision.left, m_Collision.bottom, m_Collision.left + m_Collision.width, m_Collision.bottom + m_Collision.height);
 	}
+	if (m_DebugOn && m_CollisionType == Rock)
+	{
+		DrawDebug(m_Collision.left, m_Collision.bottom, m_Collision.left + m_Collision.width, m_Collision.bottom + m_Collision.height);
+	}
 }
 
 void dae::CollisionComponent::Update(float)
 {
 	if (m_IsEnabled)
 	{
-		m_Collision.left = GetOwner()->GetLocalPosition().x;
-		m_Collision.bottom = GetOwner()->GetLocalPosition().y;
+		m_Collision.left = GetOwner()->GetLocalPosition().x  ;
+		m_Collision.bottom = GetOwner()->GetLocalPosition().y ;
 	}
 }
 
@@ -25,6 +29,7 @@ void dae::CollisionComponent::FixedUpdate(float)
 void dae::CollisionComponent::CreateCollision(const Rectf& collision, CollisionType type, bool debug)
 {
 	m_Collision = collision;
+	//m_OriginalCollisionPosition = collision;
 	m_DebugOn = debug;
 	m_CollisionType = type;
 }

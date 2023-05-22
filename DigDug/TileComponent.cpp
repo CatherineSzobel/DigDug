@@ -64,10 +64,10 @@ void dae::TileComponent::Initialize()
 	m_pCollisionComp = GetOwner()->AddComponent<CollisionComponent>();
 	m_pSpriteComp = GetOwner()->AddComponent<SpriteComponent>();
 
-	m_pTileLists.emplace_back(new Sprite("Sprites/Sands/TileOne.png", 1, 1, 1, 1, "TileOne", true, 2.f));
-	m_pTileLists.emplace_back(new Sprite("Sprites/Sands/TileTwo.png", 1, 1, 1, 1, "TileTwo", true, 2.f));
-	m_pTileLists.emplace_back(new Sprite("Sprites/Sands/TileThree.png", 1, 1, 1, 1, "TileThree", true, 2.f));
-	m_pTileLists.emplace_back(new Sprite("Sprites/Sands/TileFour.png", 1, 1, 1, 1, "TileFour", true, 2.f));
+	m_pTileLists.emplace_back(new Sprite("Sprites/Sands/TileOne.png", 1, 1, 1, 1, "TileOne", true, 4.f));
+	m_pTileLists.emplace_back(new Sprite("Sprites/Sands/TileTwo.png", 1, 1, 1, 1, "TileTwo", true, 4.f));
+	m_pTileLists.emplace_back(new Sprite("Sprites/Sands/TileThree.png", 1, 1, 1, 1, "TileThree", true, 4.f));
+	m_pTileLists.emplace_back(new Sprite("Sprites/Sands/TileFour.png", 1, 1, 1, 1, "TileFour", true, 4.f));
 
 	m_pSpriteComp->AddAnimationStrips(m_pTileLists);
 

@@ -49,18 +49,25 @@ namespace dae
 			auto movementSpeed = GetGameActor()->GetComponent<InputComponent>()->GetMovementSpeed();
 			auto elapsed = GameTime::GetInstance().GetDeltaTime();
 			auto isDead = m_pDigDugComp->IsPlayerDeadCheck();
+			auto isDigging = m_pDigDugComp->IsDigging();
 			if (!isDead)
 			{
 				GetGameActor()->SetLocalPosition({ pos.x,pos.y + ((movementSpeed * m_Direction) * elapsed)  , pos.z });
 				///	m_OriginalPos = pos;
 				if (m_Direction < 0)
 				{
-					m_pSpriteComp->SetAnimationByName("PlayerWalkUp");
+					if (isDigging)
+						m_pSpriteComp->SetAnimationByName("PlayerMoveUpWithArrow");
+					else
+						m_pSpriteComp->SetAnimationByName("PlayerWalkUp");
 
 				}
 				else
 				{
-					m_pSpriteComp->SetAnimationByName("PlayerWalkDown");
+					if (isDigging)
+						m_pSpriteComp->SetAnimationByName("PlayerMoveDownWithArrow");
+					else
+						m_pSpriteComp->SetAnimationByName("PlayerWalkDown");
 				}
 				m_pDigDugComp->SetMoving(true);
 			}
@@ -91,6 +98,7 @@ namespace dae
 			auto movementSpeed = GetGameActor()->GetComponent<InputComponent>()->GetMovementSpeed();
 			auto elapsed = GameTime::GetInstance().GetDeltaTime();
 			auto isDead = m_pDigDugComp->IsPlayerDeadCheck();
+			auto isDigging = m_pDigDugComp->IsDigging();
 			if (!isDead)
 			{
 
@@ -99,11 +107,18 @@ namespace dae
 				//	m_OriginalPos = pos;
 				if (m_Direction < 0)
 				{
+					if (isDigging)
+						m_pSpriteComp->SetAnimationByName("PlayerMoveLeftWithArrow");
+					else
 					m_pSpriteComp->SetAnimationByName("PlayerWalkLeft");
 				}
 				else
 				{
+					if (isDigging)
+						m_pSpriteComp->SetAnimationByName("PlayerMoveRightWithArrow");
+					else
 					m_pSpriteComp->SetAnimationByName("PlayerWalkRight");
+					
 				}
 				m_pDigDugComp->SetMoving(true);
 			}

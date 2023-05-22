@@ -27,7 +27,6 @@ namespace dae
 		bool Collide( Rectf rect1);
 
 		Rectf GetCollision() const { return m_Collision; };
-		Rectf GetOtherCollision() const { return m_OtherPlayerCollision; };
 		void SetCollision(bool flag) { m_IsEnabled = flag; };
 		bool GetCollisionStatus() const { return m_IsEnabled; };
 		CollisionType GetCollisionType() { return m_CollisionType; };
@@ -35,7 +34,7 @@ namespace dae
 
 		void DrawDebug(float left, float bottom, float width, float height);
 	private:
-		Rectf m_Collision, m_OtherPlayerCollision;
+		Rectf m_Collision, m_OriginalCollisionPosition;
 		bool m_IsEnabled = true, m_DebugOn = false;
 		CollisionType m_CollisionType;
 

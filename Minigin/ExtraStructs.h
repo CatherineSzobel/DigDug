@@ -15,5 +15,7 @@ enum CollisionType
 {
 	Player,
 	Enemy,
-	Sand
+	Sand,
+	Underground,
+	Rock
 };

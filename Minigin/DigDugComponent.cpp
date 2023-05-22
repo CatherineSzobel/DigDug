@@ -41,13 +41,22 @@ void dae::DigDugComponent::Update(float elapsed)
 		{
 			if (collsion->GetCollisionType() == Enemy && collsion->Collide(m_pCollisionComponent->GetCollision()))
 			{
+				//character dies
 				servicelocator::get_sound_system().Play("Sounds/Sound/GetHitSound.wav", 2);
 				m_IsDead = true;
 				m_IsMoving = false;
 				servicelocator::get_sound_system().HaltMusic();
 				m_pCollisionComponent->SetCollision(false);
 				m_HealthComponent->NotifyHealthSubject();
-				//character dies
+			}
+			if (collsion->GetCollisionType() == Underground && collsion->Collide(m_pCollisionComponent->GetCollision()) && !m_IsDead)
+			{
+				//set underground animation
+				m_IsDigging = true;
+			}
+			else
+			{
+				m_IsDigging = false;
 			}
 		}
 	}

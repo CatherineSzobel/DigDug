@@ -1,4 +1,3 @@
-#pragma once
 #include "BaseComponent.h"
 #include "CollisionComponent.h"
 #include "CollisionManager.h"
@@ -29,6 +28,7 @@ namespace dae
 		virtual void Initialize() override;
 
 		void SetSandType(TileType tileType);
+
 	private:
 		CollisionComponent* m_pCollisionComp = nullptr;
 		float m_TileScale = 5.f;
