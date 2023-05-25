@@ -37,9 +37,9 @@ void dae::DigDugComponent::Update(float elapsed)
 		{
 			servicelocator::get_sound_system().PlayMusic("Sounds/Music/Theme.mp3", 1, true);
 		}
-		for (const auto& collsion : CollisionManager::GetInstance().GetCollisions())
+		for (const auto& collision : CollisionManager::GetInstance().GetCollisions())
 		{
-			if (collsion->GetCollisionType() == Enemy && collsion->Collide(m_pCollisionComponent->GetCollision()))
+			if (collision->GetCollisionType() == EnemyLayer && collision->Collide(m_pCollisionComponent->GetCollision()))
 			{
 				//character dies
 				servicelocator::get_sound_system().Play("Sounds/Sound/GetHitSound.wav", 2);
@@ -49,7 +49,7 @@ void dae::DigDugComponent::Update(float elapsed)
 				m_pCollisionComponent->SetCollision(false);
 				m_HealthComponent->NotifyHealthSubject();
 			}
-			if (collsion->GetCollisionType() == Underground && collsion->Collide(m_pCollisionComponent->GetCollision()) && !m_IsDead)
+			if (collision->GetCollisionType() == Underground && collision->Collide(m_pCollisionComponent->GetCollision()) && !m_IsDead)
 			{
 				//set underground animation
 				m_IsDigging = true;

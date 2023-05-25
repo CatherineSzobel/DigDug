@@ -11,10 +11,11 @@ struct Rectf
 	float height;
 
 };
+
 enum CollisionType
 {
 	Player,
-	Enemy,
+	EnemyLayer,
 	Sand,
 	Underground,
 	Rock

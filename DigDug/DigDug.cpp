@@ -25,6 +25,9 @@
 #include "LivesDisplay.h"
 #include "TileComponent.h"
 #include "RockComponent.h"
+#include "Enemies/PookaComponent.h"
+#include "Enemies/FygarsComponent.h"
+#include "Enemies/EnemyManager.h"
 using namespace dae;
 void MakePlayerAnimation(std::vector<Sprite*>& listOfAnimation);
 void CreateInputSolo(std::unique_ptr<GameObject>& firstSprite);
@@ -67,15 +70,8 @@ void load()
 	secondSprite->SetLocalPosition(glm::vec3(250.f, 250.f, 0.f));
 	secondSprite->AddComponent<SpriteComponent>()->AddAnimationStrips("Sprites/PlayerMoveRight.png", 2, 1, 2, 1 / 2.f, "walkRight");
 	secondSprite->GetComponent<SpriteComponent>()->Initialize();
-	secondSprite->AddComponent<CollisionComponent>()->CreateCollision(secondSprite->GetComponent<SpriteComponent>()->GetCurrentSpriteSize(), Enemy, true);
+	secondSprite->AddComponent<CollisionComponent>()->CreateCollision(secondSprite->GetComponent<SpriteComponent>()->GetCurrentSpriteSize(), EnemyLayer, true);
 	collisions.AddCollision(secondSprite->GetComponent<CollisionComponent>());
-
-
-	input.BindKeyboardCommand(SDL_SCANCODE_0, new PlaySoundCommand("button.wav", 5), InputType::Down);
-	input.BindKeyboardCommand(SDL_SCANCODE_1, new PlaySoundCommand("Sounds/Sound/DeathSound.wav", 5), InputType::Down);
-	input.BindKeyboardCommand(SDL_SCANCODE_2, new PlaySoundCommand("Sounds/Sound/GetHitSound.wav", 5), InputType::Down);
-	input.BindKeyboardCommand(SDL_SCANCODE_3, new PlaySoundCommand("Sounds/Sound/PumpSound.wav", 5), InputType::Down);
-	input.BindKeyboardCommand(SDL_SCANCODE_4, new PlaySoundCommand("Sounds/Sound/PumpingSound.wav", 5), InputType::Down);
 
 	scene.Add(std::move(secondSprite));
 
@@ -86,15 +82,7 @@ void load()
 	UIHUD->AddComponent<SpriteComponent>()->AddAnimationStrips("Sprites/livesSprite.png", 1, 4, 4.f, 1.f, "lives", true);
 	UIHUD->GetComponent<SpriteComponent>()->SetAnimationByName("lives");
 	UIHUD->SetLocalPosition({ 0.f,460.f,0.f });
-	//input.BindKeyboardCommand(SDL_SCANCODE_R, new KillCommand(UIHUD.get()), InputType::Down);
 	scene.Add(std::move(UIHUD));
-
-	//auto tile = std::make_unique<GameObject>();
-	//tile->AddComponent<TileComponent>()->Initialize();
-	//tile->GetComponent<TileComponent>()->SetSandType(TileType::YellowSand);
-	//auto tileSize = tile->GetComponent<SpriteComponent>()->GetCurrentSpriteSize();
-	////tile->SetLocalPosition({ 0.f,60.f,0.f });
-	//scene.Add(std::move(tile));
 
 	auto undergroundBoundary = std::make_unique<GameObject>();
 	undergroundBoundary->SetLocalPosition({ 0.f,100.f,0.f });
@@ -173,7 +161,8 @@ void SaveAllCollision(std::vector<Rectf>& m_pCollision, std::unique_ptr<GameObje
 void CreateLevel()
 {
 	auto& firstLevel = dae::SceneManager::GetInstance().CreateScene("firstLevel");
-
+	auto pooka = std::make_unique<GameObject>();
+	auto fygar = std::make_unique<GameObject>();
 	auto tile = std::make_unique<GameObject>();
 	tile->AddComponent<TileComponent>()->Initialize();
 	tile->GetComponent<TileComponent>()->SetSandType(TileType::YellowSand);
@@ -246,12 +235,13 @@ void CreateLevel()
 				++currentYTile;
 				currentXTile = 0;
 			}
+			collisions.AddCollision(tile->GetComponent<CollisionComponent>());
 			firstLevel.Add(std::move(tile));
 			break;
 		case 2:
+			printf(" 2 ");
 
-
-			firstSprite->SetLocalPosition(glm::vec3(290.f, 300.f, 0.f));
+			firstSprite->SetLocalPosition({ (tileSize.width * currentXTile),(currentYTile * tileSize.height) + startingBottom,0.f });
 			firstSprite->AddComponent<SpriteComponent>();
 			firstSprite->AddComponent<HealthComponent>()->Initialize();
 
@@ -261,15 +251,10 @@ void CreateLevel()
 			auto size = firstSprite->GetComponent<SpriteComponent>()->GetCurrentSpriteSize();
 			firstSprite->AddComponent<CollisionComponent>()->CreateCollision(Rectf{ size }, Player, true);
 			firstSprite->GetComponent<CollisionComponent>()->SetCollision(true);
-
-			collisions.AddCollision(firstSprite->GetComponent<CollisionComponent>());
 			firstSprite->AddComponent<DigDugComponent>()->Initialize();
 
 			CreateInputSolo(firstSprite);
 			input.AddKeyboardController(firstSprite.get());
-			firstLevel.Add(std::move(firstSprite));
-
-			printf(" 2 ");
 			++currentXTile;
 			if (currentXTile == maxTileColumn)
 			{
@@ -277,9 +262,17 @@ void CreateLevel()
 				++currentYTile;
 				currentXTile = 0;
 			}
+			collisions.AddCollision(firstSprite->GetComponent<CollisionComponent>());
+			firstLevel.Add(std::move(firstSprite));
 			break;
+
 		case 3:
 			printf(" 3 ");
+			pooka = std::make_unique<GameObject>();
+			pooka->AddComponent<PookaComponent>()->Initialize();
+
+			pooka->SetLocalPosition({ (tileSize.width * currentXTile),(currentYTile * tileSize.height) + startingBottom,0.f });
+
 			++currentXTile;
 			if (currentXTile == maxTileColumn)
 			{
@@ -287,9 +280,17 @@ void CreateLevel()
 				++currentYTile;
 				currentXTile = 0;
 			}
+			collisions.AddCollision(pooka->GetComponent<CollisionComponent>());
+			firstLevel.Add(std::move(pooka));
 			break;
+
 		case 4:
 			printf(" 4 ");
+			fygar = std::make_unique<GameObject>();
+			fygar->AddComponent<FygarsComponent>()->Initialize();
+
+			fygar->SetLocalPosition({ (tileSize.width * currentXTile),(currentYTile * tileSize.height) + startingBottom,0.f });
+
 			++currentXTile;
 			if (currentXTile == maxTileColumn)
 			{
@@ -297,7 +298,10 @@ void CreateLevel()
 				++currentYTile;
 				currentXTile = 0;
 			}
+			collisions.AddCollision(fygar->GetComponent<CollisionComponent>());
+			firstLevel.Add(std::move(fygar));
 			break;
+
 		case 5:
 			printf(" 5 ");
 			auto rock = std::make_unique<GameObject>();
@@ -306,7 +310,9 @@ void CreateLevel()
 
 			tile = std::make_unique<GameObject>();
 			tile->AddComponent<TileComponent>()->Initialize();
-			if (currentYTile % 3 == 0 && currentYTile != 0 && currentYTile != 12 && currentXTile == 0)
+			if (currentYTile % 3 == 0 
+				&& currentYTile != 0 && currentYTile != 12 
+				&& currentXTile == 0)
 			{
 				++currentTileType;
 			}
@@ -320,8 +326,11 @@ void CreateLevel()
 				++currentYTile;
 				currentXTile = 0;
 			}
+			collisions.AddCollision(rock->GetComponent<CollisionComponent>());
+			collisions.AddCollision(tile->GetComponent<CollisionComponent>());
 			firstLevel.Add(std::move(tile));
 			firstLevel.Add(std::move(rock));
+
 			break;
 		}
 	}

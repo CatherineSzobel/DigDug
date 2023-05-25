@@ -174,16 +174,24 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="DigDug.cpp" />
+    <ClCompile Include="Enemies\EnemyManager.cpp" />
+    <ClCompile Include="Enemies\FygarsComponent.cpp" />
+    <ClCompile Include="Enemies\Enemy.cpp" />
     <ClCompile Include="HealthComponent.cpp" />
     <ClCompile Include="LivesDisplay.cpp" />
     <ClCompile Include="PointsDisplayComponent.cpp" />
+    <ClCompile Include="Enemies\PookaComponent.cpp" />
     <ClCompile Include="RockComponent.cpp" />
     <ClCompile Include="TileComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Enemies\EnemyManager.h" />
+    <ClInclude Include="Enemies\FygarsComponent.h" />
+    <ClInclude Include="Enemies\Enemy.h" />
     <ClInclude Include="HealthComponent.h" />
     <ClInclude Include="LivesDisplay.h" />
     <ClInclude Include="PointsDisplayComponent.h" />
+    <ClInclude Include="Enemies\PookaComponent.h" />
     <ClInclude Include="RockComponent.h" />
     <ClInclude Include="TileComponent.h" />
   </ItemGroup>
