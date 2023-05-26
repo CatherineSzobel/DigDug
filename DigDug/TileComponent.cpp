@@ -22,8 +22,7 @@ void dae::TileComponent::Update(float)
 		if (collsion->GetCollisionType() == Player && collsion->Collide(m_pCollisionComp->GetCollision()))
 		{
 			//Destroy
-			m_pCollisionComp->SetCollision(false);
-			m_pSpriteComp->SetRender(false);
+			GetOwner()->MarkForDeletion();
 		}
 	}
 }
@@ -53,8 +52,7 @@ void dae::TileComponent::FixedUpdate(float)
 		if (collsion->GetCollisionType() == Player && collsion->Collide(m_pCollisionComp->GetCollision()))
 		{
 			//Destroy
-			m_pCollisionComp->SetCollision(false);
-			m_pSpriteComp->SetRender(false);
+			GetOwner()->MarkForDeletion();
 		}
 	}
 }

@@ -28,6 +28,7 @@
 #include "Enemies/PookaComponent.h"
 #include "Enemies/FygarsComponent.h"
 #include "Enemies/EnemyManager.h"
+#include "DigDugCommand.h"
 using namespace dae;
 void MakePlayerAnimation(std::vector<Sprite*>& listOfAnimation);
 void CreateInputSolo(std::unique_ptr<GameObject>& firstSprite);

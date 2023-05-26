@@ -174,6 +174,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="DigDug.cpp" />
+    <ClCompile Include="DigDugCommand.cpp" />
     <ClCompile Include="Enemies\EnemyManager.cpp" />
     <ClCompile Include="Enemies\FygarsComponent.cpp" />
     <ClCompile Include="Enemies\Enemy.cpp" />
@@ -185,6 +186,7 @@
     <ClCompile Include="TileComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="DigDugCommand.h" />
     <ClInclude Include="Enemies\EnemyManager.h" />
     <ClInclude Include="Enemies\FygarsComponent.h" />
     <ClInclude Include="Enemies\Enemy.h" />

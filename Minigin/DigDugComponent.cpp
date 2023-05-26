@@ -49,7 +49,7 @@ void dae::DigDugComponent::Update(float elapsed)
 				m_pCollisionComponent->SetCollision(false);
 				m_HealthComponent->NotifyHealthSubject();
 			}
-			if (collision->GetCollisionType() == Underground && collision->Collide(m_pCollisionComponent->GetCollision()) && !m_IsDead)
+			if (collision->GetCollisionType() == Underground && collision->Collide(m_pCollisionComponent->GetCollision()) && !m_IsDead && !m_UsingWaterPump)
 			{
 				//set underground animation
 				m_IsDigging = true;

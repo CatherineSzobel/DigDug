@@ -20,16 +20,19 @@ dae::GameObject::~GameObject()
 }
 void dae::GameObject::Update(float deltaTime)
 {
-	for (const auto& component : m_pComponents)
+	if (!m_IsMarkedForDeletion)
 	{
-		component->Update(deltaTime);
-	}
-	for (const auto& child : m_pChildren)
-	{
-		//assert(child->GetComponents().size() > 0);
-		for (const auto& component : child->GetComponents())
+		for (const auto& component : m_pComponents)
 		{
 			component->Update(deltaTime);
+		}
+		for (const auto& child : m_pChildren)
+		{
+			//assert(child->GetComponents().size() > 0);
+			for (const auto& component : child->GetComponents())
+			{
+				component->Update(deltaTime);
+			}
 		}
 	}
 }
@@ -50,16 +53,18 @@ void dae::GameObject::FixedUpdate(float deltaTime)
 }
 void dae::GameObject::Render() const
 {
-	for (const auto& component : m_pComponents)
+	if (!m_IsMarkedForDeletion)
 	{
-		component->Render();
-	}
-	for (const auto& child : m_pChildren)
-	{
-		//assert(child->GetComponents().size() > 0);
-		for (const auto& component : child->GetComponents())
+		for (const auto& component : m_pComponents)
 		{
 			component->Render();
+		}
+		for (const auto& child : m_pChildren)
+		{
+			for (const auto& component : child->GetComponents())
+			{
+				component->Render();
+			}
 		}
 	}
 }
@@ -70,7 +75,7 @@ void dae::GameObject::AddChild(GameObject* child)
 	auto childIt = std::find(m_pChildren.begin(), m_pChildren.end(), child);
 	if (childIt == m_pChildren.end())
 	{
-	//	assert(child->GetComponents().size() > 0);
+		//	assert(child->GetComponents().size() > 0);
 		m_pChildren.push_back(child);
 	}
 	else

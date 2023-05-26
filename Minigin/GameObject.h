@@ -21,7 +21,6 @@ namespace dae
 		virtual void Update(float deltaTime);
 		virtual void FixedUpdate(float deltaTime);
 		virtual void Render() const;
-
 		void SetParent(GameObject* pParent, bool keepWorldPosition);
 
 		template<class Type>
@@ -34,6 +33,7 @@ namespace dae
 		glm::vec3 GetLocalPosition() const;
 		void SetLocalPosition(const glm::vec3& localPosition);
 		const glm::vec3& GetWorldPosition();
+		void MarkForDeletion() {m_IsMarkedForDeletion = true;};
 
 	private:
 		void AddChild(GameObject* child);
@@ -54,7 +54,7 @@ namespace dae
 		std::vector<GameObject*> m_pChildren{};
 
 		glm::vec3 m_LocalPosition, m_WorldPosition;
-		bool m_PositionIsDirty{ true };
+		bool m_PositionIsDirty{ true }, m_IsMarkedForDeletion{ false };
 	};
 
 	template<class Type>

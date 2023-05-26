@@ -10,8 +10,9 @@
 #include "Renderer.h"
 #include "ResourceManager.h"
 #include <chrono>
-//#include "SoundSystem.h"
 #include "sdl_sound_system.h"
+#include "servicelocator.h"
+#include "GameTime.h"
 #include <thread>
 SDL_Window* g_window{};
 
@@ -69,6 +70,7 @@ dae::Minigin::Minigin(const std::string& dataPath)
 	InputManager::GetInstance().Initialize();
 	ResourceManager::GetInstance().Init(dataPath);
 	servicelocator::register_sound_system(new sdl_sound_system());
+
 }
 
 dae::Minigin::~Minigin()
