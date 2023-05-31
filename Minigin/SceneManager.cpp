@@ -3,26 +3,17 @@
 
 void dae::SceneManager::Update(float deltaTime)
 {
-	for (auto& scene : m_scenes)
-	{
-		scene->Update(deltaTime);
-	}
+	m_CurrentScene->Update(deltaTime);
 }
 
 void dae::SceneManager::FixedUpdate(float deltaTime)
 {
-	for (auto& scene : m_scenes)
-	{
-		scene->FixedUpdate(deltaTime);
-	}
+	m_CurrentScene->FixedUpdate(deltaTime);
 }
 
 void dae::SceneManager::Render()
 {
-	for (const auto& scene : m_scenes)
-	{
-		scene->Render();
-	}
+	m_CurrentScene->Render();
 }
 
 dae::Scene& dae::SceneManager::CreateScene(const std::string& name)
@@ -32,7 +23,11 @@ dae::Scene& dae::SceneManager::CreateScene(const std::string& name)
 	m_CurrentScene = scene;
 	return *m_CurrentScene;
 }
-dae::Scene& dae::SceneManager::GetCurrentScene()
+dae::Scene& dae::SceneManager::GetScene(int index) const
+{
+	return *m_scenes[index];
+}
+dae::Scene& dae::SceneManager::GetCurrentScene() const
 {
 	return *m_CurrentScene;
 }
@@ -57,7 +52,7 @@ void dae::SceneManager::NextScene()
 {
 	auto it = std::find(m_scenes.cbegin(), m_scenes.cend(), m_CurrentScene);
 	auto index = it - m_scenes.begin();
-	if ((size_t)index >= m_scenes.size())
+	if ((size_t)index >= m_scenes.size() - 1)
 	{
 		m_CurrentScene = m_scenes[0];
 	}
@@ -65,4 +60,15 @@ void dae::SceneManager::NextScene()
 	{
 		m_CurrentScene = m_scenes[++index];
 	}
+}
+int dae::SceneManager::GetCurrentSceneIndex() const
+{
+
+	auto it = std::find(m_scenes.cbegin(), m_scenes.cend(), m_CurrentScene);
+	if (it != m_scenes.cend())
+	{
+		auto index = it - m_scenes.begin();
+		return (int)index;
+	}
+	return 0;
 }

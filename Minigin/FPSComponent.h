@@ -25,7 +25,7 @@ namespace dae
 		virtual void Update(float deltaTime);
 		virtual void FixedUpdate(float deltaTime);
 
-		int GetFPS();
+		int GetFPS() const;
 	private:
 		TextComponent* m_TextComponent;
 		float m_Elapsed = 0.f;

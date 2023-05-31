@@ -3,7 +3,7 @@
 #include "TextComponent.h"
 namespace dae
 {
-	class PointsComponent : public BaseComponent, public Observer
+	class PointsComponent final : public BaseComponent, public Observer
 	{
 	public:
 		// Inherited via BaseComponent

@@ -22,7 +22,7 @@ void dae::TileComponent::Update(float)
 		if (collsion->GetCollisionType() == Player && collsion->Collide(m_pCollisionComp->GetCollision()))
 		{
 			//Destroy
-			GetOwner()->MarkForDeletion();
+			GetOwner()->MarkForDeletion(true);
 		}
 	}
 }
@@ -52,7 +52,7 @@ void dae::TileComponent::FixedUpdate(float)
 		if (collsion->GetCollisionType() == Player && collsion->Collide(m_pCollisionComp->GetCollision()))
 		{
 			//Destroy
-			GetOwner()->MarkForDeletion();
+			GetOwner()->MarkForDeletion(true);
 		}
 	}
 }

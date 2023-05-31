@@ -25,7 +25,11 @@ void Scene::Remove(std::unique_ptr<GameObject> object)
 
 void Scene::RemoveAll()
 {
-	m_objects.clear();
+	//m_objects.clear();
+	for (const auto& object : m_objects)
+	{
+		object->MarkForDeletion(false);
+	}
 }
 
 void Scene::Update(float deltaTime)
@@ -49,3 +53,4 @@ void Scene::Render() const
 		object->Render();
 	}
 }
+

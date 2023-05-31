@@ -2,12 +2,13 @@
 #include "ExtraStructs.h"
 #include "BaseComponent.h"
 #include "GameObject.h"
+#include "Scene.h"
 namespace dae
 {
 	class CollisionComponent final : public BaseComponent
 	{
 	public:
-		CollisionComponent() = default;
+		CollisionComponent();
 		virtual ~CollisionComponent() = default;
 
 		CollisionComponent(const CollisionComponent&) = delete;
@@ -26,19 +27,22 @@ namespace dae
 
 		bool Collide( Rectf rect1);
 
-		Rectf GetCollision() const { return m_Collision; };
 		void SetCollision(bool flag) { m_IsEnabled = flag; };
+		void SetCollisionType(CollisionType type) { m_CollisionType = type; };
+
+		Rectf GetCollision() const { return m_Collision; };
 		bool GetCollisionStatus() const { return m_IsEnabled; };
 		CollisionType GetCollisionType() { return m_CollisionType; };
-		void SetCollisionType(CollisionType type) { m_CollisionType = type; };
+		Scene* GetScene() {return m_Scene;};
 
 		void DrawDebug(float left, float bottom, float width, float height);
 	private:
 		Rectf m_Collision, m_OriginalCollisionPosition;
 		bool m_IsEnabled = true, m_DebugOn = false;
 		CollisionType m_CollisionType;
+		Scene* m_Scene;
 
-
+		void SetScene(Scene* scene);
 	};
 
 }

@@ -1,6 +1,11 @@
 #include "CollisionComponent.h"
 #include "SDL.h"
 #include "Renderer.h"
+dae::CollisionComponent::CollisionComponent()
+{
+	auto& currentScene = SceneManager::GetInstance().GetCurrentScene();
+	SetScene(&currentScene);
+}
 void dae::CollisionComponent::Render()
 {
 	if (m_DebugOn)
@@ -59,6 +64,11 @@ bool dae::CollisionComponent::Collide(Rectf rect2)
 	}
 	return false;
 }
+//
+//Scene& dae::CollisionComponent::GetScene()
+//{
+//	return 
+//}
 
 void dae::CollisionComponent::DrawDebug(float left, float bottom, float width, float height)
 {
@@ -68,4 +78,9 @@ void dae::CollisionComponent::DrawDebug(float left, float bottom, float width, f
 	SDL_RenderDrawLine(Renderer::GetInstance().GetSDLRenderer(), (int)left, (int)height, (int)width, (int)height);
 	SDL_RenderDrawLine(Renderer::GetInstance().GetSDLRenderer(), (int)width, (int)height, (int)width, (int)bottom);
 	SDL_RenderDrawLine(Renderer::GetInstance().GetSDLRenderer(), (int)width, (int)bottom, (int)left, (int)bottom);
+}
+
+void dae::CollisionComponent::SetScene(Scene* scene)
+{
+	m_Scene = scene;
 }

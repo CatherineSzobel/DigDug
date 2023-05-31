@@ -4,7 +4,7 @@
 #include "Event.h"
 namespace dae
 {
-	class Observer
+	class Observer 
 	{
 	public:
 		Observer() = default;

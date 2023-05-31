@@ -1,10 +1,11 @@
+#pragma once
 #include "Command.h"
 #include "InputComponent.h"
 #include "PointsComponent.h"
 #include "DigDugComponent.h"
-#include "SpriteComponent.h"
 #include "GameTime.h"
 #include "servicelocator.h"
+#include "SceneManager.h"
 namespace dae
 {
 	class MoveLeftRightCommand final : public GameObjectCommand
@@ -160,6 +161,21 @@ namespace dae
 		std::string m_Path;
 	};
 
+	class NextSceneCommand final : public Command
+	{
+	public:
+		NextSceneCommand() {};
+		virtual ~NextSceneCommand() = default;
+		virtual void Execute() override
+		{
+			auto& scene = SceneManager::GetInstance();
+			scene.NextScene();
+		};
+		virtual void Undo() override
+		{};
+	private:
+
+	};
 
 	//class KillCommand final : public GameObjectCommand
 	//{

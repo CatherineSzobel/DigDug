@@ -1,6 +1,7 @@
 #pragma once
 #include "Singleton.h"
 #include "CollisionComponent.h"
+#include "Scene.h"
 namespace dae
 {
 	class CollisionManager final : public Singleton<CollisionManager>
@@ -8,8 +9,10 @@ namespace dae
 	public:
 		CollisionManager() = default;
 		virtual ~CollisionManager();
-		std::vector<CollisionComponent*> GetCollisions() { return m_Collisions; };
 		void AddCollision(CollisionComponent* collision);
+		void ResetCollision();
+		void SetCollisionsActive();
+		std::vector<CollisionComponent*> GetCollisions() const{ return m_Collisions; };
 	private:
 		std::vector<CollisionComponent*> m_Collisions;
 	};

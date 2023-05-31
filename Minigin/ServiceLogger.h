@@ -1,3 +1,4 @@
+#pragma once
 #include "SoundSystem.h"
 namespace dae
 {

@@ -36,7 +36,7 @@ void dae::FPSComponent::Update(float deltaTime)
 void dae::FPSComponent::FixedUpdate(float){}
 
 
-int dae::FPSComponent::GetFPS()
+int dae::FPSComponent::GetFPS() const
 {
 	return m_FPS;
 }

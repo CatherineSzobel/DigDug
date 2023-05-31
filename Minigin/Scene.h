@@ -16,7 +16,7 @@ namespace dae
 		void Update(float deltaTime);
 		void FixedUpdate(float deltaTime);
 		void Render() const;
-
+		bool isSceneEmpty() { return std::move(m_objects.empty()); };
 		std::string GetName() const { return m_name; }
 		~Scene();
 		Scene(const Scene& other) = delete;
@@ -29,7 +29,6 @@ namespace dae
 
 		std::string m_name;
 		std::vector < std::unique_ptr<GameObject>> m_objects{};
-
 		static unsigned int m_idCounter;
 	
 	};

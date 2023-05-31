@@ -30,7 +30,7 @@ namespace dae
 		bool IsUp(ControllerButton button) const;
 		bool IsPressed(ControllerButton button) const;
 
-		ControllerCommandsMap GetButtons();
+		ControllerCommandsMap GetButtons() const;
 
 	private:
 		class ControllerImpl;

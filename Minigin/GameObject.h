@@ -33,7 +33,7 @@ namespace dae
 		glm::vec3 GetLocalPosition() const;
 		void SetLocalPosition(const glm::vec3& localPosition);
 		const glm::vec3& GetWorldPosition();
-		void MarkForDeletion() {m_IsMarkedForDeletion = true;};
+		void MarkForDeletion(bool flag) {m_IsMarkedForDeletion = flag;};
 
 	private:
 		void AddChild(GameObject* child);

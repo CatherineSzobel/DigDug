@@ -3,7 +3,7 @@
 #include "BaseComponent.h"
 namespace dae
 {
-	class PointsDisplayComponent : public BaseComponent, public Observer
+	class PointsDisplayComponent final: public BaseComponent, public Observer
 	{
 		PointsDisplayComponent() = default;
 		virtual ~PointsDisplayComponent() = default;

@@ -6,7 +6,7 @@ namespace dae
 	{
 	public:
 		GameTime() = default;
-		~GameTime() = default;
+		virtual ~GameTime() = default;
 		const float& GetDeltaTime() { return m_DeltaTime; };
 		void SetDeltaTime(float deltaTime) { m_DeltaTime = deltaTime; }
 		void Wait(float amount);

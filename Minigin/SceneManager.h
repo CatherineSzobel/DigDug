@@ -11,12 +11,14 @@ namespace dae
 	{
 	public:
 		Scene& CreateScene(const std::string& name);
-		Scene& GetCurrentScene();
+		Scene& GetScene(int index) const;
+		Scene& GetCurrentScene() const;
 		void ChangeSceneTo(const std::string& name);
 		void NextScene();
 		void Update(float deltaTime);
 		void FixedUpdate(float deltaTime);
 		void Render();
+		int GetCurrentSceneIndex() const;
 	private:
 		friend class Singleton<SceneManager>;
 		SceneManager() = default;

@@ -19,9 +19,9 @@ namespace dae
 		int GetLives() const { return m_RemainingLives; }
 		void DecreaseHealth();
 		void NotifyHealthSubject();
-		bool GetIsDead() { return m_IsDead; }
+		bool GetIsDead() const { return m_IsDead; }
 		std::unique_ptr<Subject> GetSubject() { return std::move(m_pSubject); };
-		
+
 
 	private:
 		int m_CurrentHealth;

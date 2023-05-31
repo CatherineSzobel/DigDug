@@ -15,6 +15,7 @@ struct Rectf
 enum CollisionType
 {
 	Player,
+	Pump,
 	EnemyLayer,
 	Sand,
 	Underground,

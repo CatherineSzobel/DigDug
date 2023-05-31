@@ -85,7 +85,7 @@ bool dae::Controller::IsPressed(ControllerButton button) const
 	return pImpl->IsPressed(static_cast<unsigned int>(button));
 }
 
-dae::ControllerCommandsMap dae::Controller::GetButtons()
+dae::ControllerCommandsMap dae::Controller::GetButtons() const
 {
 	return pImpl->GetButtonsImpl();
 }

@@ -18,7 +18,7 @@ namespace dae
 	class InputManager final : public Singleton<InputManager>
 	{
 	public:
-		~InputManager();
+		virtual ~InputManager();
 		bool ProcessInput();
 		void Initialize();
 		//void BindControllerCommand(ControllerButton button, Command* command, InputType inputType);
