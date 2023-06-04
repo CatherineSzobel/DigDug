@@ -6,95 +6,51 @@
 #include "GameTime.h"
 #include "servicelocator.h"
 #include "SceneManager.h"
-namespace dae
+#include "ExtraStructs.h"
+using namespace dae;
+namespace digdug
 {
-	class MoveLeftRightCommand final : public GameObjectCommand
+	class MoveCommand final : public GameObjectCommand
 	{
 	public:
-		MoveLeftRightCommand(GameObject* owner, int direction) : GameObjectCommand(owner), m_Direction{ direction }
+
+		MoveCommand(GameObject* owner, Direction direction) : GameObjectCommand{ owner }, m_Direction{ direction }
 		{
 			m_pSpriteComp = GetGameActor()->GetComponent<SpriteComponent>();
 			m_pDigDugComp = GetGameActor()->GetComponent<DigDugComponent>();
 		};
-		virtual ~MoveLeftRightCommand() = default;
+		virtual ~MoveCommand() = default;
 		virtual void Execute() override
 		{
 			auto pos = GetGameActor()->GetLocalPosition();
 			auto movementSpeed = GetGameActor()->GetComponent<InputComponent>()->GetMovementSpeed();
 			auto elapsed = GameTime::GetInstance().GetDeltaTime();
 			auto isDead = m_pDigDugComp->IsPlayerDeadCheck();
-			auto isDigging = m_pDigDugComp->IsDigging();
+			//auto isDigging = m_pDigDugComp->IsDigging();
 			if (!isDead)
 			{
-
-
-				GetGameActor()->SetLocalPosition({ pos.x + ((movementSpeed * m_Direction) * elapsed) ,pos.y  , pos.z });
-				//	m_OriginalPos = pos;
-				if (m_Direction < 0)
-				{
-					if (isDigging)
-						m_pSpriteComp->SetAnimationByName("PlayerMoveLeftWithArrow");
-					else
-						m_pSpriteComp->SetAnimationByName("PlayerWalkLeft");
-				}
-				else
-				{
-					if (isDigging)
-						m_pSpriteComp->SetAnimationByName("PlayerMoveRightWithArrow");
-					else
-						m_pSpriteComp->SetAnimationByName("PlayerWalkRight");
-
-				}
-				m_pDigDugComp->SetMoving(true);
-				m_pDigDugComp->SetUsingWaterPump(false);
-			}
-		}
-		virtual void Undo() override
-		{
-			GetGameActor()->SetLocalPosition({ m_OriginalPos.x,m_OriginalPos.y,m_OriginalPos.z });
-		}
-	private:
-		int m_Direction{};
-		glm::vec3 m_OriginalPos{};
-		SpriteComponent* m_pSpriteComp = nullptr;
-		DigDugComponent* m_pDigDugComp = nullptr;
-	};
-
-	class MoveUpDownCommand final : public GameObjectCommand
-	{
-	public:
-		MoveUpDownCommand(GameObject* owner, int direction) : GameObjectCommand{ owner }, m_Direction{ direction }
-		{
-			m_pSpriteComp = GetGameActor()->GetComponent<SpriteComponent>();
-			m_pDigDugComp = GetGameActor()->GetComponent<DigDugComponent>();
-		};
-		virtual ~MoveUpDownCommand() = default;
-		virtual void Execute() override
-		{
-			auto pos = GetGameActor()->GetLocalPosition();
-			auto movementSpeed = GetGameActor()->GetComponent<InputComponent>()->GetMovementSpeed();
-			auto elapsed = GameTime::GetInstance().GetDeltaTime();
-			auto isDead = m_pDigDugComp->IsPlayerDeadCheck();
-			auto isDigging = m_pDigDugComp->IsDigging();
-			if (!isDead)
-			{
-				GetGameActor()->SetLocalPosition({ pos.x,pos.y + ((movementSpeed * m_Direction) * elapsed)  , pos.z });
 				///	m_OriginalPos = pos;
-				if (m_Direction < 0)
+				switch (m_Direction)
 				{
-					if (isDigging)
-						m_pSpriteComp->SetAnimationByName("PlayerMoveUpWithArrow");
-					else
-						m_pSpriteComp->SetAnimationByName("PlayerWalkUp");
-
+				case Direction::left:
+					m_DirectionVec.x = -1;
+					m_DirectionVec.y = 0;
+					break;
+				case Direction::right:
+					m_DirectionVec.x = 1;
+					m_DirectionVec.y = 0;
+					break;
+				case Direction::up:
+					m_DirectionVec.y = -1;
+					m_DirectionVec.x = 0;
+					break;
+				case Direction::down:
+					m_DirectionVec.y = 1;
+					m_DirectionVec.x = 0;
+					break;
 				}
-				else
-				{
-					if (isDigging)
-						m_pSpriteComp->SetAnimationByName("PlayerMoveDownWithArrow");
-					else
-						m_pSpriteComp->SetAnimationByName("PlayerWalkDown");
-				}
+				m_pDigDugComp->SetDirection(m_Direction);
+				GetGameActor()->SetLocalPosition({pos.x + ((movementSpeed * m_DirectionVec.x) * elapsed),pos.y + ((movementSpeed * m_DirectionVec.y) * elapsed)  , pos.z });
 				m_pDigDugComp->SetMoving(true);
 				m_pDigDugComp->SetUsingWaterPump(false);
 			}
@@ -104,12 +60,12 @@ namespace dae
 			GetGameActor()->SetLocalPosition({ m_OriginalPos.x,m_OriginalPos.y,m_OriginalPos.z });
 		}
 	private:
-		int m_Direction{ };
+		Direction m_Direction{ };
+		glm::vec2 m_DirectionVec{};
 		glm::vec3 m_OriginalPos{};
 		SpriteComponent* m_pSpriteComp = nullptr;
 		DigDugComponent* m_pDigDugComp = nullptr;
 	};
-
 	class PumpCommand final : public GameObjectCommand
 	{
 	public:
@@ -125,7 +81,7 @@ namespace dae
 			if (!GetGameActor()->GetComponent<DigDugComponent>()->IsPlayerDeadCheck())
 			{
 
-				if (m_pSpriteComponent->GetCurrentAnimation() == "PlayerWalkLeft")
+			/*	if (m_pSpriteComponent->GetCurrentAnimation() == "PlayerWalkLeft")
 				{
 					m_pSpriteComponent->SetAnimationByName("WaterPumpLeft");
 				}
@@ -143,11 +99,10 @@ namespace dae
 				{
 					m_pSpriteComponent->SetAnimationByName("WaterPumpDown");
 
-				}
-
+				}*/
+				m_pDigDugComp->SetUsingWaterPump(true);
 				servicelocator::get_sound_system().Play(m_Path, m_Volume);
 				m_pDigDugComp->SetMoving(false);
-				m_pDigDugComp->SetUsingWaterPump(true);
 				servicelocator::get_sound_system().HaltMusic();
 
 			}

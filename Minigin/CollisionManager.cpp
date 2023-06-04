@@ -31,3 +31,16 @@ void dae::CollisionManager::SetCollisionsActive()
 		}
 	}
 }
+
+std::vector<dae::CollisionComponent*> dae::CollisionManager::GetCollisionsByType(CollisionType type)
+{
+	std::vector<dae::CollisionComponent*> tempVector;
+	for (const auto collision : m_Collisions)
+	{
+		if (collision->GetCollisionType() == type )
+		{
+			tempVector.emplace_back(collision);
+		}
+	}
+	return tempVector;
+}

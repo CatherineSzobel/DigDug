@@ -1,7 +1,8 @@
 #include "BaseComponent.h"
 #include "CollisionComponent.h"
 #include "SpriteComponent.h"
-namespace dae
+using namespace dae;
+namespace digdug
 {
 	class RockComponent final : public BaseComponent
 	{

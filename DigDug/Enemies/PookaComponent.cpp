@@ -1,31 +1,36 @@
 #include "PookaComponent.h"
 
-dae::PookaComponent::PookaComponent()
+digdug::PookaComponent::PookaComponent()
 {
 }
 
-dae::PookaComponent::~PookaComponent()
+digdug::PookaComponent::~PookaComponent()
 {
 	GetOwner()->RemoveComponent<SpriteComponent>();
 	GetOwner()->RemoveComponent<CollisionComponent>();
 }
 
-void dae::PookaComponent::Render()
+void digdug::PookaComponent::Render()
 {
 
 }
 
-void dae::PookaComponent::Update(float)
+void digdug::PookaComponent::Update(float)
+{
+	if (m_IsDead)
+	{
+		GetOwner()->MarkForDeletion(true);
+		m_pCollisionComp->SetCollision(false);
+		SetActive(false);
+	}
+}
+
+void digdug::PookaComponent::FixedUpdate(float)
 {
 
 }
 
-void dae::PookaComponent::FixedUpdate(float)
-{
-
-}
-
-void dae::PookaComponent::Initialize()
+void digdug::PookaComponent::Initialize()
 {
 	m_pSpriteComp = GetOwner()->AddComponent<SpriteComponent>();
 	m_pCollisionComp = GetOwner()->AddComponent<CollisionComponent>();
@@ -41,7 +46,7 @@ void dae::PookaComponent::Initialize()
 	m_pCollisionComp->CreateCollision(Rectf{ size.left,size.height / 2.f,size.width,size.height / 2.f }, EnemyLayer, true);
 }
 
-void dae::PookaComponent::MoveAround()
+void digdug::PookaComponent::MoveAround()
 {
 
 }

@@ -1,7 +1,8 @@
 #pragma once
 #include "Observer.h"
 #include "BaseComponent.h"
-namespace dae
+using namespace dae;
+namespace digdug
 {
 	class PointsDisplayComponent final: public BaseComponent, public Observer
 	{

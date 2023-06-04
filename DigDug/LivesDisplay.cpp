@@ -1,5 +1,5 @@
 #include "LivesDisplay.h"
-void dae::LivesDisplay::Notify(dae::GameObject* actor , Event event )
+void digdug::LivesDisplay::Notify(dae::GameObject* actor , Event event )
 {
 	if (Event::OnPlayerDeath == event)
 	{
@@ -12,14 +12,14 @@ void dae::LivesDisplay::Notify(dae::GameObject* actor , Event event )
 
 }
 
-void dae::LivesDisplay::Render()
+void digdug::LivesDisplay::Render()
 {
 }
 
-void dae::LivesDisplay::Update(float)
+void digdug::LivesDisplay::Update(float)
 {
 }
 
-void dae::LivesDisplay::FixedUpdate(float)
+void digdug::LivesDisplay::FixedUpdate(float)
 {
 }

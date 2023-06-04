@@ -269,6 +269,7 @@ xcopy $(SolutionDir)3rdParty\SDL2_mixer\lib\$(PlatformTarget)\*.dll $(OutputPath
     <ClInclude Include="SoundSystem.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="SpriteComponent.h" />
+    <ClInclude Include="State.h" />
     <ClInclude Include="Subject.h" />
     <ClInclude Include="TextComponent.h" />
     <ClInclude Include="Texture2D.h" />
@@ -310,6 +311,7 @@ xcopy $(SolutionDir)3rdParty\SDL2_mixer\lib\$(PlatformTarget)\*.dll $(OutputPath
     <ClCompile Include="SoundSystem.cpp" />
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="SpriteComponent.cpp" />
+    <ClCompile Include="State.cpp" />
     <ClCompile Include="Subject.cpp" />
     <ClCompile Include="TextComponent.cpp" />
     <ClCompile Include="Texture2D.cpp" />

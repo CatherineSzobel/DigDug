@@ -182,12 +182,14 @@
     <ClCompile Include="HealthComponent.cpp" />
     <ClCompile Include="LevelManager.cpp" />
     <ClCompile Include="LivesDisplay.cpp" />
+    <ClCompile Include="PlayerState.cpp" />
     <ClCompile Include="PointsComponent.cpp" />
     <ClCompile Include="PointsDisplayComponent.cpp" />
     <ClCompile Include="Enemies\PookaComponent.cpp" />
     <ClCompile Include="PumpComponent.cpp" />
     <ClCompile Include="RockComponent.cpp" />
     <ClCompile Include="TileComponent.cpp" />
+    <ClCompile Include="UIState.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DigDugCommand.h" />
@@ -198,12 +200,14 @@
     <ClInclude Include="HealthComponent.h" />
     <ClInclude Include="LevelManager.h" />
     <ClInclude Include="LivesDisplay.h" />
+    <ClInclude Include="PlayerState.h" />
     <ClInclude Include="PointsComponent.h" />
     <ClInclude Include="PointsDisplayComponent.h" />
     <ClInclude Include="Enemies\PookaComponent.h" />
     <ClInclude Include="PumpComponent.h" />
     <ClInclude Include="RockComponent.h" />
     <ClInclude Include="TileComponent.h" />
+    <ClInclude Include="UIState.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

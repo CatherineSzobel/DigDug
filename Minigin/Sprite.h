@@ -1,9 +1,10 @@
 #pragma once
 #include <string>
+#include "Texture2D.h"
+#include "ResourceManager.h"
 #include "ExtraStructs.h"
 #include "Renderer.h"
-#include "ResourceManager.h"
-#include "Texture2D.h"
+
 class Sprite final
 {
 public:

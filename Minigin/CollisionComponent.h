@@ -22,13 +22,15 @@ namespace dae
 		virtual void FixedUpdate(float deltaTime) override;
 
 
-		void CreateCollision(const Rectf& collision, CollisionType type, bool debug = false);
+		void CreateCollision(const Rectf& collision, CollisionType type, bool debug = false,bool moveAble = true);
+		void CreateCollision(const Rectf& collision, glm::vec2 offSet, CollisionType type, bool debug = false, bool moveAble = true);
 		void CreateCollision(float left, float bottom, float width, float height, CollisionType type, bool debug = false);
 
 		bool Collide( Rectf rect1);
 
 		void SetCollision(bool flag) { m_IsEnabled = flag; };
 		void SetCollisionType(CollisionType type) { m_CollisionType = type; };
+
 
 		Rectf GetCollision() const { return m_Collision; };
 		bool GetCollisionStatus() const { return m_IsEnabled; };
@@ -38,7 +40,8 @@ namespace dae
 		void DrawDebug(float left, float bottom, float width, float height);
 	private:
 		Rectf m_Collision, m_OriginalCollisionPosition;
-		bool m_IsEnabled = true, m_DebugOn = false;
+		glm::vec2 m_OffSetVector = {0.f,0.f};
+		bool m_IsEnabled = true, m_DebugOn = false, m_IsMoveable = true;
 		CollisionType m_CollisionType;
 		Scene* m_Scene;
 

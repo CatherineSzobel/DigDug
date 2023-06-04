@@ -27,6 +27,7 @@
 #include "Enemies/PookaComponent.h"
 #include "Enemies/EnemyManager.h"
 using namespace dae;
+using namespace digdug;
 void CreateInputSolo(std::unique_ptr<GameObject>& firstSprite);
 void CreateInput_Coop(std::unique_ptr<GameObject>& firstSprite, std::unique_ptr<GameObject>& secondSprite);
 void SaveAllCollision(std::vector<Rectf>& m_pCollision, std::unique_ptr<GameObject>& go);
@@ -279,7 +280,7 @@ void CreateLevels()
 	auto fullPath = dae::ResourceManager::GetInstance().GetDataPath() + "Levels/level1.txt";
 	LevelManager::GetInstance().LoadLevel(fullPath, firstLevel);
 
-	auto& secondLevel = dae::SceneManager::GetInstance().CreateScene("secondLevel");
-	fullPath = dae::ResourceManager::GetInstance().GetDataPath() + "Levels/level2.txt";
-	LevelManager::GetInstance().LoadLevel(fullPath, secondLevel);
+	//auto& secondLevel = dae::SceneManager::GetInstance().CreateScene("secondLevel");
+	//fullPath = dae::ResourceManager::GetInstance().GetDataPath() + "Levels/level2.txt";
+	//LevelManager::GetInstance().LoadLevel(fullPath, secondLevel);
 }

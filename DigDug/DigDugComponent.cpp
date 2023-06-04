@@ -2,7 +2,8 @@
 #include <stdexcept>
 #include <SDL_ttf.h>
 #include "CollisionManager.h"
-dae::DigDugComponent::DigDugComponent()
+using namespace dae;
+digdug::DigDugComponent::DigDugComponent()
 	:
 	m_IsDead{ false },
 	m_RespawnCountdown{ 3.f },
@@ -14,28 +15,29 @@ dae::DigDugComponent::DigDugComponent()
 {
 
 }
-dae::DigDugComponent::~DigDugComponent()
+digdug::DigDugComponent::~DigDugComponent()
 {
 	GetOwner()->RemoveComponent<SpriteComponent>();
 	GetOwner()->RemoveComponent<CollisionComponent>();
+	delete	m_CurrentState;
+	m_CurrentState = nullptr;
 }
 
-void dae::DigDugComponent::Render()
+void digdug::DigDugComponent::Render()
 {
 }
 
-void dae::DigDugComponent::Update(float elapsed)
+void digdug::DigDugComponent::Update(float elapsed)
 {
-	if (m_IsDead)
-		DeathCountdown(elapsed);
-
-	if (GetOwner()->GetLocalPosition() == m_OriginalPos)
-		m_IsDead = false;
-
-	RespawnCountDown(elapsed);
+	auto newState = m_CurrentState->Update(GetOwner(), elapsed);
+	if (newState != nullptr)
+	{
+		delete m_CurrentState;
+		m_CurrentState = newState;
+	}
 	if (!m_IsDead)
 	{
-		std::cout << EnemyManager::GetInstance().EnemiesLeft() << "\n";
+		//std::cout << EnemyManager::GetInstance().EnemiesLeft() << "\n";
 		if (m_IsMoving && !servicelocator::get_sound_system().IsPlaying())
 		{
 			servicelocator::get_sound_system().PlayMusic("Sounds/Music/Theme.mp3", 1, true);
@@ -44,32 +46,36 @@ void dae::DigDugComponent::Update(float elapsed)
 		{
 			if (collision->GetCollisionType() == EnemyLayer && collision->Collide(m_pCollisionComponent->GetCollision()))
 			{
-				//character dies
-				servicelocator::get_sound_system().Play("Sounds/Sound/GetHitSound.wav", 2);
 				m_IsDead = true;
 				m_IsMoving = false;
-				servicelocator::get_sound_system().HaltMusic();
-				m_pCollisionComponent->SetCollision(false);
+
 				m_pHealthComponent->NotifyHealthSubject();
 			}
-			if (collision->GetCollisionType() == Underground && collision->Collide(m_pCollisionComponent->GetCollision()) && !m_IsDead && !m_UsingWaterPump)
+			if (collision->GetCollisionType() == Sand && collision->Collide(m_pCollisionComponent->GetCollision()))
 			{
 				//set underground animation
-				m_IsDigging = true;
-			}
-			else
-			{
-				m_IsDigging = false;
+			//	m_IsDigging = true;
 			}
 		}
 	}
 }
-
-void dae::DigDugComponent::FixedUpdate(float)
+void digdug::DigDugComponent::SetUsingWaterPump(bool flag)
+{
+	auto attached = m_pPumpComponent->IsAttached();
+	if (flag && !attached)
+	{
+		m_pPumpComponent->Shoot(GetOwner()->GetLocalPosition());
+	}
+	if (attached)
+	{
+		m_pPumpComponent->Pump();
+	}
+}
+void digdug::DigDugComponent::FixedUpdate(float)
 {
 }
 
-void dae::DigDugComponent::Initialize()
+void digdug::DigDugComponent::Initialize()
 {
 	m_pSpriteComponent = GetOwner()->AddComponent<SpriteComponent>();
 	m_pSpriteComponent->Initialize();
@@ -87,25 +93,30 @@ void dae::DigDugComponent::Initialize()
 
 	m_OriginalPos = GetOwner()->GetLocalPosition();
 	m_pHealthComponent = GetOwner()->GetComponent<HealthComponent>();
+
+	m_CurrentState = new IdleState(GetOwner());
+
+	m_pPumpComponent = GetOwner()->AddComponent<PumpComponent>();
+	m_pPumpComponent->Initialize();
 }
 
-bool dae::DigDugComponent::IsPlayerDeadCheck() const
+bool digdug::DigDugComponent::IsPlayerDeadCheck() const
 {
 	return m_IsDead;
 }
 
-int dae::DigDugComponent::GetLives() const
+int digdug::DigDugComponent::GetLives() const
 {
 	return GetOwner()->GetComponent<HealthComponent>()->GetLives();
 }
-void dae::DigDugComponent::ResetDigger()
+void digdug::DigDugComponent::ResetDigger()
 {
 	m_pSpriteComponent->SetAnimationByName("PlayerWalkRight");
 	GetOwner()->SetLocalPosition(m_OriginalPos);
 
 }
 
-void dae::DigDugComponent::RespawnCountDown(float elapsed)
+void digdug::DigDugComponent::RespawnCountDown(float elapsed)
 {
 	if (m_DeathCountdownFinished)
 	{
@@ -120,7 +131,7 @@ void dae::DigDugComponent::RespawnCountDown(float elapsed)
 	}
 }
 
-void dae::DigDugComponent::DeathCountdown(float elapsed)
+void digdug::DigDugComponent::DeathCountdown(float elapsed)
 {
 	if (!m_DeathCountdownFinished)
 	{
@@ -139,7 +150,7 @@ void dae::DigDugComponent::DeathCountdown(float elapsed)
 	}
 }
 
-void dae::DigDugComponent::CreateAnimation()
+void digdug::DigDugComponent::CreateAnimation()
 {
 	std::vector<Sprite*>DiggerAnimations;
 	auto playerScale = 1.5f;
@@ -148,10 +159,10 @@ void dae::DigDugComponent::CreateAnimation()
 	DiggerAnimations.emplace_back(new Sprite{ "Sprites/PlayerMoveUp.png", 2, 1, 2.f,  1.f / 2.f, "PlayerWalkUp",false,playerScale });
 	DiggerAnimations.emplace_back(new Sprite{ "Sprites/PlayerMoveDown.png", 2, 1, 2.f,  1.f / 2.f, "PlayerWalkDown",false,playerScale });
 
-	DiggerAnimations.emplace_back(new Sprite{ "Sprites/PlayerMoveLeftWithArrow.png", 2, 1, 2.f, 1.f / 2.f, "PlayerMoveLeftWithArrow",false,playerScale });
-	DiggerAnimations.emplace_back(new Sprite{ "Sprites/PlayerMoveRightWithArrow.png", 2, 1, 2.f,  1.f / 2.f, "PlayerMoveRightWithArrow",false,playerScale });
-	DiggerAnimations.emplace_back(new Sprite{ "Sprites/PlayerMoveUpWithArrow.png", 2, 1, 2.f,  1.f / 2.f, "PlayerMoveUpWithArrow",false,playerScale });
-	DiggerAnimations.emplace_back(new Sprite{ "Sprites/PlayerMoveDownWithArrow.png", 2, 1, 2.f,  1.f / 2.f, "PlayerMoveDownWithArrow",false,playerScale });
+	DiggerAnimations.emplace_back(new Sprite{ "Sprites/PlayerMoveLeftWithArrow.png", 2, 1, 2.f, 1.f / 2.f, "PlayerDigLeft",false,playerScale });
+	DiggerAnimations.emplace_back(new Sprite{ "Sprites/PlayerMoveRightWithArrow.png", 2, 1, 2.f,  1.f / 2.f, "PlayerDigRight",false,playerScale });
+	DiggerAnimations.emplace_back(new Sprite{ "Sprites/PlayerMoveUpWithArrow.png", 2, 1, 2.f,  1.f / 2.f, "PlayerDigUp",false,playerScale });
+	DiggerAnimations.emplace_back(new Sprite{ "Sprites/PlayerMoveDownWithArrow.png", 2, 1, 2.f,  1.f / 2.f, "PlayerDigDown",false,playerScale });
 
 	DiggerAnimations.emplace_back(new Sprite{ "Sprites/deathAnimationPlayer.png", 4, 1, 4.f, 1.f / 3.f, "deathAnimation" ,false,playerScale });
 

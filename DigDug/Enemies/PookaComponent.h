@@ -1,7 +1,8 @@
 #pragma once
 #include "BaseComponent.h"
 #include "Enemy.h"
-namespace dae
+using namespace dae;
+namespace digdug
 {
 
 	class PookaComponent final : public BaseComponent, public Enemy

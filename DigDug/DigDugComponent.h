@@ -7,17 +7,10 @@
 #include "servicelocator.h"
 #include "CollisionComponent.h"
 #include "Enemies/EnemyManager.h"
-namespace dae
+#include "PlayerState.h"
+using namespace dae;
+namespace digdug
 {
-	enum CharacterStates
-	{
-		Digging,
-		Idle,
-		Walking,
-		Death,
-		Throwing,
-		Respawn
-	};
 
 	class DigDugComponent final : public BaseComponent
 	{
@@ -34,15 +27,20 @@ namespace dae
 		bool IsPlayerDeadCheck() const;
 		int GetLives() const;
 		bool IsMoving() const { return m_IsMoving; };
+		bool IsPumping() const { return m_UsingWaterPump; };
+		glm::vec3 GetOriginalPosition() const { return m_OriginalPos; };
+		Direction GetPlayerDirection() const { return m_PlayerDirection; };
 
 		void SetMoving(bool flag) { m_IsMoving = flag; };
 		void SetDeath(bool flag) { m_IsDead = flag; };
-		void SetUsingWaterPump(bool flag) { m_UsingWaterPump = flag; };
+		void SetDigging(bool flag) { m_IsDigging = flag; };
+		void SetUsingWaterPump(bool flag);
 		void SetHealthComponent(HealthComponent* comp) { m_pHealthComponent = comp; };
+		void SetDirection(Direction direction) { m_PlayerDirection = direction; };
+
 		void ResetDigger();
 		void RespawnCountDown(float elapsed);
 		void DeathCountdown(float elapsed);
-	//	void HandleStates(float elapsed);
 		void CreateAnimation();
 	private:
 
@@ -52,9 +50,11 @@ namespace dae
 		SpriteComponent* m_pSpriteComponent{};
 		CollisionComponent* m_pCollisionComponent{};
 		PumpComponent* m_pPumpComponent{};
+		PlayerState* m_CurrentState;
+
 		CollisionType m_CollisionType{};
-		CharacterStates m_CharacterState{};
 		glm::vec3 m_OriginalPos{};
+		Direction m_PlayerDirection{};
 	};
 
 }

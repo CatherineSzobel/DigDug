@@ -1,17 +1,17 @@
 #include "HealthComponent.h"
 
-dae::HealthComponent::HealthComponent()
+digdug::HealthComponent::HealthComponent()
 	:m_CurrentHealth{ 10 }, m_RemainingLives{ 3 }
 {
 
 
 }
-dae::HealthComponent::~HealthComponent()
+digdug::HealthComponent::~HealthComponent()
 {
 }
-void dae::HealthComponent::Render() {}
+void digdug::HealthComponent::Render() {}
 
-void dae::HealthComponent::Update(float)
+void digdug::HealthComponent::Update(float)
 {
 	if (m_RemainingLives < 0)
 	{
@@ -19,8 +19,8 @@ void dae::HealthComponent::Update(float)
 	}
 }
 
-void dae::HealthComponent::FixedUpdate(float) {}
-void dae::HealthComponent::Initialize()
+void digdug::HealthComponent::FixedUpdate(float) {}
+void digdug::HealthComponent::Initialize()
 {
 	auto livesDisplay = GetOwner()->GetComponent<LivesDisplay>();
 	if (livesDisplay != nullptr)
@@ -29,12 +29,12 @@ void dae::HealthComponent::Initialize()
 		livesDisplay->SetCurrentLives(m_RemainingLives);
 	}
 }
-void dae::HealthComponent::DecreaseHealth()
+void digdug::HealthComponent::DecreaseHealth()
 {
 	m_CurrentHealth -= 5;
 }
 
-void dae::HealthComponent::NotifyHealthSubject()
+void digdug::HealthComponent::NotifyHealthSubject()
 {
 	m_pSubject->Notify(GetOwner(), Event::OnPlayerDeath);
 	if (m_RemainingLives < 0)

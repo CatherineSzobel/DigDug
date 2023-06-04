@@ -1,24 +1,24 @@
 #include "FygarsComponent.h"
 
-dae::FygarsComponent::~FygarsComponent()
+digdug::FygarsComponent::~FygarsComponent()
 {
 	GetOwner()->RemoveComponent<SpriteComponent>();
 	GetOwner()->RemoveComponent<CollisionComponent>();
 }
 
-void dae::FygarsComponent::Render()
+void digdug::FygarsComponent::Render()
 {
 }
 
-void dae::FygarsComponent::Update(float )
+void digdug::FygarsComponent::Update(float )
 {
 }
 
-void dae::FygarsComponent::FixedUpdate(float )
+void digdug::FygarsComponent::FixedUpdate(float )
 {
 }
 
-void dae::FygarsComponent::Initialize()
+void digdug::FygarsComponent::Initialize()
 {
 	m_pSpriteComp = GetOwner()->AddComponent<SpriteComponent>();
 	m_pCollisionComp = GetOwner()->AddComponent<CollisionComponent>();

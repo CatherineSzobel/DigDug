@@ -1,21 +1,21 @@
 #include "TileComponent.h"
 
 
-dae::TileComponent::TileComponent()
+digdug::TileComponent::TileComponent()
 	:m_pCollisionComp{ nullptr }, m_pTileLists{}, m_pSpriteComp{ nullptr }
 {
 
 }
-dae::TileComponent::~TileComponent()
+digdug::TileComponent::~TileComponent()
 {
 	GetOwner()->RemoveComponent<CollisionComponent>();
 	GetOwner()->RemoveComponent<SpriteComponent>();
 }
-void dae::TileComponent::Render()
+void digdug::TileComponent::Render()
 {
 }
 
-void dae::TileComponent::Update(float)
+void digdug::TileComponent::Update(float)
 {
 	for (const auto& collsion : CollisionManager::GetInstance().GetCollisions())
 	{
@@ -26,26 +26,26 @@ void dae::TileComponent::Update(float)
 		}
 	}
 }
-void dae::TileComponent::SetSandType(TileType tile)
+void digdug::TileComponent::SetSandType(TileType tile)
 {
 	switch (tile)
 	{
-	case dae::TileType::YellowSand:
+	case digdug::TileType::YellowSand:
 		m_pSpriteComp->SetAnimationByName("TileOne", false);
 		break;
-	case dae::TileType::OrangeSand:
+	case digdug::TileType::OrangeSand:
 		m_pSpriteComp->SetAnimationByName("TileTwo", false);
 		break;
-	case dae::TileType::BrownSand:
+	case digdug::TileType::BrownSand:
 		m_pSpriteComp->SetAnimationByName("TileThree", false);
 		break;
-	case dae::TileType::RedSand:
+	case digdug::TileType::RedSand:
 		m_pSpriteComp->SetAnimationByName("TileFour", false);
 		break;
 	}
 	m_pCollisionComp->CreateCollision(m_pSpriteComp->GetCurrentSpriteSize(), Sand, true);
 }
-void dae::TileComponent::FixedUpdate(float)
+void digdug::TileComponent::FixedUpdate(float)
 {
 	for (const auto& collsion : CollisionManager::GetInstance().GetCollisions())
 	{
@@ -57,7 +57,7 @@ void dae::TileComponent::FixedUpdate(float)
 	}
 }
 
-void dae::TileComponent::Initialize()
+void digdug::TileComponent::Initialize()
 {
 	m_pCollisionComp = GetOwner()->AddComponent<CollisionComponent>();
 	m_pSpriteComp = GetOwner()->AddComponent<SpriteComponent>();

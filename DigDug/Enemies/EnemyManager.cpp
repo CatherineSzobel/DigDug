@@ -1,6 +1,6 @@
 #include "EnemyManager.h"
 
-const int dae::EnemyManager::EnemiesLeft() const
+const int digdug::EnemyManager::EnemiesLeft() const
 {
 	int amount = 0;
 	for (const auto& enemy : m_Enemies)
@@ -13,12 +13,12 @@ const int dae::EnemyManager::EnemiesLeft() const
 	return amount;
 }
 
-void dae::EnemyManager::AddEnemies(Enemy* obj)
+void digdug::EnemyManager::AddEnemies(Enemy* obj)
 {
 	m_Enemies.emplace_back(obj);
 }
 
-void dae::EnemyManager::SetEnemiesActive()
+void digdug::EnemyManager::SetEnemiesActive()
 {
 	for (auto& enemy : m_Enemies)
 	{
@@ -34,4 +34,9 @@ void dae::EnemyManager::SetEnemiesActive()
 			enemy->SetActive(false);
 		}
 	}
+}
+
+digdug::Enemy* digdug::EnemyManager::GetEnemyPointer(const int i)
+{
+	return m_Enemies.at(i);
 }

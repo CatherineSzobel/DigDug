@@ -1,24 +1,24 @@
 #include "RockComponent.h"
 
-dae::RockComponent::~RockComponent()
+digdug::RockComponent::~RockComponent()
 {
 	GetOwner()->RemoveComponent<SpriteComponent>();
 	GetOwner()->RemoveComponent<CollisionComponent>();
 }
 
-void dae::RockComponent::Render()
+void digdug::RockComponent::Render()
 {
 }
 
-void dae::RockComponent::Update(float)
+void digdug::RockComponent::Update(float)
 {
 }
 
-void dae::RockComponent::FixedUpdate(float)
+void digdug::RockComponent::FixedUpdate(float)
 {
 }
 
-void dae::RockComponent::Initialize()
+void digdug::RockComponent::Initialize()
 {
 	m_pSpriteComp = GetOwner()->AddComponent<SpriteComponent>();
 	m_pCollisionComp = GetOwner()->AddComponent<CollisionComponent>();

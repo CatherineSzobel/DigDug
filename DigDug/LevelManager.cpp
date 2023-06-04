@@ -1,6 +1,6 @@
 #include "LevelManager.h"
 
-void dae::LevelManager::LoadLevel(std::string filename, Scene& level)
+void digdug::LevelManager::LoadLevel(std::string filename, Scene& level)
 {
 	CollisionManager::GetInstance().ResetCollision();
 	bool empty = level.isSceneEmpty();
@@ -161,7 +161,7 @@ void dae::LevelManager::LoadLevel(std::string filename, Scene& level)
 	CollisionManager::GetInstance().SetCollisionsActive();
 }
 
-void dae::LevelManager::LoadCoopLevel(std::string filename, Scene& level)
+void digdug::LevelManager::LoadCoopLevel(std::string filename, Scene& level)
 {
 	CollisionManager::GetInstance().ResetCollision();
 	std::fstream txtFile(filename, std::ios_base::in);
@@ -343,33 +343,36 @@ void dae::LevelManager::LoadCoopLevel(std::string filename, Scene& level)
 	}
 }
 
-void dae::LevelManager::CreateInputSolo(std::unique_ptr<GameObject>& firstSprite)
+void digdug::LevelManager::CreateInputSolo(std::unique_ptr<GameObject>& firstSprite)
 {
 	firstSprite->AddComponent<InputComponent>();
-	firstSprite->GetComponent<InputComponent>()->BindKeyboardCommand(SDL_SCANCODE_S, new MoveUpDownCommand(firstSprite.get(), 1), InputType::Press);
-	firstSprite->GetComponent<InputComponent>()->BindKeyboardCommand(SDL_SCANCODE_W, new MoveUpDownCommand(firstSprite.get(), -1), InputType::Press);
-	firstSprite->GetComponent<InputComponent>()->BindKeyboardCommand(SDL_SCANCODE_A, new MoveLeftRightCommand(firstSprite.get(), -1), InputType::Press);
-	firstSprite->GetComponent<InputComponent>()->BindKeyboardCommand(SDL_SCANCODE_D, new MoveLeftRightCommand(firstSprite.get(), 1), InputType::Press);
+
+	firstSprite->GetComponent<InputComponent>()->BindKeyboardCommand(SDL_SCANCODE_W, new MoveCommand(firstSprite.get(),Direction::up), InputType::Press);
+	firstSprite->GetComponent<InputComponent>()->BindKeyboardCommand(SDL_SCANCODE_A, new MoveCommand(firstSprite.get(), Direction::left), InputType::Press);
+	firstSprite->GetComponent<InputComponent>()->BindKeyboardCommand(SDL_SCANCODE_S, new MoveCommand(firstSprite.get(), Direction::down), InputType::Press);
+	firstSprite->GetComponent<InputComponent>()->BindKeyboardCommand(SDL_SCANCODE_D, new MoveCommand(firstSprite.get(), Direction::right), InputType::Press);
+
 	firstSprite->GetComponent<InputComponent>()->BindKeyboardCommand(SDL_SCANCODE_F, new PumpCommand(firstSprite.get(), "Sounds/Sound/PumpSound.wav", 4), InputType::Down);
 	firstSprite->GetComponent<InputComponent>()->SetMovementSpeed(120.f);
 }
 
-void dae::LevelManager::CreateInput_Coop(std::unique_ptr<GameObject>& firstSprite, std::unique_ptr<GameObject>& secondSprite)
+void digdug::LevelManager::CreateInput_Coop(std::unique_ptr<GameObject>& firstSprite, std::unique_ptr<GameObject>& secondSprite)
 {
 	firstSprite->AddComponent<InputComponent>();
-	firstSprite->GetComponent<InputComponent>()->BindKeyboardCommand(SDL_SCANCODE_S, new MoveUpDownCommand(firstSprite.get(), 1), InputType::Press);
-	firstSprite->GetComponent<InputComponent>()->BindKeyboardCommand(SDL_SCANCODE_W, new MoveUpDownCommand(firstSprite.get(), -1), InputType::Press);
-	firstSprite->GetComponent<InputComponent>()->BindKeyboardCommand(SDL_SCANCODE_A, new MoveLeftRightCommand(firstSprite.get(), -1), InputType::Press);
-	firstSprite->GetComponent<InputComponent>()->BindKeyboardCommand(SDL_SCANCODE_D, new MoveLeftRightCommand(firstSprite.get(), 1), InputType::Press);
+	firstSprite->GetComponent<InputComponent>()->BindKeyboardCommand(SDL_SCANCODE_W, new MoveCommand(firstSprite.get(), Direction::up), InputType::Press);
+	firstSprite->GetComponent<InputComponent>()->BindKeyboardCommand(SDL_SCANCODE_A, new MoveCommand(firstSprite.get(), Direction::left), InputType::Press);
+	firstSprite->GetComponent<InputComponent>()->BindKeyboardCommand(SDL_SCANCODE_S, new MoveCommand(firstSprite.get(), Direction::down), InputType::Press);
+	firstSprite->GetComponent<InputComponent>()->BindKeyboardCommand(SDL_SCANCODE_D, new MoveCommand(firstSprite.get(), Direction::right), InputType::Press);
 	//	firstSprite->GetComponent<InputComponent>()->BindKeyboardCommand(SDL_SCANCODE_R, new KillCommand(firstSprite.get()), InputType::Down);
 	firstSprite->GetComponent<InputComponent>()->BindKeyboardCommand(SDL_SCANCODE_F, new PumpCommand(firstSprite.get(), "Sounds/Sound/PumpSound.wav", 4), InputType::Down);
 	firstSprite->GetComponent<InputComponent>()->SetMovementSpeed(120.f);
 
 	secondSprite->AddComponent<InputComponent>();
-	secondSprite->GetComponent<InputComponent>()->BindControllerCommand(ControllerButton::DPadDown, new MoveUpDownCommand(secondSprite.get(), 1), InputType::Press);
-	secondSprite->GetComponent<InputComponent>()->BindControllerCommand(ControllerButton::DPadUp, new MoveUpDownCommand(secondSprite.get(), -1), InputType::Press);
-	secondSprite->GetComponent<InputComponent>()->BindControllerCommand(ControllerButton::DPadLeft, new MoveLeftRightCommand(secondSprite.get(), -1), InputType::Press);
-	secondSprite->GetComponent<InputComponent>()->BindControllerCommand(ControllerButton::DPadRight, new MoveLeftRightCommand(secondSprite.get(), 1), InputType::Press);
+
+	firstSprite->GetComponent<InputComponent>()->BindControllerCommand(ControllerButton::DPadDown, new MoveCommand(firstSprite.get(), Direction::up), InputType::Press);
+	firstSprite->GetComponent<InputComponent>()->BindControllerCommand(ControllerButton::DPadUp, new MoveCommand(firstSprite.get(), Direction::left), InputType::Press);
+	firstSprite->GetComponent<InputComponent>()->BindControllerCommand(ControllerButton::DPadLeft, new MoveCommand(firstSprite.get(), Direction::down), InputType::Press);
+	firstSprite->GetComponent<InputComponent>()->BindControllerCommand(ControllerButton::DPadRight, new MoveCommand(firstSprite.get(), Direction::right), InputType::Press);
 
 	secondSprite->GetComponent<InputComponent>()->SetMovementSpeed(240.f);
 }

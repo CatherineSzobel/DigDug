@@ -2,7 +2,8 @@
 #include "BaseComponent.h"
 
 #include "Enemy.h"
-namespace dae
+using namespace dae;
+namespace digdug
 {
 	class Enemy;
 	class FygarsComponent final : public BaseComponent, public Enemy

@@ -2,7 +2,8 @@
 #include "CollisionComponent.h"
 #include "CollisionManager.h"
 #include "SpriteComponent.h"
-namespace dae
+using namespace dae;
+namespace digdug
 {
 	enum class TileType
 	{

@@ -1,7 +1,8 @@
 #include "BaseComponent.h"
 #include "Observer.h"
 #include "TextComponent.h"
-namespace dae
+using namespace dae;
+namespace digdug
 {
 	class PointsComponent final : public BaseComponent, public Observer
 	{

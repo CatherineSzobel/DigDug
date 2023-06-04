@@ -21,3 +21,10 @@ enum CollisionType
 	Underground,
 	Rock
 };
+enum class Direction
+{
+	left,
+	right,
+	up,
+	down
+};

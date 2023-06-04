@@ -3,7 +3,9 @@
 #include "RenderComponent.h"
 #include "CollisionComponent.h"
 #include "CollisionManager.h"
-namespace dae
+#include "Enemies/Enemy.h"
+using namespace dae;
+namespace digdug
 {
 	class PumpComponent : public BaseComponent
 	{
@@ -15,14 +17,24 @@ namespace dae
 		virtual void Initialize() override;
 
 		void Shoot(glm::vec2 playerPos);
+		void Pump();
 		void Reset();
 		bool IsAttached() { return m_Attached; }
+		Rectf GetCollision() const;
 	private:
 		RenderComponent* m_pSpriteComp = nullptr;
 		CollisionComponent* m_pCollisionComp = nullptr;
-		float m_Speed, m_Lifetime = 2.f;
-		bool m_Attached = false;
+
+		CollisionManager m_CollisionManager;
+		bool m_Attached = false, m_IsActive = false;
+		float m_Speed, m_Lifetime = 2.f,m_MaxStretch = 50.f;
+		const float m_PumpSpeed = 15.f;
+		int m_CurrentPump = 0;
+		const int m_MaxPump = 2;
 		glm::vec2 m_PlayerPosition;
+		glm::vec2 m_PumpSize;
+		bool m_HasShot{ false };
+		Enemy* m_Enemy;
 	};
 
 }

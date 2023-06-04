@@ -1,13 +1,13 @@
 #include "PointsComponent.h"
-void dae::PointsComponent::Render() {}
+void digdug::PointsComponent::Render() {}
 
-void dae::PointsComponent::Update(float) {
+void digdug::PointsComponent::Update(float) {
 
 }
 
-void dae::PointsComponent::FixedUpdate(float) {}
+void digdug::PointsComponent::FixedUpdate(float) {}
 
-void dae::PointsComponent::Notify(dae::GameObject* actor, Event event)
+void digdug::PointsComponent::Notify(dae::GameObject* actor, Event event)
 {
 	switch (event)
 	{

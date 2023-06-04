@@ -13,6 +13,7 @@ namespace dae
 		void ResetCollision();
 		void SetCollisionsActive();
 		std::vector<CollisionComponent*> GetCollisions() const{ return m_Collisions; };
+		std::vector<CollisionComponent*> GetCollisionsByType(CollisionType type);
 	private:
 		std::vector<CollisionComponent*> m_Collisions;
 	};

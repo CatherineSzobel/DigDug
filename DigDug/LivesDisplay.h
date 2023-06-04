@@ -2,7 +2,8 @@
 #include "SpriteComponent.h"
 #include "BaseComponent.h"
 #include "Observer.h"
-namespace dae
+using namespace dae;
+namespace digdug
 {
 	class LivesDisplay final : public Observer, public BaseComponent
 	{

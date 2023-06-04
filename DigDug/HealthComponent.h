@@ -4,9 +4,10 @@
 #include "TextComponent.h"
 #include "LivesDisplay.h"
 #include "Subject.h"
-namespace dae
+using namespace dae;
+namespace digdug
 {
-	class HealthComponent final : public BaseComponent
+	class HealthComponent final : public dae::BaseComponent
 	{
 	public:
 		HealthComponent();

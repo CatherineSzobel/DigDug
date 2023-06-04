@@ -15,7 +15,8 @@
 #include "TileComponent.h"
 #include "SceneManager.h"
 #include "Enemies/EnemyManager.h"
-namespace dae
+using namespace dae;
+namespace digdug
 {
 	class LevelManager final : public Singleton<LevelManager>
 	{
