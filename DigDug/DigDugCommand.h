@@ -50,9 +50,9 @@ namespace digdug
 					break;
 				}
 				m_pDigDugComp->SetDirection(m_Direction);
-				GetGameActor()->SetLocalPosition({pos.x + ((movementSpeed * m_DirectionVec.x) * elapsed),pos.y + ((movementSpeed * m_DirectionVec.y) * elapsed)  , pos.z });
+				GetGameActor()->SetLocalPosition({ pos.x + ((movementSpeed * m_DirectionVec.x) * elapsed),pos.y + ((movementSpeed * m_DirectionVec.y) * elapsed)  , pos.z });
 				m_pDigDugComp->SetMoving(true);
-				m_pDigDugComp->SetUsingWaterPump(false);
+				//m_pDigDugComp->SetUsingWaterPump(false);
 			}
 		}
 		virtual void Undo() override
@@ -81,27 +81,35 @@ namespace digdug
 			if (!GetGameActor()->GetComponent<DigDugComponent>()->IsPlayerDeadCheck())
 			{
 
-			/*	if (m_pSpriteComponent->GetCurrentAnimation() == "PlayerWalkLeft")
-				{
-					m_pSpriteComponent->SetAnimationByName("WaterPumpLeft");
-				}
-				else if (m_pSpriteComponent->GetCurrentAnimation() == "PlayerWalkRight")
-				{
-					m_pSpriteComponent->SetAnimationByName("WaterPumpRight");
+				/*	if (m_pSpriteComponent->GetCurrentAnimation() == "PlayerWalkLeft")
+					{
+						m_pSpriteComponent->SetAnimationByName("WaterPumpLeft");
+					}
+					else if (m_pSpriteComponent->GetCurrentAnimation() == "PlayerWalkRight")
+					{
+						m_pSpriteComponent->SetAnimationByName("WaterPumpRight");
 
-				}
-				else if (m_pSpriteComponent->GetCurrentAnimation() == "PlayerWalkUp")
-				{
-					m_pSpriteComponent->SetAnimationByName("WaterPumpUp");
+					}
+					else if (m_pSpriteComponent->GetCurrentAnimation() == "PlayerWalkUp")
+					{
+						m_pSpriteComponent->SetAnimationByName("WaterPumpUp");
 
-				}
-				else if (m_pSpriteComponent->GetCurrentAnimation() == "PlayerWalkDown")
-				{
-					m_pSpriteComponent->SetAnimationByName("WaterPumpDown");
+					}
+					else if (m_pSpriteComponent->GetCurrentAnimation() == "PlayerWalkDown")
+					{
+						m_pSpriteComponent->SetAnimationByName("WaterPumpDown");
 
-				}*/
+					}*/
 				m_pDigDugComp->SetUsingWaterPump(true);
-				servicelocator::get_sound_system().Play(m_Path, m_Volume);
+				auto isThrown = m_pDigDugComp->IsThrown();
+				if (isThrown)
+				{
+					servicelocator::get_sound_system().Play(m_Path, m_Volume);
+				}
+				else
+				{
+				//	servicelocator::get_sound_system().Play("Sounds/Sound/PumpingSound.wav", m_Volume);
+				}
 				m_pDigDugComp->SetMoving(false);
 				servicelocator::get_sound_system().HaltMusic();
 

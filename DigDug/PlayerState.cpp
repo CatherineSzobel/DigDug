@@ -54,26 +54,49 @@ digdug::PumpState::PumpState(GameObject* obj)
 }
 digdug::PumpState::~PumpState()
 {
-
+	m_Player->GetComponent<DigDugComponent>()->SetUsingWaterPump(false);
+	m_pSpriteComp->SetAnimationByName({ "PlayerWalk" + m_DirectionString });
 }
 
-digdug::PlayerState* digdug::PumpState::Update(dae::GameObject* player, float)
+digdug::PlayerState* digdug::PumpState::Update(dae::GameObject* player, float elapsed)
 {
 	m_Direction = player->GetComponent<DigDugComponent>()->GetPlayerDirection();
 	switch (m_Direction)
 	{
 	case Direction::left:
-		m_pSpriteComp->SetAnimationByName("WaterPumpLeft");
+		m_DirectionString = "Left";
 		break;
 	case Direction::right:
-		m_pSpriteComp->SetAnimationByName("WaterPumpRight");
+		m_DirectionString = "Right";
 		break;
 	case Direction::up:
-		m_pSpriteComp->SetAnimationByName("WaterPumpUp");
+		m_DirectionString = "Up";
 		break;
 	case Direction::down:
-		m_pSpriteComp->SetAnimationByName("WaterPumpDown");
+		m_DirectionString = "Down";
 		break;
+	}
+
+	if (player->GetComponent<DigDugComponent>()->IsMoving())
+	{
+
+		std::cout << "return to walking";
+
+		return new WalkingState(player);
+	}
+	if (m_Finished || m_CurrentTime >= m_MaxPumpTime)
+	{
+		std::cout << "return to idle";
+		return new IdleState(player);
+	}
+	m_CurrentTime += elapsed;
+	if (player->GetComponent<DigDugComponent>()->IsThrown())
+	{
+		m_pSpriteComp->SetAnimationByName("Throw" + m_DirectionString);
+	}
+	else
+	{
+		m_pSpriteComp->SetAnimationByName("Pump" + m_DirectionString);
 	}
 	return nullptr;
 }
@@ -81,8 +104,8 @@ digdug::PlayerState* digdug::PumpState::Update(dae::GameObject* player, float)
 void digdug::PumpState::OnEnter(dae::GameObject* obj)
 {
 	m_pSpriteComp = obj->GetComponent<SpriteComponent>();
-	servicelocator::get_sound_system().Play("Sounds/Sound/PumpSound.wav", 4);
 	servicelocator::get_sound_system().HaltMusic();
+	m_Player = obj;
 }
 
 #pragma endregion

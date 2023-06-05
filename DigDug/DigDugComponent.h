@@ -28,6 +28,7 @@ namespace digdug
 		int GetLives() const;
 		bool IsMoving() const { return m_IsMoving; };
 		bool IsPumping() const { return m_UsingWaterPump; };
+		bool IsThrown() const { return m_ThrownPump; };
 		glm::vec3 GetOriginalPosition() const { return m_OriginalPos; };
 		Direction GetPlayerDirection() const { return m_PlayerDirection; };
 
@@ -44,7 +45,7 @@ namespace digdug
 		void CreateAnimation();
 	private:
 
-		bool m_IsDigging = false, m_IsDead = false, m_IsMoving = false,m_UsingWaterPump = false, m_DeathCountdownFinished = false;// m_CreatedOwnHealthComponent = false;
+		bool m_IsDigging = false, m_IsDead = false, m_IsMoving = false,m_UsingWaterPump = false, m_ThrownPump = false, m_DeathCountdownFinished = false;// m_CreatedOwnHealthComponent = false;
 		float m_RespawnCountdown, m_DeathCountdown;
 		HealthComponent* m_pHealthComponent{};
 		SpriteComponent* m_pSpriteComponent{};

@@ -26,6 +26,7 @@ namespace dae
 		void CreateCollision(const Rectf& collision, glm::vec2 offSet, CollisionType type, bool debug = false, bool moveAble = true);
 		void CreateCollision(float left, float bottom, float width, float height, CollisionType type, bool debug = false);
 
+		void RemoveCollision();
 		bool Collide( Rectf rect1);
 
 		void SetCollision(bool flag) { m_IsEnabled = flag; };

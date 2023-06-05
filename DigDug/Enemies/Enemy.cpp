@@ -17,9 +17,11 @@ void digdug::Enemy::IncreasePump()
 	{
 		//enemy dies
 		m_IsDead = true;
+		Reset();
 	}
 	else
 	{
+		m_IsHit = true;
 		++m_AmountOfPumps;
 	}
 }

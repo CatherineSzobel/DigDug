@@ -57,17 +57,28 @@ void digdug::DigDugComponent::Update(float elapsed)
 			//	m_IsDigging = true;
 			}
 		}
+
 	}
 }
 void digdug::DigDugComponent::SetUsingWaterPump(bool flag)
 {
-	auto attached = m_pPumpComponent->IsAttached();
-	if (flag && !attached)
+	if (!flag)
 	{
-		m_pPumpComponent->Shoot(GetOwner()->GetLocalPosition());
+		m_UsingWaterPump = false;
+		m_ThrownPump = false;
+		m_pPumpComponent->Reset();
+
 	}
-	if (attached)
+	if (flag && !m_pPumpComponent->IsAttached())
 	{
+		m_ThrownPump = true;
+		m_pPumpComponent->Shoot(GetOwner()->GetLocalPosition());
+		return;
+	}
+	if (m_pPumpComponent->IsAttached())
+	{
+		m_UsingWaterPump = true;
+		m_ThrownPump = false;
 		m_pPumpComponent->Pump();
 	}
 }
@@ -166,10 +177,15 @@ void digdug::DigDugComponent::CreateAnimation()
 
 	DiggerAnimations.emplace_back(new Sprite{ "Sprites/deathAnimationPlayer.png", 4, 1, 4.f, 1.f / 3.f, "deathAnimation" ,false,playerScale });
 
-	DiggerAnimations.emplace_back(new Sprite{ "Sprites/PlayerThrowLeft.png",1, 1,1.f, 1.f, "WaterPumpLeft" ,false,playerScale });
-	DiggerAnimations.emplace_back(new Sprite{ "Sprites/PlayerThrowRight.png",1, 1,1.f, 1.f, "WaterPumpRight" ,false,playerScale });
-	DiggerAnimations.emplace_back(new Sprite{ "Sprites/PlayerThrowUp.png",1, 1,1.f, 1.f, "WaterPumpUp",false,playerScale });
-	DiggerAnimations.emplace_back(new Sprite{ "Sprites/PlayerThrowDown.png",1, 1,1.f, 1.f, "WaterPumpDown",false,playerScale });
+	DiggerAnimations.emplace_back(new Sprite{ "Sprites/PlayerThrowLeft.png",1, 1,1.f, 1.f, "ThrowLeft" ,false,playerScale });
+	DiggerAnimations.emplace_back(new Sprite{ "Sprites/PlayerThrowRight.png",1, 1,1.f, 1.f, "ThrowRight" ,false,playerScale });
+	DiggerAnimations.emplace_back(new Sprite{ "Sprites/PlayerThrowUp.png",1, 1,1.f, 1.f, "ThrowUp",false,playerScale });
+	DiggerAnimations.emplace_back(new Sprite{ "Sprites/PlayerThrowDown.png",1, 1,1.f, 1.f, "ThrowDown",false,playerScale });
+
+	DiggerAnimations.emplace_back(new Sprite{ "Sprites/Player/PumpLeft.png",2, 1,2.f, 1.f / 2.f, "PumpLeft" ,false,playerScale });
+	DiggerAnimations.emplace_back(new Sprite{ "Sprites/Player/PumpRight.png",2, 1,2.f, 1.f / 2.f, "PumpRight" ,false,playerScale });
+	DiggerAnimations.emplace_back(new Sprite{ "Sprites/Player/PumpUp.png",2, 1,2.f, 1.f / 2.f, "PumpUp",false,playerScale });
+	DiggerAnimations.emplace_back(new Sprite{ "Sprites/Player/PumpDown.png",2, 1,2.f, 1.f / 2.f, "PumpDown",false,playerScale });
 
 	m_pSpriteComponent->AddAnimationStrips(DiggerAnimations);
 }

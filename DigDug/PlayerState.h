@@ -88,5 +88,10 @@ namespace digdug
 	private:
 		SpriteComponent* m_pSpriteComp = nullptr;
 		Direction m_Direction;
+		std::string m_DirectionString;
+		GameObject* m_Player;
+		bool m_Finished = false;
+		float m_CurrentTime;
+		const float m_MaxPumpTime = 2.f;
 	};
 }

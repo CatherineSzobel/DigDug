@@ -1,6 +1,6 @@
 #include "EnemyManager.h"
 
-const int digdug::EnemyManager::EnemiesLeft() const
+int digdug::EnemyManager::EnemiesLeft() const
 {
 	int amount = 0;
 	for (const auto& enemy : m_Enemies)

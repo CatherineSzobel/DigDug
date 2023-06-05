@@ -53,6 +53,12 @@ void dae::CollisionComponent::CreateCollision(float left, float bottom, float wi
 	m_CollisionType = type;
 }
 
+void dae::CollisionComponent::RemoveCollision()
+{
+	m_Collision = Rectf{};
+	m_CollisionType = None;
+}
+
 bool dae::CollisionComponent::Collide(Rectf rect2)
 {
 	if (m_IsEnabled)

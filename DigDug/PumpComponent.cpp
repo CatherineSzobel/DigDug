@@ -82,6 +82,8 @@ void digdug::PumpComponent::Pump()
 void digdug::PumpComponent::Reset()
 {
 	m_Attached = false;
+	m_Enemy = nullptr;
+	m_pCollisionComp->RemoveCollision();
 }
 
 Rectf digdug::PumpComponent::GetCollision() const

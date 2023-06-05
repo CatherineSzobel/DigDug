@@ -10,8 +10,8 @@ namespace digdug
 		UIState() = default;
 		virtual ~UIState() = default;
 
-		virtual UIState* HandleInput(std::string ) { return nullptr; };
-		virtual UIState* Update(float ) { return nullptr; };
+		virtual UIState* HandleInput(std::string) { return nullptr; };
+		virtual UIState* Update(float, dae::GameObject*) { return nullptr; };
 
 	};
 
@@ -21,8 +21,8 @@ namespace digdug
 		PauseState(dae::GameObject* player);
 		virtual void OnEnter(dae::GameObject* player) override;
 
-		virtual UIState* HandleInput(std::string action);
-		virtual UIState* Update(float elapsed);
+		virtual UIState* HandleInput(std::string action) override;
+		virtual UIState* Update(float elapsed, dae::GameObject* player) override;
 	};
 
 	class GameState : public UIState
@@ -31,8 +31,8 @@ namespace digdug
 		GameState(dae::GameObject* player);
 		virtual void OnEnter(dae::GameObject* player) override;
 
-		virtual UIState* HandleInput(std::string action);
-		virtual UIState* Update(float elapsed);
+		virtual UIState* HandleInput(std::string action)override;
+		virtual UIState* Update(float elapsed, dae::GameObject* player) override;
 	};
 
 	class MainSceneState : public UIState
@@ -41,8 +41,8 @@ namespace digdug
 		MainSceneState(dae::GameObject* player);
 		virtual void OnEnter(dae::GameObject* player) override;
 
-		virtual UIState* HandleInput(std::string action);
-		virtual UIState* Update(float elapsed);
+		virtual UIState* HandleInput(std::string action) override;
+		virtual UIState* Update(float elapsed, dae::GameObject* player) override;
 	};
 	class EndSceneState : public UIState
 	{
@@ -50,8 +50,8 @@ namespace digdug
 		EndSceneState(dae::GameObject* player);
 		virtual void OnEnter(dae::GameObject* player) override;
 
-		virtual UIState* HandleInput(std::string action);
-		virtual UIState* Update(float elapsed);
+		virtual UIState* HandleInput(std::string action) override;
+		virtual UIState* Update(float elapsed, dae::GameObject* player) override;
 	};
 }
 

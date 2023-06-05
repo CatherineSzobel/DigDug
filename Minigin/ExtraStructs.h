@@ -14,6 +14,7 @@ struct Rectf
 
 enum CollisionType
 {
+	None,
 	Player,
 	Pump,
 	EnemyLayer,
@@ -23,8 +24,8 @@ enum CollisionType
 };
 enum class Direction
 {
-	left,
 	right,
+	left,
 	up,
 	down
 };

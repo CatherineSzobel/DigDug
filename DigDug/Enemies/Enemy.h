@@ -23,6 +23,7 @@ namespace digdug
 		SpriteComponent* m_pSpriteComp = nullptr;
 		CollisionComponent* m_pCollisionComp = nullptr;
 		bool m_Attached = false;
+		bool m_IsHit = false;
 		bool m_IsDead = false;
 		int m_AmountOfPumps;
 	private:

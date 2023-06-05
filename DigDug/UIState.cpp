@@ -1,4 +1,5 @@
 #include "UIState.h"
+#include "Enemies/EnemyManager.h"
 #pragma region PauseState
 digdug::PauseState::PauseState(dae::GameObject* )
 {
@@ -13,7 +14,7 @@ digdug::UIState* digdug::PauseState::HandleInput(std::string)
 	return nullptr;
 }
 
-digdug::UIState* digdug::PauseState::Update(float)
+digdug::UIState* digdug::PauseState::Update(float, dae::GameObject* )
 {
 	return nullptr;
 }
@@ -33,8 +34,12 @@ digdug::UIState* digdug::GameState::HandleInput(std::string)
 	return nullptr;
 }
 
-digdug::UIState* digdug::GameState::Update(float)
+digdug::UIState* digdug::GameState::Update(float, dae::GameObject* player)
 {
+	if (EnemyManager::GetInstance().EnemiesLeft() <= 0)
+	{
+		return new EndSceneState(player);
+	}
 	return nullptr;
 }
 #pragma endregion
@@ -53,8 +58,9 @@ digdug::UIState* digdug::MainSceneState::HandleInput(std::string)
 	return nullptr;
 }
 
-digdug::UIState* digdug::MainSceneState::Update(float)
+digdug::UIState* digdug::MainSceneState::Update(float, dae::GameObject*)
 {
+
 	return nullptr;
 }
 #pragma endregion
@@ -72,7 +78,7 @@ digdug::UIState* digdug::EndSceneState::HandleInput(std::string )
 	return nullptr;
 }
 
-digdug::UIState* digdug::EndSceneState::Update(float )
+digdug::UIState* digdug::EndSceneState::Update(float, dae::GameObject*)
 {
 	return nullptr;
 }

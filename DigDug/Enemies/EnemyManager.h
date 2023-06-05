@@ -8,7 +8,7 @@ namespace digdug
 	class EnemyManager : public Singleton<EnemyManager>
 	{
 	public:
-		const int EnemiesLeft() const;
+		int EnemiesLeft() const;
 		void AddEnemies(Enemy* enemy);
 		void SetEnemiesActive();
 		std::vector<Enemy*> GetEnemies() const {return std::move(m_Enemies);};
