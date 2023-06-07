@@ -27,6 +27,8 @@ namespace dae
 		void AddController(GameObject* gameObject, int controllerID);
 		void AddKeyboardController(GameObject* gameObject);
 
+		void Reset();
+
 	private:
 		XINPUT_STATE m_CurrentState[XUSER_MAX_COUNT];
 		XINPUT_STATE m_PreviousState{};

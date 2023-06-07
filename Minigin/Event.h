@@ -2,7 +2,13 @@
 enum class Event
 {
 	OnPlayerDeath,
-	OnEnemyDeath,
+	OnPookaFirstLayerDeath,
+	OnPookaSecondLayerDeath,
+	OnPookaThirdLayerDeath,
+	OnPookaFourthLayerDeath,
+	OnFygarFirstLayerDeath,
+	OnFygarSecondLayerDeath,
+	OnFygarThirdLayerDeath,
+	OnFygarFourthLayerDeath,
 	OnGameOver,
-	IncreasePoints
 };

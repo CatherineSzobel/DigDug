@@ -24,46 +24,129 @@
 #include "CollisionComponent.h"
 #include "LevelManager.h"
 #include "LivesDisplay.h"
-#include "Enemies/PookaComponent.h"
-#include "Enemies/EnemyManager.h"
+#include "PointComponent.h"
+#include "PookaComponent.h"
+#include "EnemyManager.h"
 using namespace dae;
 using namespace digdug;
 void CreateInputSolo(std::unique_ptr<GameObject>& firstSprite);
 void CreateInput_Coop(std::unique_ptr<GameObject>& firstSprite, std::unique_ptr<GameObject>& secondSprite);
 void SaveAllCollision(std::vector<Rectf>& m_pCollision, std::unique_ptr<GameObject>& go);
 void CreateLevels();
-void CreateLevelFromTxtFile(std::string filename,Scene& scene);
+void CreateLevelFromTxtFile(std::string filename, Scene& scene);
 void load()
 {
-
-	CreateLevels();
-	servicelocator::get_sound_system().PlayMusic("Sounds/Music/Theme.mp3", 1, true);
-	auto& input = InputManager::GetInstance();
-	auto& scene = dae::SceneManager::GetInstance().GetCurrentScene();
-	auto& collisions = CollisionManager::GetInstance();
-	input.BindKeyboardCommand(SDL_SCANCODE_F1, new NextSceneCommand(), InputType::Down);
 	auto font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 21);
-	auto go = std::make_unique<GameObject>();
-	go->SetLocalPosition(glm::vec3(0.f, 0.f, 0.f));
-	go->AddComponent<TextComponent>()->SetText("FPS: ");
-	go->GetComponent<TextComponent>()->SetFont(font);
-	go->AddComponent<FPSComponent>()->Initialize();
-	scene.Add(std::move(go));
+	auto& input = InputManager::GetInstance();
+	auto& firstLevel = dae::SceneManager::GetInstance().CreateScene("level1");
 
-	auto UIHUD = std::make_unique<GameObject>();
-	UIHUD->AddComponent<LivesDisplay>();
-	UIHUD->AddComponent<HealthComponent>();
-	UIHUD->GetComponent<HealthComponent>()->Initialize();
-	UIHUD->AddComponent<SpriteComponent>()->AddAnimationStrips("Sprites/livesSprite.png", 1, 4, 4.f, 1.f, "lives", true);
-	UIHUD->GetComponent<SpriteComponent>()->SetAnimationByName("lives");
-	UIHUD->SetLocalPosition({ 0.f,460.f,0.f });
-	scene.Add(std::move(UIHUD));
+	auto textObject = std::make_unique<GameObject>();
+	textObject->SetLocalPosition({ 265.f,300.f,0.f });
+	textObject->AddComponent<TextComponent>()->SetFont(font);
+	textObject->GetComponent<TextComponent>()->SetText("SinglePlayer");
+	firstLevel.Add(std::move(textObject));
 
-	auto undergroundBoundary = std::make_unique<GameObject>();
-	undergroundBoundary->SetLocalPosition({ 0.f,100.f,0.f });
-	undergroundBoundary->AddComponent<CollisionComponent>()->CreateCollision(Rectf{ 0.f,0.f,635.f,350.f }, Underground, true);
-	collisions.AddCollision(undergroundBoundary->GetComponent<CollisionComponent>());
-	scene.Add(std::move(undergroundBoundary));
+	textObject = std::make_unique<GameObject>();
+	textObject->SetLocalPosition({ 265.f,330.f,0.f });
+	textObject->AddComponent<TextComponent>()->SetFont(font);
+	textObject->GetComponent<TextComponent>()->SetText("CoOp");
+	firstLevel.Add(std::move(textObject));
+
+	auto arrow = std::make_unique<GameObject>();
+	arrow->SetLocalPosition({ 220.f,300.f,0 });
+	arrow->AddComponent<InputComponent>();
+	arrow->AddComponent<UI>();
+	arrow->AddComponent<RenderComponent>();
+	arrow->GetComponent<RenderComponent>()->SetTexture("Arrow.png");
+	arrow->GetComponent<RenderComponent>()->SetScale(25.f);
+
+	arrow->GetComponent<InputComponent>()->BindKeyboardCommand(SDL_SCANCODE_W, new HandleUpDownMenuCommand(arrow.get(), Direction::up), InputType::Down);
+	arrow->GetComponent<InputComponent>()->BindKeyboardCommand(SDL_SCANCODE_S, new HandleUpDownMenuCommand(arrow.get(), Direction::down), InputType::Down);
+	input.BindKeyboardCommand(SDL_SCANCODE_RETURN, new HandleMenuCommand(arrow.get()), InputType::Down);
+	input.AddKeyboardController(arrow.get());
+	firstLevel.Add(std::move(arrow));
+	
+	auto scoringObject = std::make_unique<GameObject>();
+	scoringObject->AddComponent<TextComponent>()->SetFont(font);
+	scoringObject->GetComponent<TextComponent>()->SetText("0");
+	scoringObject->SetLocalPosition({ 100.f,20.f,0.f });
+	firstLevel.AddUI(std::move(scoringObject));
+
+	scoringObject = std::make_unique<GameObject>();
+	scoringObject->AddComponent<TextComponent>()->SetFont(font);
+	scoringObject->GetComponent<TextComponent>()->SetText("1P SCORE");
+	scoringObject->SetLocalPosition({ 80.f,0.f,0.f });
+	firstLevel.AddUI(std::move(scoringObject));
+
+	scoringObject = std::make_unique<GameObject>();
+	scoringObject->AddComponent<TextComponent>()->SetFont(font);
+	scoringObject->GetComponent<TextComponent>()->SetText("HIGHSCORE");
+	scoringObject->SetLocalPosition({ 250.F,0.f,0.f });
+	firstLevel.AddUI(std::move(scoringObject));
+
+	scoringObject = std::make_unique<GameObject>();
+	scoringObject->AddComponent<TextComponent>()->SetFont(font);
+	scoringObject->GetComponent<TextComponent>()->SetText("0");
+	scoringObject->SetLocalPosition({ 300.f,20.f,0.f });
+	firstLevel.AddUI(std::move(scoringObject));
+
+
+	//CreateLevels();
+	//servicelocator::get_sound_system().PlayMusic("Sounds/Music/Theme.mp3", 1, true);
+	//auto& scene = dae::SceneManager::GetInstance().GetCurrentScene();
+	//auto& collisions = CollisionManager::GetInstance();
+	input.BindKeyboardCommand(SDL_SCANCODE_F1, new NextSceneCommand(), InputType::Down);
+	//auto font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 21);
+	//auto go = std::make_unique<GameObject>();
+	//go->SetLocalPosition(glm::vec3(0.f, 0.f, 0.f));
+	//go->AddComponent<TextComponent>()->SetText("FPS: ");
+	//go->GetComponent<TextComponent>()->SetFont(font);
+	//go->AddComponent<FPSComponent>()->Initialize();
+	//scene.Add(std::move(go));
+	//
+	//auto UIHUD = std::make_unique<GameObject>();
+	//UIHUD->AddComponent<LivesDisplay>();
+	//UIHUD->AddComponent<HealthComponent>()->Initialize();
+	//UIHUD->AddComponent<SpriteComponent>()->AddAnimationStrips("Sprites/livesSprite.png", 1, 4, 4.f, 1.f, "lives", true);
+	//UIHUD->GetComponent<SpriteComponent>()->SetAnimationByName("lives");
+	//UIHUD->SetLocalPosition({ 0.f,460.f,0.f });
+	//scene.Add(std::move(UIHUD));
+	//
+	//UIHUD = std::make_unique<GameObject>();
+	//UIHUD->AddComponent<PointsDisplayComponent>();
+	//UIHUD->AddComponent<PointsComponent>()->Initialize();
+	//
+	//UIHUD->AddComponent<TextComponent>()->SetFont(font);
+	//UIHUD->GetComponent<TextComponent>()->SetText("0");
+	//
+	//UIHUD->SetLocalPosition({ 300.f,20.f,0.f });
+	//scene.Add(std::move(UIHUD));
+	//
+	//UIHUD = std::make_unique<GameObject>();
+	//UIHUD->AddComponent<TextComponent>()->SetFont(font);
+	//UIHUD->GetComponent<TextComponent>()->SetText("HIGH SCORE");
+	//UIHUD->SetLocalPosition({ 250.f,0.f,0.f });
+	//scene.Add(std::move(UIHUD));
+	//
+	//UIHUD = std::make_unique<GameObject>();
+	//UIHUD->AddComponent<PointsDisplayComponent>();
+	//UIHUD->AddComponent<PointsComponent>()->Initialize();
+	//UIHUD->AddComponent<TextComponent>()->SetFont(font);
+	//UIHUD->GetComponent<TextComponent>()->SetText("0");
+	//UIHUD->SetLocalPosition({ 100.f,20.f,0.f });
+	//scene.Add(std::move(UIHUD));
+	//
+	//UIHUD = std::make_unique<GameObject>();
+	//UIHUD->AddComponent<TextComponent>()->SetFont(font);
+	//UIHUD->GetComponent<TextComponent>()->SetText("1UP");
+	//UIHUD->SetLocalPosition({ 80.f,0.f,0.f });
+	//scene.Add(std::move(UIHUD));
+	//
+	//auto undergroundBoundary = std::make_unique<GameObject>();
+	//undergroundBoundary->SetLocalPosition({ 0.f,100.f,0.f });
+	//undergroundBoundary->AddComponent<CollisionComponent>()->CreateCollision(Rectf{ 0.f,0.f,635.f,350.f }, Underground, true);
+	//collisions.AddCollision(undergroundBoundary->GetComponent<CollisionComponent>());
+	//scene.Add(std::move(undergroundBoundary));
 }
 
 int main(int, char* [])
@@ -74,7 +157,7 @@ int main(int, char* [])
 	return 0;
 }
 
-void CreateInputSolo(std::unique_ptr<GameObject>& )
+void CreateInputSolo(std::unique_ptr<GameObject>&)
 {
 	//firstSprite->AddComponent<InputComponent>();
 	//firstSprite->GetComponent<InputComponent>()->BindKeyboardCommand(SDL_SCANCODE_S, new MoveUpDownCommand(firstSprite.get(), 1), InputType::Press);
@@ -85,7 +168,7 @@ void CreateInputSolo(std::unique_ptr<GameObject>& )
 	//firstSprite->GetComponent<InputComponent>()->SetMovementSpeed(120.f);
 }
 
-void CreateInput_Coop(std::unique_ptr<GameObject>& , std::unique_ptr<GameObject>& )
+void CreateInput_Coop(std::unique_ptr<GameObject>&, std::unique_ptr<GameObject>&)
 {
 	//firstSprite->AddComponent<InputComponent>();
 	//firstSprite->GetComponent<InputComponent>()->BindKeyboardCommand(SDL_SCANCODE_S, new MoveUpDownCommand(firstSprite.get(), 1), InputType::Press);
@@ -110,7 +193,7 @@ void SaveAllCollision(std::vector<Rectf>& m_pCollision, std::unique_ptr<GameObje
 	m_pCollision.emplace_back(go->GetComponent<CollisionComponent>()->GetCollision());
 }
 
-void CreateLevelFromTxtFile(std::string , Scene& )
+void CreateLevelFromTxtFile(std::string, Scene&)
 {
 
 	//CollisionManager::GetInstance().ResetCollision();
@@ -276,9 +359,9 @@ void CreateLevelFromTxtFile(std::string , Scene& )
 
 void CreateLevels()
 {
-	auto& firstLevel = dae::SceneManager::GetInstance().CreateScene("firstLevel");
-	auto fullPath = dae::ResourceManager::GetInstance().GetDataPath() + "Levels/level1.txt";
-	LevelManager::GetInstance().LoadLevel(fullPath, firstLevel);
+	//auto& firstLevel = dae::SceneManager::GetInstance().CreateScene("firstLevel");
+	//auto fullPath = dae::ResourceManager::GetInstance().GetDataPath() + "Levels/level1.txt";
+	//LevelManager::GetInstance().LoadLevel("level1.txt");
 
 	//auto& secondLevel = dae::SceneManager::GetInstance().CreateScene("secondLevel");
 	//fullPath = dae::ResourceManager::GetInstance().GetDataPath() + "Levels/level2.txt";

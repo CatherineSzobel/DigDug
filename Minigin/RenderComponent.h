@@ -22,7 +22,9 @@ namespace dae
 		virtual void FixedUpdate(float deltaTime) override;
 
 		void SetTexture(std::string texture);
+		void SetScale(float scale);
 	private:
 		std::shared_ptr<Texture2D> m_Texture{};
+		float m_Scale = 1.f;
 	};
 }

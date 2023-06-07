@@ -1,23 +1,24 @@
 #include "LevelManager.h"
 
-void digdug::LevelManager::LoadLevel(std::string filename, Scene& level)
+
+void digdug::LevelManager::LoadLevel(std::string filename)
 {
+	auto fullPath = dae::ResourceManager::GetInstance().GetDataPath() + "Levels/" + filename;
+
+	auto& level = SceneManager::GetInstance().CreateScene(filename.substr(0,filename.size() - 4));
 	CollisionManager::GetInstance().ResetCollision();
 	bool empty = level.isSceneEmpty();
 	if (empty)
 	{
-
-
-		std::fstream txtFile(filename, std::ios_base::in);
+		std::fstream txtFile(fullPath, std::ios_base::in);
 		auto pooka = std::make_unique<GameObject>();
 		auto fygar = std::make_unique<GameObject>();
 		auto tile = std::make_unique<GameObject>();
 		auto firstSprite = std::make_unique<GameObject>();
 
 		tile->AddComponent<TileComponent>()->Initialize();
-		tile->GetComponent<TileComponent>()->SetSandType(TileType::YellowSand);
-		auto tileSize = tile->GetComponent<SpriteComponent>()->GetCurrentSpriteSize();
-		tile->SetLocalPosition({ 0.f,100.f,0.f });
+		auto tileSize = tile->GetComponent<SpriteComponent>()->GetSpriteSize();
+		tile->MarkForDeletion(true);
 		level.Add(std::move(tile));
 
 		auto& input = InputManager::GetInstance();
@@ -46,49 +47,37 @@ void digdug::LevelManager::LoadLevel(std::string filename, Scene& level)
 			switch (type)
 			{
 			case levelType::empty:
-				++currentXTile;
-				if (currentXTile == maxTileColumn)
-				{
-					++currentYTile;
-					currentXTile = 0;
-				}
+				IncreaseRow(currentXTile, currentYTile, maxTileColumn);
 				break;
 
 			case levelType::tile:
 
 				tile = std::make_unique<GameObject>();
-				tile->AddComponent<TileComponent>()->Initialize();
 				if (currentYTile % 3 == 0 && currentYTile != 0 && currentYTile != 12 && currentXTile == 0)
 				{
 					++currentTileType;
 				}
+				tile->SetLocalPosition({ (tileSize.x * currentXTile),(currentYTile * tileSize.y) + startingBottom,0.f });
+				tile->AddComponent<TileComponent>()->Initialize();
 				tile->GetComponent<TileComponent>()->SetSandType(tileTypes[currentTileType]);
-				tile->SetLocalPosition({ (tileSize.width * currentXTile),(currentYTile * tileSize.height) + startingBottom,0.f });
-				++currentXTile;
-				if (currentXTile == maxTileColumn)
-				{
-					++currentYTile;
-					currentXTile = 0;
-				}
+
+				IncreaseRow(currentXTile, currentYTile, maxTileColumn);
+
 				collisions.AddCollision(tile->GetComponent<CollisionComponent>());
 				level.Add(std::move(tile));
 				break;
 
 			case levelType::player:
 
-				firstSprite->SetLocalPosition({ (tileSize.width * currentXTile),(currentYTile * tileSize.height) + startingBottom,0.f });
+				firstSprite->SetLocalPosition({ (tileSize.x * currentXTile),(currentYTile * tileSize.y) + startingBottom,0.f });
 				firstSprite->AddComponent<HealthComponent>()->Initialize();
 				firstSprite->AddComponent<DigDugComponent>()->Initialize();
 
 				CreateInputSolo(firstSprite);
 				input.AddKeyboardController(firstSprite.get());
-				++currentXTile;
-				if (currentXTile == maxTileColumn)
-				{
-					printf("\n");
-					++currentYTile;
-					currentXTile = 0;
-				}
+				
+				IncreaseRow(currentXTile, currentYTile, maxTileColumn);
+
 				level.Add(std::move(firstSprite));
 				break;
 
@@ -96,14 +85,10 @@ void digdug::LevelManager::LoadLevel(std::string filename, Scene& level)
 				pooka = std::make_unique<GameObject>();
 				pooka->AddComponent<PookaComponent>()->Initialize();
 
-				pooka->SetLocalPosition({ (tileSize.width * currentXTile),(currentYTile * tileSize.height) + startingBottom,0.f });
+				pooka->SetLocalPosition({ (tileSize.x * currentXTile),(currentYTile * tileSize.y) + startingBottom,0.f });
 
-				++currentXTile;
-				if (currentXTile == maxTileColumn)
-				{
-					++currentYTile;
-					currentXTile = 0;
-				}
+				IncreaseRow(currentXTile, currentYTile, maxTileColumn);
+
 				collisions.AddCollision(pooka->GetComponent<CollisionComponent>());
 				enemies.AddEnemies(pooka->GetComponent<PookaComponent>());
 				level.Add(std::move(pooka));
@@ -113,14 +98,10 @@ void digdug::LevelManager::LoadLevel(std::string filename, Scene& level)
 				fygar = std::make_unique<GameObject>();
 				fygar->AddComponent<FygarsComponent>()->Initialize();
 
-				fygar->SetLocalPosition({ (tileSize.width * currentXTile),(currentYTile * tileSize.height) + startingBottom,0.f });
+				fygar->SetLocalPosition({ (tileSize.x * currentXTile),(currentYTile * tileSize.y) + startingBottom,0.f });
 
-				++currentXTile;
-				if (currentXTile == maxTileColumn)
-				{
-					++currentYTile;
-					currentXTile = 0;
-				}
+				IncreaseRow(currentXTile, currentYTile, maxTileColumn);
+
 				collisions.AddCollision(fygar->GetComponent<CollisionComponent>());
 				enemies.AddEnemies(fygar->GetComponent<FygarsComponent>());
 				level.Add(std::move(fygar));
@@ -128,9 +109,7 @@ void digdug::LevelManager::LoadLevel(std::string filename, Scene& level)
 
 			case  levelType::rock:
 				auto rock = std::make_unique<GameObject>();
-				rock->AddComponent<RockComponent>()->Initialize();
-				auto rockSize = rock->GetComponent<SpriteComponent>()->GetCurrentSpriteSize();
-
+			
 				tile = std::make_unique<GameObject>();
 				tile->AddComponent<TileComponent>()->Initialize();
 				if (currentYTile % 3 == 0
@@ -140,14 +119,12 @@ void digdug::LevelManager::LoadLevel(std::string filename, Scene& level)
 					++currentTileType;
 				}
 				tile->GetComponent<TileComponent>()->SetSandType(tileTypes[currentTileType]);
-				tile->SetLocalPosition({ (tileSize.width * currentXTile),(currentYTile * tileSize.height) + startingBottom,0.f });
-				rock->SetLocalPosition({ (tileSize.width * currentXTile),(currentYTile * tileSize.height) + startingBottom,0.f });
-				++currentXTile;
-				if (currentXTile == maxTileColumn)
-				{
-					++currentYTile;
-					currentXTile = 0;
-				}
+				tile->SetLocalPosition({ (tileSize.x * currentXTile),(currentYTile * tileSize.y) + startingBottom,0.f });
+				rock->SetLocalPosition({ (tileSize.x * currentXTile),(currentYTile * tileSize.y) + startingBottom,0.f });
+				rock->AddComponent<RockComponent>()->Initialize();
+				
+				IncreaseRow(currentXTile, currentYTile, maxTileColumn);
+
 				collisions.AddCollision(rock->GetComponent<CollisionComponent>());
 				collisions.AddCollision(tile->GetComponent<CollisionComponent>());
 				level.Add(std::move(tile));
@@ -161,8 +138,12 @@ void digdug::LevelManager::LoadLevel(std::string filename, Scene& level)
 	CollisionManager::GetInstance().SetCollisionsActive();
 }
 
-void digdug::LevelManager::LoadCoopLevel(std::string filename, Scene& level)
+void digdug::LevelManager::LoadCoopLevel(std::string filename)
 {
+	auto fullPath = dae::ResourceManager::GetInstance().GetDataPath() + "Levels/" + filename;
+
+	auto& level = SceneManager::GetInstance().CreateScene(filename.substr(0, filename.size() - 4));
+
 	CollisionManager::GetInstance().ResetCollision();
 	std::fstream txtFile(filename, std::ios_base::in);
 
@@ -204,19 +185,13 @@ void digdug::LevelManager::LoadCoopLevel(std::string filename, Scene& level)
 		switch (type)
 		{
 		case levelType::empty:
-			printf(" 0 ");
-			++currentXTile;
-			if (currentXTile == maxTileColumn)
-			{
-				printf("\n");
-				++currentYTile;
-				currentXTile = 0;
-			}
+
+			IncreaseRow(currentXTile, currentYTile, maxTileColumn);
+
 			break;
 
 		case levelType::tile:
 
-			printf(" 1 ");
 			tile = std::make_unique<GameObject>();
 			tile->AddComponent<TileComponent>()->Initialize();
 			if (currentYTile % 3 == 0 && currentYTile != 0 && currentYTile != 12 && currentXTile == 0)
@@ -225,19 +200,14 @@ void digdug::LevelManager::LoadCoopLevel(std::string filename, Scene& level)
 			}
 			tile->GetComponent<TileComponent>()->SetSandType(tileTypes[currentTileType]);
 			tile->SetLocalPosition({ (tileSize.width * currentXTile),(currentYTile * tileSize.height) + startingBottom,0.f });
-			++currentXTile;
-			if (currentXTile == maxTileColumn)
-			{
-				printf("\n");
-				++currentYTile;
-				currentXTile = 0;
-			}
+		
+			IncreaseRow(currentXTile, currentYTile, maxTileColumn);
+
 			collisions.AddCollision(tile->GetComponent<CollisionComponent>());
 			level.Add(std::move(tile));
 			break;
 
 		case levelType::playerOne:
-			printf(" 2 ");
 
 			firstSprite->SetLocalPosition({ (tileSize.width * currentXTile),(currentYTile * tileSize.height) + startingBottom,0.f });
 			firstSprite->AddComponent<HealthComponent>()->Initialize();
@@ -245,17 +215,12 @@ void digdug::LevelManager::LoadCoopLevel(std::string filename, Scene& level)
 
 			CreateInputSolo(firstSprite);
 			input.AddKeyboardController(firstSprite.get());
-			++currentXTile;
-			if (currentXTile == maxTileColumn)
-			{
-				printf("\n");
-				++currentYTile;
-				currentXTile = 0;
-			}
+
+			IncreaseRow(currentXTile, currentYTile, maxTileColumn);
+
 			level.Add(std::move(firstSprite));
 			break;
 		case levelType::playerTwo:
-			printf(" 2 ");
 
 			secondSprite->SetLocalPosition({ (tileSize.width * currentXTile),(currentYTile * tileSize.height) + startingBottom,0.f });
 			secondSprite->AddComponent<HealthComponent>()->Initialize();
@@ -263,54 +228,39 @@ void digdug::LevelManager::LoadCoopLevel(std::string filename, Scene& level)
 
 			CreateInputSolo(secondSprite);
 			input.AddKeyboardController(secondSprite.get());
-			++currentXTile;
-			if (currentXTile == maxTileColumn)
-			{
-				printf("\n");
-				++currentYTile;
-				currentXTile = 0;
-			}
+
+			IncreaseRow(currentXTile, currentYTile, maxTileColumn);
+
 			level.Add(std::move(secondSprite));
 			break;
 
 		case levelType::pooka:
-			printf(" 3 ");
+
 			pooka = std::make_unique<GameObject>();
 			pooka->AddComponent<PookaComponent>()->Initialize();
 
 			pooka->SetLocalPosition({ (tileSize.width * currentXTile),(currentYTile * tileSize.height) + startingBottom,0.f });
 
-			++currentXTile;
-			if (currentXTile == maxTileColumn)
-			{
-				printf("\n");
-				++currentYTile;
-				currentXTile = 0;
-			}
+			IncreaseRow(currentXTile, currentYTile, maxTileColumn);
+
 			collisions.AddCollision(pooka->GetComponent<CollisionComponent>());
 			level.Add(std::move(pooka));
 			break;
 
 		case  levelType::fyger:
-			printf(" 4 ");
+
 			fygar = std::make_unique<GameObject>();
 			fygar->AddComponent<FygarsComponent>()->Initialize();
 
 			fygar->SetLocalPosition({ (tileSize.width * currentXTile),(currentYTile * tileSize.height) + startingBottom,0.f });
 
-			++currentXTile;
-			if (currentXTile == maxTileColumn)
-			{
-				printf("\n");
-				++currentYTile;
-				currentXTile = 0;
-			}
+			IncreaseRow(currentXTile, currentYTile, maxTileColumn);
+
 			collisions.AddCollision(fygar->GetComponent<CollisionComponent>());
 			level.Add(std::move(fygar));
 			break;
 
 		case  levelType::rock:
-			printf(" 5 ");
 			auto rock = std::make_unique<GameObject>();
 			rock->AddComponent<RockComponent>()->Initialize();
 			auto rockSize = rock->GetComponent<SpriteComponent>()->GetCurrentSpriteSize();
@@ -326,13 +276,9 @@ void digdug::LevelManager::LoadCoopLevel(std::string filename, Scene& level)
 			tile->GetComponent<TileComponent>()->SetSandType(tileTypes[currentTileType]);
 			tile->SetLocalPosition({ (tileSize.width * currentXTile),(currentYTile * tileSize.height) + startingBottom,0.f });
 			rock->SetLocalPosition({ (tileSize.width * currentXTile),(currentYTile * tileSize.height) + startingBottom,0.f });
-			++currentXTile;
-			if (currentXTile == maxTileColumn)
-			{
-				printf("\n");
-				++currentYTile;
-				currentXTile = 0;
-			}
+
+			IncreaseRow(currentXTile, currentYTile, maxTileColumn);
+
 			collisions.AddCollision(rock->GetComponent<CollisionComponent>());
 			collisions.AddCollision(tile->GetComponent<CollisionComponent>());
 			level.Add(std::move(tile));
@@ -355,7 +301,6 @@ void digdug::LevelManager::CreateInputSolo(std::unique_ptr<GameObject>& firstSpr
 	firstSprite->GetComponent<InputComponent>()->BindKeyboardCommand(SDL_SCANCODE_F, new PumpCommand(firstSprite.get(), "Sounds/Sound/PumpSound.wav", 4), InputType::Down);
 	firstSprite->GetComponent<InputComponent>()->SetMovementSpeed(120.f);
 }
-
 void digdug::LevelManager::CreateInput_Coop(std::unique_ptr<GameObject>& firstSprite, std::unique_ptr<GameObject>& secondSprite)
 {
 	firstSprite->AddComponent<InputComponent>();
@@ -375,4 +320,14 @@ void digdug::LevelManager::CreateInput_Coop(std::unique_ptr<GameObject>& firstSp
 	firstSprite->GetComponent<InputComponent>()->BindControllerCommand(ControllerButton::DPadRight, new MoveCommand(firstSprite.get(), Direction::right), InputType::Press);
 
 	secondSprite->GetComponent<InputComponent>()->SetMovementSpeed(240.f);
+}
+
+void digdug::LevelManager::IncreaseRow(int& x , int& y, int maxTileColumn)
+{
+	++x;
+	if (x == maxTileColumn)
+	{
+		++y;
+		x = 0;
+	}
 }

@@ -4,6 +4,7 @@
 #include "Event.h"
 namespace dae
 {
+	//template class
 	class Observer 
 	{
 	public:

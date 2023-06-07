@@ -19,22 +19,16 @@ void digdug::PookaComponent::Update(float)
 {
 	if (m_IsDead)
 	{
-		GetOwner()->MarkForDeletion(true);
-		m_pCollisionComp->SetCollision(false);
-		SetActive(false);
+		HandleOnDeath(GetOwner());
+		m_pSubject->Notify(GetOwner(), Event::OnPookaFirstLayerDeath);
 	}
 	if (m_IsHit)
 	{
-		m_pSpriteComp->SetAnimationByName("PookaDeath");
-		m_pSpriteComp->IncreaseSpriteFrame();
-		m_IsHit = false;
+		HandleOnHit("PookaDeath");
 	}
 }
 
-void digdug::PookaComponent::FixedUpdate(float)
-{
-
-}
+void digdug::PookaComponent::FixedUpdate(float){}
 
 void digdug::PookaComponent::Initialize()
 {
@@ -45,15 +39,10 @@ void digdug::PookaComponent::Initialize()
 	m_pSpriteComp->AddAnimationStrips("Sprites/Pooka/PookaMoveLeft.png", 3, 1, 3, 1 / 3.f, "PookaMoveLeft", false, playerScale);
 	m_pSpriteComp->AddAnimationStrips("Sprites/Pooka/PookaMoveRight.png", 3, 1, 3, 1 / 3.f, "PookaMoveRight", false, playerScale);
 	m_pSpriteComp->AddAnimationStrips("Sprites/Pooka/PookaDeathRight.png", 4, 1, 4, 1 / 4.f, "PookaDeathRight", false, playerScale);
-	
-	m_pSpriteComp->AddAnimationStrips("Sprites/Pooka/PookaDeathRight.png", 4, 1, 4, 1 / 4.f, "PookaDeath",false,playerScale);
 
-	m_pSpriteComp->SetAnimationByName("PookaDeath");
+	m_pSpriteComp->AddAnimationStrips("Sprites/Pooka/PookaDeathRight.png", 4, 1, 4, 1 / 4.f, "PookaDeath", true, playerScale);
+
+	m_pSpriteComp->SetAnimationByName("PookaMoveRight");
 	auto size = m_pSpriteComp->GetCurrentSpriteSize();
 	m_pCollisionComp->CreateCollision(Rectf{ size.left,size.height / 2.f,size.width,size.height / 2.f }, EnemyLayer, true);
-}
-
-void digdug::PookaComponent::MoveAround()
-{
-
 }

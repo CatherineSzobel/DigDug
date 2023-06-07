@@ -1,12 +1,12 @@
 #pragma once
 #include "Command.h"
 #include "InputComponent.h"
-#include "PointsComponent.h"
 #include "DigDugComponent.h"
 #include "GameTime.h"
 #include "servicelocator.h"
 #include "SceneManager.h"
 #include "ExtraStructs.h"
+#include "UI.h"
 using namespace dae;
 namespace digdug
 {
@@ -108,7 +108,7 @@ namespace digdug
 				}
 				else
 				{
-				//	servicelocator::get_sound_system().Play("Sounds/Sound/PumpingSound.wav", m_Volume);
+					//	servicelocator::get_sound_system().Play("Sounds/Sound/PumpingSound.wav", m_Volume);
 				}
 				m_pDigDugComp->SetMoving(false);
 				servicelocator::get_sound_system().HaltMusic();
@@ -131,15 +131,81 @@ namespace digdug
 		virtual ~NextSceneCommand() = default;
 		virtual void Execute() override
 		{
-			auto& scene = SceneManager::GetInstance();
-			scene.NextScene();
+			//	m_levelManager->LoadLevel("level2.txt");
 		};
 		virtual void Undo() override
 		{};
 	private:
+		//	digdug::LevelManager* m_levelManager;
 
 	};
+	class HandleUpDownMenuCommand final : public GameObjectCommand
+	{
+	public:
+		HandleUpDownMenuCommand(GameObject* owner, Direction direction)
+			:GameObjectCommand{ owner }, m_direction{ direction }, m_MinimumUpwards{ 299.f }, m_MaximumDownwards{ 331.f }
+		{
 
+		};
+		virtual ~HandleUpDownMenuCommand() = default;
+		virtual void Execute() override
+		{
+			m_originalPosition = GetGameActor()->GetLocalPosition();
+			float offSet = 0;
+			switch (m_direction)
+			{
+			case Direction::up:
+				GetGameActor()->GetComponent<UI>()->HandleAction(-1);
+				offSet = -30.f;
+				break;
+			case Direction::down:
+				GetGameActor()->GetComponent<UI>()->HandleAction(1);
+				offSet = 30.f;
+				break;
+			}
+			auto newPosition = m_originalPosition.y + offSet;
+			if (newPosition < m_MinimumUpwards)
+			{
+				offSet = 30;
+			}
+			if (newPosition > m_MaximumDownwards)
+			{
+				offSet = -30;
+			}
+
+			GetGameActor()->SetLocalPosition({ m_originalPosition.x,m_originalPosition.y + offSet,m_originalPosition.z });
+		};
+		virtual void Undo() override
+		{};
+	private:
+		Direction m_direction;
+		glm::vec3 m_originalPosition;
+		float m_MinimumUpwards;
+		float m_MaximumDownwards;
+	};
+	class HandleMenuCommand final : public GameObjectCommand
+	{
+	public:
+		HandleMenuCommand(GameObject* owner)
+			:GameObjectCommand(owner)
+		{
+		};
+		virtual ~HandleMenuCommand() = default;
+		virtual void Execute() override
+		{
+			auto gb = GetGameActor()->GetComponent<UI>();
+			if (gb != nullptr)
+			{
+				m_Action = GetGameActor()->GetComponent<UI>()->GetAction();
+				GetGameActor()->GetComponent<UI>()->ActivateAction(m_Action);
+			}
+
+		};
+		virtual void Undo() override
+		{};
+	private:
+		std::string m_Action;
+	};
 	//class KillCommand final : public GameObjectCommand
 	//{
 	//public:

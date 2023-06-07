@@ -14,7 +14,6 @@ namespace digdug
 		virtual void Update(float deltaTime) override;
 		virtual void FixedUpdate(float deltaTime) override;
 		virtual void Initialize() override;
-		void MoveAround();
 	private:
 		bool m_IsInvinsible = false;
 	};

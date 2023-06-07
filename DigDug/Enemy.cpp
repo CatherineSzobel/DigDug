@@ -31,6 +31,20 @@ void digdug::Enemy::Reset()
 	m_AmountOfPumps = 0;
 }
 
+void digdug::Enemy::HandleOnDeath(GameObject* obj)
+{
+	obj->MarkForDeletion(true);
+	m_pCollisionComp->SetCollision(false);
+	SetActive(false);
+}
+
+void digdug::Enemy::HandleOnHit(std::string animation)
+{
+	m_pSpriteComp->SetAnimationByName(animation);
+	m_pSpriteComp->IncreaseSpriteFrame();
+	m_IsHit = false;
+}
+
 void digdug::Enemy::SetScene(Scene* scene)
 {
 	m_Scene = scene;

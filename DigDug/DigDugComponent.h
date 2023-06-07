@@ -6,7 +6,7 @@
 #include "ExtraStructs.h"
 #include "servicelocator.h"
 #include "CollisionComponent.h"
-#include "Enemies/EnemyManager.h"
+#include "EnemyManager.h"
 #include "PlayerState.h"
 using namespace dae;
 namespace digdug
@@ -45,7 +45,7 @@ namespace digdug
 		void CreateAnimation();
 	private:
 
-		bool m_IsDigging = false, m_IsDead = false, m_IsMoving = false,m_UsingWaterPump = false, m_ThrownPump = false, m_DeathCountdownFinished = false;// m_CreatedOwnHealthComponent = false;
+		bool m_IsDigging = false, m_IsDead = false, m_IsMoving = false,m_UsingWaterPump = false, m_ThrownPump = false, m_DeathCountdownFinished = false;
 		float m_RespawnCountdown, m_DeathCountdown;
 		HealthComponent* m_pHealthComponent{};
 		SpriteComponent* m_pSpriteComponent{};

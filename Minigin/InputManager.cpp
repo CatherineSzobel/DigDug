@@ -134,3 +134,8 @@ void dae::InputManager::AddKeyboardController(GameObject* gameObject)
 {
 	m_KeyboardButtons = gameObject->GetComponent<InputComponent>()->GetKeyboardButtons();
 }
+
+void dae::InputManager::Reset()
+{
+	m_GlobalKeyboardButtons.clear();
+}

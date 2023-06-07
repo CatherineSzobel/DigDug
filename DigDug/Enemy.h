@@ -3,6 +3,8 @@
 #include "SpriteComponent.h"
 #include "CollisionComponent.h"
 #include "SceneManager.h"
+#include "Subject.h"
+
 using namespace dae;
 namespace digdug
 {
@@ -17,8 +19,10 @@ namespace digdug
 		Scene* GetScene() const { return m_Scene; };
 		void IncreasePump();
 		void Reset();
-		int GetAmountOfPumps() { return m_AmountOfPumps; };
 	protected:
+		void HandleOnDeath(GameObject* obj);
+		void HandleOnHit(std::string animation);
+
 		void SetScene(Scene* scene);
 		SpriteComponent* m_pSpriteComp = nullptr;
 		CollisionComponent* m_pCollisionComp = nullptr;
@@ -26,6 +30,8 @@ namespace digdug
 		bool m_IsHit = false;
 		bool m_IsDead = false;
 		int m_AmountOfPumps;
+		std::unique_ptr<Subject> m_pSubject{ std::make_unique<Subject>() };
+	//	TileType m_CurrentTileType;
 	private:
 		bool m_IsActive = true;
 		Scene* m_Scene = nullptr;

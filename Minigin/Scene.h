@@ -10,6 +10,8 @@ namespace dae
 		friend Scene& SceneManager::CreateScene(const std::string& name);
 	public:
 		void Add(std::unique_ptr<GameObject> object);
+		void AddUI(std::unique_ptr<GameObject> object);
+		void MoveOverUI(Scene& level);
 		void Remove(std::unique_ptr<GameObject> object);
 		void RemoveAll();
 
@@ -29,6 +31,7 @@ namespace dae
 
 		std::string m_name;
 		std::vector < std::unique_ptr<GameObject>> m_objects{};
+		std::vector < std::unique_ptr<GameObject>> m_UIobjects{};
 		static unsigned int m_idCounter;
 	
 	};

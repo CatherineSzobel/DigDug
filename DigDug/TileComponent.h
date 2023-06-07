@@ -2,16 +2,11 @@
 #include "CollisionComponent.h"
 #include "CollisionManager.h"
 #include "SpriteComponent.h"
+#include "Helpers.h"
 using namespace dae;
 namespace digdug
 {
-	enum class TileType
-	{
-		YellowSand,
-		OrangeSand,
-		BrownSand,
-		RedSand
-	};
+
 	class TileComponent final : public BaseComponent
 	{
 	public:
@@ -29,11 +24,13 @@ namespace digdug
 		virtual void Initialize() override;
 
 		void SetSandType(TileType tileType);
+		bool IsActive() const { return m_Active; };
 
 	private:
 		CollisionComponent* m_pCollisionComp = nullptr;
 		float m_TileScale = 5.f;
 		std::vector<Sprite*> m_pTileLists{};
+		bool m_Active = true;
 		SpriteComponent* m_pSpriteComp = nullptr;
 	};
 }

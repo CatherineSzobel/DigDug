@@ -17,6 +17,16 @@ void Scene::Add(std::unique_ptr<GameObject> object)
 
 }
 
+void dae::Scene::AddUI(std::unique_ptr<GameObject> object)
+{
+	m_UIobjects.emplace_back(std::move(object));
+}
+
+void dae::Scene::MoveOverUI(Scene& )
+{
+	//level.m_UIobjects = m_UIobjects;
+}
+
 void Scene::Remove(std::unique_ptr<GameObject> object)
 {
 	auto it = std::find(m_objects.begin(), m_objects.end(), object);
@@ -25,16 +35,20 @@ void Scene::Remove(std::unique_ptr<GameObject> object)
 
 void Scene::RemoveAll()
 {
-	//m_objects.clear();
-	for (const auto& object : m_objects)
+	m_objects.clear();
+	/*for (const auto& object : m_objects)
 	{
 		object->MarkForDeletion(false);
-	}
+	}*/
 }
 
 void Scene::Update(float deltaTime)
 {
 	for (auto& object : m_objects)
+	{
+		object->Update(deltaTime);
+	}
+	for (auto& object : m_UIobjects)
 	{
 		object->Update(deltaTime);
 	}
@@ -45,10 +59,18 @@ void dae::Scene::FixedUpdate(float deltaTime)
 	{
 		object->FixedUpdate(deltaTime);
 	}
+	for (auto& object : m_UIobjects)
+	{
+		object->FixedUpdate(deltaTime);
+	}
 }
 void Scene::Render() const
 {
 	for (const auto& object : m_objects)
+	{
+		object->Render();
+	}
+	for (const auto& object : m_UIobjects)
 	{
 		object->Render();
 	}

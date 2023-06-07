@@ -18,9 +18,29 @@ void dae::SceneManager::Render()
 
 dae::Scene& dae::SceneManager::CreateScene(const std::string& name)
 {
-	const auto& scene = std::shared_ptr<Scene>(new Scene(name));
-	m_scenes.push_back(scene);
-	m_CurrentScene = scene;
+	auto findByName = [&](std::shared_ptr<Scene> scene)
+	{
+		if (scene->GetName() == name)
+		{
+			return true;
+		}
+		return false;
+	};
+	auto it = std::find_if(m_scenes.begin(), m_scenes.end(), findByName);
+	if (it != m_scenes.cend())
+	{
+		//Reference that one
+		auto index = it - m_scenes.begin();
+		m_CurrentScene = m_scenes[index];
+	}
+	else
+	{
+		//Create new one
+		const auto& scene = std::shared_ptr<Scene>(new Scene(name));
+		m_scenes.push_back(scene);
+		m_CurrentScene = scene;
+	}
+
 	return *m_CurrentScene;
 }
 dae::Scene& dae::SceneManager::GetScene(int index) const
@@ -50,16 +70,7 @@ void dae::SceneManager::ChangeSceneTo(const std::string& name)
 }
 void dae::SceneManager::NextScene()
 {
-	auto it = std::find(m_scenes.cbegin(), m_scenes.cend(), m_CurrentScene);
-	auto index = it - m_scenes.begin();
-	if ((size_t)index >= m_scenes.size() - 1)
-	{
-		m_CurrentScene = m_scenes[0];
-	}
-	else
-	{
-		m_CurrentScene = m_scenes[++index];
-	}
+	
 }
 int dae::SceneManager::GetCurrentSceneIndex() const
 {

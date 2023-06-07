@@ -3,7 +3,7 @@
 #include "RenderComponent.h"
 #include "CollisionComponent.h"
 #include "CollisionManager.h"
-#include "Enemies/Enemy.h"
+#include "Enemy.h"
 using namespace dae;
 namespace digdug
 {

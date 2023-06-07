@@ -1,5 +1,5 @@
 #include "UIState.h"
-#include "Enemies/EnemyManager.h"
+#include "EnemyManager.h"
 #pragma region PauseState
 digdug::PauseState::PauseState(dae::GameObject* )
 {

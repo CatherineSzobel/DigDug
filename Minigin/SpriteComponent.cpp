@@ -55,6 +55,11 @@ Rectf dae::SpriteComponent::GetCurrentSpriteSize() const
 	return Rectf(GetOwner()->GetLocalPosition().x, GetOwner()->GetLocalPosition().y, m_CurrentAnimationStrip->GetFrameWidth() * m_CurrentAnimationStrip->GetScale(), m_CurrentAnimationStrip->GetFrameHeight() * m_CurrentAnimationStrip->GetScale());
 }
 
+glm::vec2 dae::SpriteComponent::GetSpriteSize() const
+{
+	return glm::vec2(m_CurrentAnimationStrip->GetFrameWidth() * m_CurrentAnimationStrip->GetScale(), m_CurrentAnimationStrip->GetFrameHeight() * m_CurrentAnimationStrip->GetScale());
+}
+
 Sprite* dae::SpriteComponent::GetCurrentSprite() const
 {
 	return m_CurrentAnimationStrip;

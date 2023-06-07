@@ -10,10 +10,11 @@ void digdug::PumpComponent::Update(float)
 	auto collisions = CollisionManager::GetInstance().GetCollisionsByType(EnemyLayer);
 	for (int i = 0; i < (int)collisions.size(); i++)
 	{
-		if (m_pCollisionComp->Collide(collisions[i]->GetCollision()))
+		if (m_pCollisionComp->Collide(collisions[i]->GetCollision()) && EnemyManager::GetInstance().GetEnemyPointer(i)->IsActive())
 		{
 			m_Attached = true;
 			m_Enemy = EnemyManager::GetInstance().GetEnemyPointer(i);
+
 			break;
 		}
 
