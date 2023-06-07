@@ -4,8 +4,9 @@
 void digdug::LevelManager::LoadLevel(std::string filename)
 {
 	auto fullPath = dae::ResourceManager::GetInstance().GetDataPath() + "Levels/" + filename;
-
-	auto& level = SceneManager::GetInstance().CreateScene(filename.substr(0,filename.size() - 4));
+	auto levelname = filename.substr(0, filename.size() - 4);
+	auto& level = SceneManager::GetInstance().CreateScene(levelname);
+	SceneManager::GetInstance().ChangeSceneTo(levelname);
 	CollisionManager::GetInstance().ResetCollision();
 	bool empty = level.isSceneEmpty();
 	if (empty)

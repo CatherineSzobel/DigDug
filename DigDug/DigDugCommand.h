@@ -80,26 +80,6 @@ namespace digdug
 		{
 			if (!GetGameActor()->GetComponent<DigDugComponent>()->IsPlayerDeadCheck())
 			{
-
-				/*	if (m_pSpriteComponent->GetCurrentAnimation() == "PlayerWalkLeft")
-					{
-						m_pSpriteComponent->SetAnimationByName("WaterPumpLeft");
-					}
-					else if (m_pSpriteComponent->GetCurrentAnimation() == "PlayerWalkRight")
-					{
-						m_pSpriteComponent->SetAnimationByName("WaterPumpRight");
-
-					}
-					else if (m_pSpriteComponent->GetCurrentAnimation() == "PlayerWalkUp")
-					{
-						m_pSpriteComponent->SetAnimationByName("WaterPumpUp");
-
-					}
-					else if (m_pSpriteComponent->GetCurrentAnimation() == "PlayerWalkDown")
-					{
-						m_pSpriteComponent->SetAnimationByName("WaterPumpDown");
-
-					}*/
 				m_pDigDugComp->SetUsingWaterPump(true);
 				auto isThrown = m_pDigDugComp->IsThrown();
 				if (isThrown)
@@ -129,14 +109,9 @@ namespace digdug
 	public:
 		NextSceneCommand() {};
 		virtual ~NextSceneCommand() = default;
-		virtual void Execute() override
-		{
-			//	m_levelManager->LoadLevel("level2.txt");
-		};
-		virtual void Undo() override
-		{};
+		virtual void Execute() override;
+		virtual void Undo() override{};
 	private:
-		//	digdug::LevelManager* m_levelManager;
 
 	};
 	class HandleUpDownMenuCommand final : public GameObjectCommand

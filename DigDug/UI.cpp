@@ -35,7 +35,9 @@ void digdug::UI::ActivateAction(std::string action)
 		auto& firstLevel = dae::SceneManager::GetInstance().GetCurrentScene();
 		auto fullPath = dae::ResourceManager::GetInstance().GetDataPath() + "Levels/level1.txt";
 		firstLevel.RemoveAll();
-		LevelManager::GetInstance().LoadLevel("level1.txt");
+
+		LevelManager levelManager;
+		levelManager.LoadLevel("level1.txt");
 	}
 	if (action == "CoOp")
 	{

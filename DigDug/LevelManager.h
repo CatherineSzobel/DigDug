@@ -8,17 +8,17 @@
 #include "CollisionManager.h"
 #include "PookaComponent.h"
 #include "FygarsComponent.h"
-#include "DigDugCommand.h"
 #include "HealthComponent.h"
 #include <vector>
 #include "ExtraStructs.h"
 #include "TileComponent.h"
 #include "SceneManager.h"
 #include "EnemyManager.h"
+#include "DigDugCommand.h"
 using namespace dae;
 namespace digdug
 {
-	class LevelManager final : public Singleton<LevelManager>
+	class LevelManager final
 	{
 	public:
 		void LoadLevel(std::string filename);

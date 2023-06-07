@@ -38,5 +38,14 @@ void digdug::EnemyManager::SetEnemiesActive()
 
 digdug::Enemy* digdug::EnemyManager::GetEnemyPointer(const int i)
 {
-	return m_Enemies.at(i);
+	auto& currentScene = SceneManager::GetInstance().GetCurrentScene();
+	std::vector<Enemy*> tempEnemies;
+	for (auto& enemy : m_Enemies)
+	{
+		if (enemy->GetScene()->GetName() == currentScene.GetName())
+		{
+			tempEnemies.emplace_back(enemy);
+		}
+	}
+	return tempEnemies.at(i);
 }
