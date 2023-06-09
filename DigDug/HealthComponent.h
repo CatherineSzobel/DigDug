@@ -18,17 +18,15 @@ namespace digdug
 		virtual void FixedUpdate(float deltaTime) override;
 		virtual void Initialize() override;
 		int GetLives() const { return m_RemainingLives; }
-		void DecreaseHealth();
 		void NotifyHealthSubject();
 		bool GetIsDead() const { return m_IsDead; }
-		std::unique_ptr<Subject> GetSubject() { return std::move(m_pSubject); };
+		Subject* GetSubject() { return m_pSubject; };
 
 
 	private:
-		int m_CurrentHealth;
 		int m_RemainingLives;
 		bool m_IsDead, m_IsGameOver;
-		std::unique_ptr<Subject> m_pSubject{ std::make_unique<Subject>() };
+		Subject* m_pSubject = nullptr;
 	};
 
 }

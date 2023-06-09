@@ -25,8 +25,11 @@ namespace digdug
 		void LoadCoopLevel(std::string filename);
 		void CreateInputSolo(std::unique_ptr<GameObject>& firstSprite);
 		void CreateInput_Coop(std::unique_ptr<GameObject>& firstSprite, std::unique_ptr<GameObject>& secondSprite);
+		int ReadHighScoreFromFile();
+		void SaveHighScoreInFile(int highScore);
 	private:
 		void IncreaseRow(int& x,int& y,int maxtilecolumn);
+		bool m_LevelCleared = false;
 	};
 }
 

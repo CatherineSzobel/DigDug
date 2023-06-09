@@ -2,6 +2,7 @@
 #include <stdexcept>
 #include <SDL_ttf.h>
 #include "CollisionManager.h"
+#include "LevelManager.h"
 using namespace dae;
 digdug::DigDugComponent::DigDugComponent()
 	:
@@ -13,7 +14,7 @@ digdug::DigDugComponent::DigDugComponent()
 	m_CollisionType{},
 	m_OriginalPos{}
 {
-
+	m_pSubject = new Subject();
 }
 digdug::DigDugComponent::~DigDugComponent()
 {
@@ -21,6 +22,8 @@ digdug::DigDugComponent::~DigDugComponent()
 	GetOwner()->RemoveComponent<CollisionComponent>();
 	delete	m_CurrentState;
 	m_CurrentState = nullptr;
+	delete m_pSubject;
+	m_pSubject = nullptr;
 }
 
 void digdug::DigDugComponent::Render()
@@ -37,7 +40,19 @@ void digdug::DigDugComponent::Update(float elapsed)
 	}
 	if (!m_IsDead)
 	{
-		//std::cout << EnemyManager::GetInstance().EnemiesLeft() << "\n";
+		if (EnemyManager::GetInstance().EnemiesLeft() == 0)
+		{
+			LevelManager levelmanager;
+			auto currentLevel = SceneManager::GetInstance().GetCurrentSceneIndex() + 2;
+			if (currentLevel == 4)
+			{
+				m_GameEnd = true;
+			}
+			else
+			{
+				levelmanager.LoadLevel("level" + std::to_string(currentLevel) + ".txt");
+			}
+		}
 		if (m_IsMoving && !servicelocator::get_sound_system().IsPlaying())
 		{
 			servicelocator::get_sound_system().PlayMusic("Sounds/Music/Theme.mp3", 1, true);
@@ -96,6 +111,7 @@ void digdug::DigDugComponent::Initialize()
 
 	m_CollisionType = Player;
 	m_pCollisionComponent = GetOwner()->AddComponent<CollisionComponent>();
+
 	auto size = m_pSpriteComponent->GetCurrentSpriteSize();
 	m_pCollisionComponent->CreateCollision(Rectf{ size }, Player, true);
 	m_pCollisionComponent->SetCollision(true);
@@ -103,7 +119,9 @@ void digdug::DigDugComponent::Initialize()
 	CollisionManager::GetInstance().AddCollision(m_pCollisionComponent);
 
 	m_OriginalPos = GetOwner()->GetLocalPosition();
-	m_pHealthComponent = GetOwner()->GetComponent<HealthComponent>();
+
+	m_pHealthComponent = GetOwner()->AddComponent<HealthComponent>();
+	m_pHealthComponent->Initialize();
 
 	m_CurrentState = new IdleState(GetOwner());
 

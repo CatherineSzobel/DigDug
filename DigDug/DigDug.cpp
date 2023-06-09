@@ -66,30 +66,6 @@ void load()
 	input.AddKeyboardController(arrow.get());
 	firstLevel.Add(std::move(arrow));
 	
-	auto scoringObject = std::make_unique<GameObject>();
-	scoringObject->AddComponent<TextComponent>()->SetFont(font);
-	scoringObject->GetComponent<TextComponent>()->SetText("0");
-	scoringObject->SetLocalPosition({ 100.f,20.f,0.f });
-	firstLevel.AddUI(std::move(scoringObject));
-
-	scoringObject = std::make_unique<GameObject>();
-	scoringObject->AddComponent<TextComponent>()->SetFont(font);
-	scoringObject->GetComponent<TextComponent>()->SetText("1P SCORE");
-	scoringObject->SetLocalPosition({ 80.f,0.f,0.f });
-	firstLevel.AddUI(std::move(scoringObject));
-
-	scoringObject = std::make_unique<GameObject>();
-	scoringObject->AddComponent<TextComponent>()->SetFont(font);
-	scoringObject->GetComponent<TextComponent>()->SetText("HIGHSCORE");
-	scoringObject->SetLocalPosition({ 250.F,0.f,0.f });
-	firstLevel.AddUI(std::move(scoringObject));
-
-	scoringObject = std::make_unique<GameObject>();
-	scoringObject->AddComponent<TextComponent>()->SetFont(font);
-	scoringObject->GetComponent<TextComponent>()->SetText("0");
-	scoringObject->SetLocalPosition({ 300.f,20.f,0.f });
-	firstLevel.AddUI(std::move(scoringObject));
-
 
 	//CreateLevels();
 	//servicelocator::get_sound_system().PlayMusic("Sounds/Music/Theme.mp3", 1, true);

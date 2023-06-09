@@ -68,10 +68,6 @@ void dae::SceneManager::ChangeSceneTo(const std::string& name)
 		m_CurrentScene = m_scenes[index];
 	}
 }
-void dae::SceneManager::NextScene()
-{
-	
-}
 int dae::SceneManager::GetCurrentSceneIndex() const
 {
 

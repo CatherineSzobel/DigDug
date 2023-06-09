@@ -2,6 +2,7 @@
 #include "Singleton.h"
 #include "Enemy.h"
 #include "Scene.h"
+#include "Subject.h"
 using namespace dae;
 namespace digdug
 {
@@ -13,8 +14,10 @@ namespace digdug
 		void SetEnemiesActive();
 		std::vector<Enemy*> GetEnemies() const {return std::move(m_Enemies);};
 		Enemy* GetEnemyPointer(const int i);
+
 	private:
 		std::vector< Enemy*> m_Enemies;
+
 	};
 }
 

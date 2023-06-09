@@ -4,8 +4,13 @@ digdug::Enemy::Enemy()
 {
 	auto& currentScene = SceneManager::GetInstance().GetCurrentScene();
 	SetScene(&currentScene);
+	m_pSubject = new Subject();
 }
-
+digdug::Enemy::~Enemy()
+{
+	delete m_pSubject;
+	m_pSubject = nullptr;
+}
 void digdug::Enemy::SetActive(bool flag)
 {
 	m_IsActive = flag;
@@ -17,7 +22,8 @@ void digdug::Enemy::IncreasePump()
 	{
 		//enemy dies
 		m_IsDead = true;
-		Reset();
+		m_pSubject->Notify(Event::OnPookaFirstLayerDeath);
+		m_AmountOfPumps = 0;
 	}
 	else
 	{
@@ -29,6 +35,7 @@ void digdug::Enemy::IncreasePump()
 void digdug::Enemy::Reset()
 {
 	m_AmountOfPumps = 0;
+	m_IsDead = false;
 }
 
 void digdug::Enemy::HandleOnDeath(GameObject* obj)

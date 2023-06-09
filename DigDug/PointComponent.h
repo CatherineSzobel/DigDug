@@ -12,7 +12,7 @@ namespace digdug
 		virtual void FixedUpdate(float deltaTime) override;
 
 		// Inherited via Observer
-		virtual void Notify(dae::GameObject* actor, Event event) override;
+		virtual void Notify( Event event) override;
 
 		int GetCurrentPoints() { return m_CurrentPoints; };
 	private:

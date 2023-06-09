@@ -15,7 +15,7 @@ namespace dae
 		Observer& operator=(const Observer& other) = delete;
 		Observer& operator=(Observer&& other) = delete;
 
-		virtual void Notify(dae::GameObject* actor, Event event) = 0;
+		virtual void Notify(Event event) = 0;
 	private:
 
 	};

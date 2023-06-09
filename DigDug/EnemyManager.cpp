@@ -1,5 +1,5 @@
 #include "EnemyManager.h"
-
+#include "LevelManager.h"
 int digdug::EnemyManager::EnemiesLeft() const
 {
 	int amount = 0;

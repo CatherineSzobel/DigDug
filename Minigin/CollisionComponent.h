@@ -38,6 +38,9 @@ namespace dae
 		CollisionType GetCollisionType() { return m_CollisionType; };
 		Scene* GetScene() {return m_Scene;};
 
+		std::string GetTag() { return m_Tag; };
+		void SetTag(std::string& name) { m_Tag = name; }
+
 		void DrawDebug(float left, float bottom, float width, float height);
 	private:
 		Rectf m_Collision, m_OriginalCollisionPosition;
@@ -45,7 +48,7 @@ namespace dae
 		bool m_IsEnabled = true, m_DebugOn = false, m_IsMoveable = true;
 		CollisionType m_CollisionType;
 		Scene* m_Scene;
-
+		std::string m_Tag;
 		void SetScene(Scene* scene);
 	};
 

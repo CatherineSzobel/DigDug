@@ -2,6 +2,14 @@
 #include "LevelManager.h"
 void digdug::NextSceneCommand::Execute()
 {
-	LevelManager levelManager;
-	levelManager.LoadLevel("level2.txt");
+	LevelManager levelmanager;
+	auto currentLevel = SceneManager::GetInstance().GetCurrentSceneIndex() + 2;
+	if (currentLevel == 4)
+	{
+		
+	}
+	else
+	{
+		levelmanager.LoadLevel("level" + std::to_string(currentLevel) + ".txt");
+	}
 };

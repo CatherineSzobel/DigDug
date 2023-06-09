@@ -19,13 +19,10 @@ namespace digdug
 		virtual void Render() override;
 		virtual void Update(float deltaTime) override;
 		virtual void FixedUpdate(float deltaTime) override;
+		virtual void Initialize() override;
 
-		virtual void Notify(dae::GameObject* actor, Event event) override;
-		void SetCurrentLives(int lives) { currentLives = lives; };
+		virtual void Notify(Event event) override;
 	private:
-		int currentLives;
-
-
 	};
 
 }

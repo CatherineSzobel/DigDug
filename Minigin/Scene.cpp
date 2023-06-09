@@ -17,14 +17,30 @@ void Scene::Add(std::unique_ptr<GameObject> object)
 
 }
 
-void dae::Scene::AddUI(std::unique_ptr<GameObject> object)
+void dae::Scene::AddUI(std::shared_ptr<GameObject> object)
 {
-	m_UIobjects.emplace_back(std::move(object));
+	m_UIobjects.emplace_back(object);
 }
 
-void dae::Scene::MoveOverUI(Scene& )
+void dae::Scene::SetUI(std::vector<std::shared_ptr<GameObject>> objects)
 {
-	//level.m_UIobjects = m_UIobjects;
+	for (auto& object : objects)
+	{
+		m_UIobjects.emplace_back(std::move(object));
+	}
+}
+
+std::vector < std::shared_ptr<GameObject>> dae::Scene::MoveOverUI(Scene& level)
+{
+
+	std::vector < std::shared_ptr<GameObject>> temp;
+	for (auto object : m_UIobjects)
+	{
+		temp.emplace_back(object);
+		level.AddUI(object);
+	}
+	m_UIobjects.clear();
+	return temp;
 }
 
 void Scene::Remove(std::unique_ptr<GameObject> object)

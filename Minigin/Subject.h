@@ -14,7 +14,8 @@ namespace dae
 
 		void AddObserver(Observer* observer);
 		void RemoveObserver(Observer* observer);
-		void Notify(GameObject* actor, Event event);
+		void RemoveAll();
+		void Notify(Event event);
 	private:
 		std::vector<Observer*> m_pObservers;
 	};

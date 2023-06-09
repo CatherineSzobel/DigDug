@@ -20,7 +20,7 @@ void digdug::PookaComponent::Update(float)
 	if (m_IsDead)
 	{
 		HandleOnDeath(GetOwner());
-		m_pSubject->Notify(GetOwner(), Event::OnPookaFirstLayerDeath);
+		//m_pSubject->Notify(Event::OnPookaFirstLayerDeath);
 	}
 	if (m_IsHit)
 	{

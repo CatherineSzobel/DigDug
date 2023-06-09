@@ -1,13 +1,13 @@
 #include "LivesDisplay.h"
-void digdug::LivesDisplay::Notify(dae::GameObject* actor , Event event )
+void digdug::LivesDisplay::Notify(Event event)
 {
 	if (Event::OnPlayerDeath == event)
 	{
-		actor->GetComponent<SpriteComponent>()->IncreaseSpriteFrame();
+		GetOwner()->GetComponent<SpriteComponent>()->IncreaseSpriteFrame();
 	}
 	else if (event == Event::OnGameOver)
 	{
-		actor->GetComponent<SpriteComponent>()->GetCurrentSprite()->SetCurrentFrame(3);
+		GetOwner()->GetComponent<SpriteComponent>()->GetCurrentSprite()->SetCurrentFrame(3);
 	}
 
 }
@@ -22,4 +22,11 @@ void digdug::LivesDisplay::Update(float)
 
 void digdug::LivesDisplay::FixedUpdate(float)
 {
+}
+
+void digdug::LivesDisplay::Initialize()
+{
+	GetOwner()->AddComponent<SpriteComponent>()->Initialize();
+	GetOwner()->GetComponent<SpriteComponent>()->AddAnimationStrips("Sprites/livesSprite.png", 4, 1, 4.f, 1.f, "lives", true);
+	GetOwner()->GetComponent<SpriteComponent>()->SetAnimationByName("lives");
 }

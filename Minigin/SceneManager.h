@@ -14,7 +14,6 @@ namespace dae
 		Scene& GetScene(int index) const;
 		Scene& GetCurrentScene() const;
 		void ChangeSceneTo(const std::string& name);
-		void NextScene();
 		void Update(float deltaTime);
 		void FixedUpdate(float deltaTime);
 		void Render();

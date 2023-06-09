@@ -13,10 +13,11 @@ namespace digdug
 	{
 	public:
 		Enemy();
-		virtual ~Enemy() {};
+		virtual ~Enemy();
 		bool IsActive() const { return m_IsActive; };
 		void SetActive(bool flag);
 		Scene* GetScene() const { return m_Scene; };
+		Subject* GetSubject() { return m_pSubject; };
 		void IncreasePump();
 		void Reset();
 	protected:
@@ -30,11 +31,12 @@ namespace digdug
 		bool m_IsHit = false;
 		bool m_IsDead = false;
 		int m_AmountOfPumps;
-		std::unique_ptr<Subject> m_pSubject{ std::make_unique<Subject>() };
+
 	//	TileType m_CurrentTileType;
 	private:
 		bool m_IsActive = true;
 		Scene* m_Scene = nullptr;
+		Subject* m_pSubject = nullptr;
 	};
 }
 
