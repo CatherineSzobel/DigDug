@@ -6,7 +6,7 @@
 #include "servicelocator.h"
 #include "SceneManager.h"
 #include "ExtraStructs.h"
-#include "UI.h"
+#include "StartScreen.h"
 using namespace dae;
 namespace digdug
 {
@@ -130,11 +130,11 @@ namespace digdug
 			switch (m_direction)
 			{
 			case Direction::up:
-				GetGameActor()->GetComponent<UI>()->HandleAction(-1);
+				GetGameActor()->GetComponent<StartScreen>()->HandleAction(-1);
 				offSet = -30.f;
 				break;
 			case Direction::down:
-				GetGameActor()->GetComponent<UI>()->HandleAction(1);
+				GetGameActor()->GetComponent<StartScreen>()->HandleAction(1);
 				offSet = 30.f;
 				break;
 			}
@@ -168,11 +168,11 @@ namespace digdug
 		virtual ~HandleMenuCommand() = default;
 		virtual void Execute() override
 		{
-			auto gb = GetGameActor()->GetComponent<UI>();
+			auto gb = GetGameActor()->GetComponent<StartScreen>();
 			if (gb != nullptr)
 			{
-				m_Action = GetGameActor()->GetComponent<UI>()->GetAction();
-				GetGameActor()->GetComponent<UI>()->ActivateAction(m_Action);
+				m_Action = GetGameActor()->GetComponent<StartScreen>()->GetAction();
+				GetGameActor()->GetComponent<StartScreen>()->ActivateAction(m_Action);
 			}
 
 		};

@@ -34,7 +34,7 @@ std::vector < std::shared_ptr<GameObject>> dae::Scene::MoveOverUI(Scene& level)
 {
 
 	std::vector < std::shared_ptr<GameObject>> temp;
-	for (auto object : m_UIobjects)
+	for (auto& object : m_UIobjects)
 	{
 		temp.emplace_back(object);
 		level.AddUI(object);

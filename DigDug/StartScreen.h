@@ -4,16 +4,16 @@
 using namespace dae;
 namespace digdug
 {
-	enum StartScreen
+	enum StartScreenChoice
 	{
 		SinglePlayer = 0,
 		CoOp = 1
 	};
-	class UI final : public BaseComponent
+	class StartScreen final : public BaseComponent
 	{
 	public:
-		UI();
-		virtual ~UI() = default;
+		StartScreen();
+		virtual ~StartScreen() = default;
 	
 		// Inherited via BaseComponent
 		virtual void Render() override;
@@ -26,7 +26,7 @@ namespace digdug
 	private:
 		std::string m_Action;
 		int m_Number = 0;
-		StartScreen m_StartScreen;
+		StartScreenChoice m_StartScreen;
 
 	
 	};

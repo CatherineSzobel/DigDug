@@ -18,16 +18,21 @@
 using namespace dae;
 namespace digdug
 {
+	enum ControllerType
+	{
+		keyboard,
+		controller,
+		both
+	};
 	class LevelManager final
 	{
 	public:
 		void LoadLevel(std::string filename);
 		void LoadCoopLevel(std::string filename);
-		void CreateInputSolo(std::unique_ptr<GameObject>& firstSprite);
-		void CreateInput_Coop(std::unique_ptr<GameObject>& firstSprite, std::unique_ptr<GameObject>& secondSprite);
 		int ReadHighScoreFromFile();
 		void SaveHighScoreInFile(int highScore);
 	private:
+		void CreateInputSolo(std::unique_ptr<GameObject>& sprite, ControllerType type);
 		void IncreaseRow(int& x,int& y,int maxtilecolumn);
 		bool m_LevelCleared = false;
 	};

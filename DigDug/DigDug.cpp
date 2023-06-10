@@ -27,6 +27,7 @@
 #include "PointComponent.h"
 #include "PookaComponent.h"
 #include "EnemyManager.h"
+#include "StartScreen.h"
 using namespace dae;
 using namespace digdug;
 void CreateInputSolo(std::unique_ptr<GameObject>& firstSprite);
@@ -55,7 +56,7 @@ void load()
 	auto arrow = std::make_unique<GameObject>();
 	arrow->SetLocalPosition({ 220.f,300.f,0 });
 	arrow->AddComponent<InputComponent>();
-	arrow->AddComponent<UI>();
+	arrow->AddComponent<StartScreen>();
 	arrow->AddComponent<RenderComponent>();
 	arrow->GetComponent<RenderComponent>()->SetTexture("Arrow.png");
 	arrow->GetComponent<RenderComponent>()->SetScale(25.f);
@@ -63,7 +64,13 @@ void load()
 	arrow->GetComponent<InputComponent>()->BindKeyboardCommand(SDL_SCANCODE_W, new HandleUpDownMenuCommand(arrow.get(), Direction::up), InputType::Down);
 	arrow->GetComponent<InputComponent>()->BindKeyboardCommand(SDL_SCANCODE_S, new HandleUpDownMenuCommand(arrow.get(), Direction::down), InputType::Down);
 	input.BindKeyboardCommand(SDL_SCANCODE_RETURN, new HandleMenuCommand(arrow.get()), InputType::Down);
+
+	arrow->GetComponent<InputComponent>()->BindControllerCommand(ControllerButton::DPadUp, new HandleUpDownMenuCommand(arrow.get(), Direction::up), InputType::Down);
+	arrow->GetComponent<InputComponent>()->BindControllerCommand(ControllerButton::DPadDown, new HandleUpDownMenuCommand(arrow.get(), Direction::down), InputType::Down);
+	arrow->GetComponent<InputComponent>()->BindControllerCommand(ControllerButton::ButtonA, new HandleMenuCommand(arrow.get()), InputType::Up);
+
 	input.AddKeyboardController(arrow.get());
+	input.AddController(arrow.get(), 0);
 	firstLevel.Add(std::move(arrow));
 	
 

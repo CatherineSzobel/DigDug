@@ -45,6 +45,7 @@ bool dae::InputManager::ProcessInput()
 				{
 					keyboardButton.first.second->Execute();
 				}
+
 			}
 			for (auto& globalkeyboardButton : m_GlobalKeyboardButtons)
 			{
@@ -137,5 +138,10 @@ void dae::InputManager::AddKeyboardController(GameObject* gameObject)
 
 void dae::InputManager::Reset()
 {
-	m_GlobalKeyboardButtons.clear();
+	//for (const auto button : m_GlobalKeyboardButtons)
+	//{
+	//	m_GlobalKeyboardButtons.erase(std::remove(m_GlobalKeyboardButtons.cbegin(), m_GlobalKeyboardButtons.cend(), button));
+	//}
+	m_pControllers.clear();
+	m_KeyboardButtons.clear();
 }

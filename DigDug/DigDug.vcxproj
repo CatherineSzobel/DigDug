@@ -179,6 +179,7 @@
     <ClCompile Include="EnemyManager.cpp" />
     <ClCompile Include="FygarsComponent.cpp" />
     <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="GameState.cpp" />
     <ClCompile Include="HealthComponent.cpp" />
     <ClCompile Include="LevelManager.cpp" />
     <ClCompile Include="LivesDisplay.cpp" />
@@ -188,7 +189,7 @@
     <ClCompile Include="PumpComponent.cpp" />
     <ClCompile Include="RockComponent.cpp" />
     <ClCompile Include="TileComponent.cpp" />
-    <ClCompile Include="UI.cpp" />
+    <ClCompile Include="StartScreen.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DigDugCommand.h" />
@@ -196,6 +197,7 @@
     <ClInclude Include="EnemyManager.h" />
     <ClInclude Include="FygarsComponent.h" />
     <ClInclude Include="Enemy.h" />
+    <ClInclude Include="GameState.h" />
     <ClInclude Include="HealthComponent.h" />
     <ClInclude Include="LevelManager.h" />
     <ClInclude Include="LivesDisplay.h" />
@@ -206,7 +208,7 @@
     <ClInclude Include="RockComponent.h" />
     <ClInclude Include="Helpers.h" />
     <ClInclude Include="TileComponent.h" />
-    <ClInclude Include="UI.h" />
+    <ClInclude Include="StartScreen.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

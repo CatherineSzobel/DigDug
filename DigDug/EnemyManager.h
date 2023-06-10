@@ -12,7 +12,7 @@ namespace digdug
 		int EnemiesLeft() const;
 		void AddEnemies(Enemy* enemy);
 		void SetEnemiesActive();
-		std::vector<Enemy*> GetEnemies() const {return std::move(m_Enemies);};
+		std::vector<Enemy*> GetEnemies() {return std::move(m_Enemies);};
 		Enemy* GetEnemyPointer(const int i);
 
 	private:

@@ -3,9 +3,8 @@
 
 void digdug::LevelManager::LoadLevel(std::string filename)
 {
-	auto font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 21);
 	auto& scene = SceneManager::GetInstance().GetCurrentScene();
-	auto fullPath = dae::ResourceManager::GetInstance().GetDataPath() + "Levels/" + filename;
+	auto fullPath = dae::ResourceManager::GetInstance().GetDataPath() + "Levels/Single/" + filename;
 	auto levelname = filename.substr(0, filename.size() - 4);
 	auto& level = SceneManager::GetInstance().CreateScene(levelname);
 
@@ -16,6 +15,8 @@ void digdug::LevelManager::LoadLevel(std::string filename)
 	//auto groundLevelThree = std::make_unique<GameObject>();
 	//groundLevelThree->AddComponent<CollisionComponent>();
 	//auto groundLevelFour = std::make_unique<GameObject>();
+
+	auto font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 21);
 
 	auto sharedScoringObject = std::make_shared<GameObject>();
 	auto sharedLivesObject = std::make_shared<GameObject>();
@@ -57,8 +58,6 @@ void digdug::LevelManager::LoadLevel(std::string filename)
 	bool empty = level.isSceneEmpty();
 	if (empty)
 	{
-
-
 		std::fstream txtFile(fullPath, std::ios_base::in);
 		auto pooka = std::make_unique<GameObject>();
 		auto fygar = std::make_unique<GameObject>();
@@ -70,7 +69,6 @@ void digdug::LevelManager::LoadLevel(std::string filename)
 		tile->MarkForDeletion(true);
 		level.Add(std::move(tile));
 
-		auto& input = InputManager::GetInstance();
 		auto& collisions = CollisionManager::GetInstance();
 		auto& enemies = EnemyManager::GetInstance();
 		auto scoringObject = std::make_unique<GameObject>();
@@ -138,8 +136,8 @@ void digdug::LevelManager::LoadLevel(std::string filename)
 				firstSprite->SetLocalPosition({ (tileSize.x * currentXTile),(currentYTile * tileSize.y) + startingBottom,0.f });
 				firstSprite->AddComponent<DigDugComponent>()->Initialize();
 				firstSprite->GetComponent<HealthComponent>()->GetSubject()->AddObserver(sharedLivesObject->GetComponent<LivesDisplay>());
-				CreateInputSolo(firstSprite);
-				input.AddKeyboardController(firstSprite.get());
+				CreateInputSolo(firstSprite, both);
+
 
 				IncreaseRow(currentXTile, currentYTile, maxTileColumn);
 
@@ -207,188 +205,268 @@ void digdug::LevelManager::LoadLevel(std::string filename)
 
 void digdug::LevelManager::LoadCoopLevel(std::string filename)
 {
-	auto fullPath = dae::ResourceManager::GetInstance().GetDataPath() + "Levels/" + filename;
+	auto& scene = SceneManager::GetInstance().GetCurrentScene();
+	auto fullPath = dae::ResourceManager::GetInstance().GetDataPath() + "Levels/CoOp/" + filename;
+	auto levelname = filename.substr(0, filename.size() - 4);
+	auto& level = SceneManager::GetInstance().CreateScene(levelname);
 
-	auto& level = SceneManager::GetInstance().CreateScene(filename.substr(0, filename.size() - 4));
+	//auto groundLevelOne = std::make_unique<GameObject>();
+	//groundLevelOne->AddComponent<CollisionComponent>();
+	//auto groundLevelTwo = std::make_unique<GameObject>();
+	//groundLevelTwo->AddComponent<CollisionComponent>();
+	//auto groundLevelThree = std::make_unique<GameObject>();
+	//groundLevelThree->AddComponent<CollisionComponent>();
+	//auto groundLevelFour = std::make_unique<GameObject>();
+	auto font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 21);
 
-	CollisionManager::GetInstance().ResetCollision();
-	std::fstream txtFile(filename, std::ios_base::in);
-
-	auto pooka = std::make_unique<GameObject>();
-	auto fygar = std::make_unique<GameObject>();
-	auto tile = std::make_unique<GameObject>();
-	auto firstSprite = std::make_unique<GameObject>();
-	auto secondSprite = std::make_unique<GameObject>();
-
-	tile->AddComponent<TileComponent>()->Initialize();
-	tile->GetComponent<TileComponent>()->SetSandType(TileType::YellowSand);
-	auto tileSize = tile->GetComponent<SpriteComponent>()->GetCurrentSpriteSize();
-	tile->SetLocalPosition({ 0.f,100.f,0.f });
-	level.Add(std::move(tile));
-
-	auto& input = InputManager::GetInstance();
-	auto& collisions = CollisionManager::GetInstance();
-
-	const int maxTileColumn = 20;
-	int currentXTile = 0, currentYTile = 0, currentTileType = 0;
-	const float startingBottom = 100.f;
-	enum class levelType
+	auto sharedScoringObject = std::make_shared<GameObject>();
+	auto sharedScoringObjectTwo = std::make_shared<GameObject>();
+	auto sharedLivesObject = std::make_shared<GameObject>();
+	auto sharedLivesObjectTwo = std::make_shared<GameObject>();
+	if (scene.HasNoUIObjects())
 	{
-		empty = 0,
-		tile = 1,
-		playerOne = 2,
-		playerTwo = 3,
-		pooka = 4,
-		fyger = 5,
-		rock = 6
-	};
-	int value = 0;
-	levelType type = levelType::empty;
-	std::vector<TileType> tileTypes = { TileType::YellowSand,TileType::OrangeSand,TileType::BrownSand,TileType::RedSand };
+		sharedScoringObject->AddComponent<TextComponent>()->SetFont(font);
+		sharedScoringObject->GetComponent<TextComponent>()->SetText("0");
+		sharedScoringObject->AddComponent<PointComponent>()->Initialize();
+		sharedScoringObject->SetLocalPosition({ 100.f,20.f,0.f });
+		scene.AddUI(sharedScoringObject);
 
-	while (txtFile >> value)
+		sharedScoringObjectTwo->AddComponent<TextComponent>()->SetFont(font);
+		sharedScoringObjectTwo->GetComponent<TextComponent>()->SetText("0");
+		sharedScoringObjectTwo->AddComponent<PointComponent>()->Initialize();
+		sharedScoringObjectTwo->SetLocalPosition({ 180.f,20.f,0.f });
+		scene.AddUI(sharedScoringObjectTwo);
+
+		sharedLivesObject->AddComponent<LivesDisplay>()->Initialize();
+		sharedLivesObject->SetLocalPosition({ 0.f,460.f,0.f });
+		scene.AddUI(sharedLivesObject);
+
+		sharedLivesObjectTwo->AddComponent<LivesDisplay>()->Initialize();
+		sharedLivesObjectTwo->SetLocalPosition({ 300.f,460.f,0.f });
+		scene.AddUI(sharedLivesObjectTwo);
+	}
+	else
 	{
-		type = (levelType)value;
-		switch (type)
+		auto objects = scene.MoveOverUI(level);
+		for (const auto& object : objects)
 		{
-		case levelType::empty:
-
-			IncreaseRow(currentXTile, currentYTile, maxTileColumn);
-
-			break;
-
-		case levelType::tile:
-
-			tile = std::make_unique<GameObject>();
-			tile->AddComponent<TileComponent>()->Initialize();
-			if (currentYTile % 3 == 0 && currentYTile != 0 && currentYTile != 12 && currentXTile == 0)
+			if (object->GetComponent<PointComponent>() != nullptr)
 			{
-				++currentTileType;
+				sharedScoringObject = object;
+				continue;
+
 			}
-			tile->GetComponent<TileComponent>()->SetSandType(tileTypes[currentTileType]);
-			tile->SetLocalPosition({ (tileSize.width * currentXTile),(currentYTile * tileSize.height) + startingBottom,0.f });
-
-			IncreaseRow(currentXTile, currentYTile, maxTileColumn);
-
-			collisions.AddCollision(tile->GetComponent<CollisionComponent>());
-			level.Add(std::move(tile));
-			break;
-
-		case levelType::playerOne:
-
-			firstSprite->SetLocalPosition({ (tileSize.width * currentXTile),(currentYTile * tileSize.height) + startingBottom,0.f });
-			firstSprite->AddComponent<HealthComponent>()->Initialize();
-			firstSprite->AddComponent<DigDugComponent>()->Initialize();
-
-			CreateInputSolo(firstSprite);
-			input.AddKeyboardController(firstSprite.get());
-
-			IncreaseRow(currentXTile, currentYTile, maxTileColumn);
-
-			level.Add(std::move(firstSprite));
-			break;
-		case levelType::playerTwo:
-
-			secondSprite->SetLocalPosition({ (tileSize.width * currentXTile),(currentYTile * tileSize.height) + startingBottom,0.f });
-			secondSprite->AddComponent<HealthComponent>()->Initialize();
-			secondSprite->AddComponent<DigDugComponent>()->Initialize();
-
-			CreateInputSolo(secondSprite);
-			input.AddKeyboardController(secondSprite.get());
-
-			IncreaseRow(currentXTile, currentYTile, maxTileColumn);
-
-			level.Add(std::move(secondSprite));
-			break;
-
-		case levelType::pooka:
-
-			pooka = std::make_unique<GameObject>();
-			pooka->AddComponent<PookaComponent>()->Initialize();
-
-			pooka->SetLocalPosition({ (tileSize.width * currentXTile),(currentYTile * tileSize.height) + startingBottom,0.f });
-
-			IncreaseRow(currentXTile, currentYTile, maxTileColumn);
-
-			collisions.AddCollision(pooka->GetComponent<CollisionComponent>());
-			level.Add(std::move(pooka));
-			break;
-
-		case  levelType::fyger:
-
-			fygar = std::make_unique<GameObject>();
-			fygar->AddComponent<FygarsComponent>()->Initialize();
-
-			fygar->SetLocalPosition({ (tileSize.width * currentXTile),(currentYTile * tileSize.height) + startingBottom,0.f });
-
-			IncreaseRow(currentXTile, currentYTile, maxTileColumn);
-
-			collisions.AddCollision(fygar->GetComponent<CollisionComponent>());
-			level.Add(std::move(fygar));
-			break;
-
-		case  levelType::rock:
-			auto rock = std::make_unique<GameObject>();
-			rock->AddComponent<RockComponent>()->Initialize();
-			auto rockSize = rock->GetComponent<SpriteComponent>()->GetCurrentSpriteSize();
-
-			tile = std::make_unique<GameObject>();
-			tile->AddComponent<TileComponent>()->Initialize();
-			if (currentYTile % 3 == 0
-				&& currentYTile != 0 && currentYTile != 12
-				&& currentXTile == 0)
+			if (object->GetComponent<LivesDisplay>() != nullptr)
 			{
-				++currentTileType;
+				sharedLivesObject = object;
+				break;
+
 			}
-			tile->GetComponent<TileComponent>()->SetSandType(tileTypes[currentTileType]);
-			tile->SetLocalPosition({ (tileSize.width * currentXTile),(currentYTile * tileSize.height) + startingBottom,0.f });
-			rock->SetLocalPosition({ (tileSize.width * currentXTile),(currentYTile * tileSize.height) + startingBottom,0.f });
 
-			IncreaseRow(currentXTile, currentYTile, maxTileColumn);
+		}
 
-			collisions.AddCollision(rock->GetComponent<CollisionComponent>());
-			collisions.AddCollision(tile->GetComponent<CollisionComponent>());
-			level.Add(std::move(tile));
-			level.Add(std::move(rock));
+	}
 
-			break;
+	SceneManager::GetInstance().ChangeSceneTo(levelname);
+	bool empty = level.isSceneEmpty();
+	if (empty)
+	{
+		std::fstream txtFile(fullPath, std::ios_base::in);
+		auto pooka = std::make_unique<GameObject>();
+		auto fygar = std::make_unique<GameObject>();
+		auto firstSprite = std::make_unique<GameObject>();
+		auto secondSprite = std::make_unique<GameObject>();
+		auto tile = std::make_unique<GameObject>();
+
+		tile->AddComponent<TileComponent>()->Initialize();
+		auto tileSize = tile->GetComponent<SpriteComponent>()->GetSpriteSize();
+		tile->MarkForDeletion(true);
+		level.Add(std::move(tile));
+
+		auto& collisions = CollisionManager::GetInstance();
+		auto& enemies = EnemyManager::GetInstance();
+
+		const int maxTileColumn = 20;
+		int currentXTile = 0, currentYTile = 0, currentTileType = 0;
+		const float startingBottom = 100.f;
+		enum class levelType
+		{
+			empty = 0,
+			tile = 1,
+			player = 2,
+			secondPlayer = 3,
+			pooka = 4,
+			fyger = 5,
+			rock = 6
+		};
+		int value = 0;
+		levelType type = levelType::empty;
+		std::vector<TileType> tileTypes = { TileType::YellowSand,TileType::OrangeSand,TileType::BrownSand,TileType::RedSand };
+
+		while (txtFile >> value)
+		{
+			type = (levelType)value;
+			switch (type)
+			{
+			case levelType::empty:
+				IncreaseRow(currentXTile, currentYTile, maxTileColumn);
+				break;
+
+			case levelType::tile:
+
+				tile = std::make_unique<GameObject>();
+				if (currentYTile % 3 == 0 && currentYTile != 0 && currentYTile != 12 && currentXTile == 0)
+				{
+					++currentTileType;
+				}
+				tile->SetLocalPosition({ (tileSize.x * currentXTile),(currentYTile * tileSize.y) + startingBottom,0.f });
+				tile->AddComponent<TileComponent>()->Initialize();
+				tile->GetComponent<TileComponent>()->SetSandType(tileTypes[currentTileType]);
+
+				IncreaseRow(currentXTile, currentYTile, maxTileColumn);
+
+				collisions.AddCollision(tile->GetComponent<CollisionComponent>());
+				level.Add(std::move(tile));
+				break;
+
+			case levelType::player:
+
+				firstSprite->SetLocalPosition({ (tileSize.x * currentXTile),(currentYTile * tileSize.y) + startingBottom,0.f });
+				firstSprite->AddComponent<DigDugComponent>()->Initialize();
+				firstSprite->GetComponent<HealthComponent>()->GetSubject()->AddObserver(sharedLivesObject->GetComponent<LivesDisplay>());
+				CreateInputSolo(firstSprite, keyboard);
+
+				IncreaseRow(currentXTile, currentYTile, maxTileColumn);
+
+				level.Add(std::move(firstSprite));
+
+				break;
+			case levelType::secondPlayer:
+
+				secondSprite->SetLocalPosition({ (tileSize.x * currentXTile),(currentYTile * tileSize.y) + startingBottom,0.f });
+				secondSprite->AddComponent<DigDugComponent>()->Initialize();
+				secondSprite->GetComponent<HealthComponent>()->GetSubject()->AddObserver(sharedLivesObjectTwo->GetComponent<LivesDisplay>());
+				CreateInputSolo(secondSprite, controller);
+
+
+				IncreaseRow(currentXTile, currentYTile, maxTileColumn);
+
+				level.Add(std::move(secondSprite));
+
+				break;
+
+			case levelType::pooka:
+				pooka = std::make_unique<GameObject>();
+				pooka->AddComponent<PookaComponent>()->Initialize();
+
+				pooka->SetLocalPosition({ (tileSize.x * currentXTile),(currentYTile * tileSize.y) + startingBottom,0.f });
+
+				IncreaseRow(currentXTile, currentYTile, maxTileColumn);
+				pooka->GetComponent<PookaComponent>()->GetSubject()->AddObserver(sharedScoringObject->GetComponent<PointComponent>());
+				pooka->GetComponent<PookaComponent>()->GetSubject()->AddObserver(sharedScoringObjectTwo->GetComponent<PointComponent>());
+
+				collisions.AddCollision(pooka->GetComponent<CollisionComponent>());
+				enemies.AddEnemies(pooka->GetComponent<PookaComponent>());
+				level.Add(std::move(pooka));
+				break;
+
+			case  levelType::fyger:
+				fygar = std::make_unique<GameObject>();
+				fygar->AddComponent<FygarsComponent>()->Initialize();
+
+				fygar->SetLocalPosition({ (tileSize.x * currentXTile),(currentYTile * tileSize.y) + startingBottom,0.f });
+
+				IncreaseRow(currentXTile, currentYTile, maxTileColumn);
+				fygar->GetComponent<FygarsComponent>()->GetSubject()->AddObserver(sharedScoringObject->GetComponent<PointComponent>());
+				fygar->GetComponent<FygarsComponent>()->GetSubject()->AddObserver(sharedScoringObjectTwo->GetComponent<PointComponent>());
+
+				collisions.AddCollision(fygar->GetComponent<CollisionComponent>());
+				enemies.AddEnemies(fygar->GetComponent<FygarsComponent>());
+				level.Add(std::move(fygar));
+				break;
+
+			case  levelType::rock:
+				auto rock = std::make_unique<GameObject>();
+
+				tile = std::make_unique<GameObject>();
+				tile->AddComponent<TileComponent>()->Initialize();
+				if (currentYTile % 3 == 0
+					&& currentYTile != 0 && currentYTile != 12
+					&& currentXTile == 0)
+				{
+					++currentTileType;
+				}
+				tile->GetComponent<TileComponent>()->SetSandType(tileTypes[currentTileType]);
+				tile->SetLocalPosition({ (tileSize.x * currentXTile),(currentYTile * tileSize.y) + startingBottom,0.f });
+				rock->SetLocalPosition({ (tileSize.x * currentXTile),(currentYTile * tileSize.y) + startingBottom,0.f });
+				rock->AddComponent<RockComponent>()->Initialize();
+
+				IncreaseRow(currentXTile, currentYTile, maxTileColumn);
+
+				collisions.AddCollision(rock->GetComponent<CollisionComponent>());
+				collisions.AddCollision(tile->GetComponent<CollisionComponent>());
+				level.Add(std::move(tile));
+				level.Add(std::move(rock));
+
+				break;
+			}
 		}
 	}
+	EnemyManager::GetInstance().SetEnemiesActive();
+	CollisionManager::GetInstance().SetCollisionsActive();
 }
 
-void digdug::LevelManager::CreateInputSolo(std::unique_ptr<GameObject>& firstSprite)
+void digdug::LevelManager::CreateInputSolo(std::unique_ptr<GameObject>& sprite, ControllerType type)
 {
-	firstSprite->AddComponent<InputComponent>();
+	auto& input = InputManager::GetInstance();
+	sprite->AddComponent<InputComponent>();
+	switch (type)
+	{
+	case digdug::both:
 
-	firstSprite->GetComponent<InputComponent>()->BindKeyboardCommand(SDL_SCANCODE_W, new MoveCommand(firstSprite.get(), Direction::up), InputType::Press);
-	firstSprite->GetComponent<InputComponent>()->BindKeyboardCommand(SDL_SCANCODE_A, new MoveCommand(firstSprite.get(), Direction::left), InputType::Press);
-	firstSprite->GetComponent<InputComponent>()->BindKeyboardCommand(SDL_SCANCODE_S, new MoveCommand(firstSprite.get(), Direction::down), InputType::Press);
-	firstSprite->GetComponent<InputComponent>()->BindKeyboardCommand(SDL_SCANCODE_D, new MoveCommand(firstSprite.get(), Direction::right), InputType::Press);
+		sprite->GetComponent<InputComponent>()->BindKeyboardCommand(SDL_SCANCODE_W, new MoveCommand(sprite.get(), Direction::up), InputType::Press);
+		sprite->GetComponent<InputComponent>()->BindKeyboardCommand(SDL_SCANCODE_A, new MoveCommand(sprite.get(), Direction::left), InputType::Press);
+		sprite->GetComponent<InputComponent>()->BindKeyboardCommand(SDL_SCANCODE_S, new MoveCommand(sprite.get(), Direction::down), InputType::Press);
+		sprite->GetComponent<InputComponent>()->BindKeyboardCommand(SDL_SCANCODE_D, new MoveCommand(sprite.get(), Direction::right), InputType::Press);
+		sprite->GetComponent<InputComponent>()->BindKeyboardCommand(SDL_SCANCODE_F, new PumpCommand(sprite.get(), "Sounds/Sound/PumpSound.wav", 4), InputType::Down);
 
-	firstSprite->GetComponent<InputComponent>()->BindKeyboardCommand(SDL_SCANCODE_F, new PumpCommand(firstSprite.get(), "Sounds/Sound/PumpSound.wav", 4), InputType::Down);
-	firstSprite->GetComponent<InputComponent>()->SetMovementSpeed(120.f);
+		sprite->GetComponent<InputComponent>()->BindControllerCommand(ControllerButton::DPadDown, new MoveCommand(sprite.get(), Direction::down), InputType::Press);
+		sprite->GetComponent<InputComponent>()->BindControllerCommand(ControllerButton::DPadUp, new MoveCommand(sprite.get(), Direction::up), InputType::Press);
+		sprite->GetComponent<InputComponent>()->BindControllerCommand(ControllerButton::DPadLeft, new MoveCommand(sprite.get(), Direction::left), InputType::Press);
+		sprite->GetComponent<InputComponent>()->BindControllerCommand(ControllerButton::DPadRight, new MoveCommand(sprite.get(), Direction::right), InputType::Press);
+		sprite->GetComponent<InputComponent>()->BindControllerCommand(ControllerButton::ButtonA, new PumpCommand(sprite.get(), "Sounds/Sound/PumpSound.wav", 4), InputType::Down);
+
+		sprite->GetComponent<InputComponent>()->SetMovementSpeed(120.f);
+
+		input.AddKeyboardController(sprite.get());
+		input.AddController(sprite.get(), 0);
+
+		break;
+	case digdug::controller:
+
+		sprite->GetComponent<InputComponent>()->BindControllerCommand(ControllerButton::DPadDown, new MoveCommand(sprite.get(), Direction::down), InputType::Press);
+		sprite->GetComponent<InputComponent>()->BindControllerCommand(ControllerButton::DPadUp, new MoveCommand(sprite.get(), Direction::up), InputType::Press);
+		sprite->GetComponent<InputComponent>()->BindControllerCommand(ControllerButton::DPadLeft, new MoveCommand(sprite.get(), Direction::left), InputType::Press);
+		sprite->GetComponent<InputComponent>()->BindControllerCommand(ControllerButton::DPadRight, new MoveCommand(sprite.get(), Direction::right), InputType::Press);
+		sprite->GetComponent<InputComponent>()->BindControllerCommand(ControllerButton::ButtonA, new PumpCommand(sprite.get(), "Sounds/Sound/PumpSound.wav", 4), InputType::Down);
+		
+		sprite->GetComponent<InputComponent>()->SetMovementSpeed(120.f);
+		input.AddController(sprite.get(), 0);
+		break;
+	case digdug::keyboard:
+
+		sprite->GetComponent<InputComponent>()->BindKeyboardCommand(SDL_SCANCODE_W, new MoveCommand(sprite.get(), Direction::up), InputType::Press);
+		sprite->GetComponent<InputComponent>()->BindKeyboardCommand(SDL_SCANCODE_A, new MoveCommand(sprite.get(), Direction::left), InputType::Press);
+		sprite->GetComponent<InputComponent>()->BindKeyboardCommand(SDL_SCANCODE_S, new MoveCommand(sprite.get(), Direction::down), InputType::Press);
+		sprite->GetComponent<InputComponent>()->BindKeyboardCommand(SDL_SCANCODE_D, new MoveCommand(sprite.get(), Direction::right), InputType::Press);
+		sprite->GetComponent<InputComponent>()->BindKeyboardCommand(SDL_SCANCODE_F, new PumpCommand(sprite.get(), "Sounds/Sound/PumpSound.wav", 4), InputType::Down);
+		
+		sprite->GetComponent<InputComponent>()->SetMovementSpeed(120.f);
+		input.AddKeyboardController(sprite.get());
+
+		break;
+	}
 }
-void digdug::LevelManager::CreateInput_Coop(std::unique_ptr<GameObject>& firstSprite, std::unique_ptr<GameObject>& secondSprite)
-{
-	firstSprite->AddComponent<InputComponent>();
-	firstSprite->GetComponent<InputComponent>()->BindKeyboardCommand(SDL_SCANCODE_W, new MoveCommand(firstSprite.get(), Direction::up), InputType::Press);
-	firstSprite->GetComponent<InputComponent>()->BindKeyboardCommand(SDL_SCANCODE_A, new MoveCommand(firstSprite.get(), Direction::left), InputType::Press);
-	firstSprite->GetComponent<InputComponent>()->BindKeyboardCommand(SDL_SCANCODE_S, new MoveCommand(firstSprite.get(), Direction::down), InputType::Press);
-	firstSprite->GetComponent<InputComponent>()->BindKeyboardCommand(SDL_SCANCODE_D, new MoveCommand(firstSprite.get(), Direction::right), InputType::Press);
-	//	firstSprite->GetComponent<InputComponent>()->BindKeyboardCommand(SDL_SCANCODE_R, new KillCommand(firstSprite.get()), InputType::Down);
-	firstSprite->GetComponent<InputComponent>()->BindKeyboardCommand(SDL_SCANCODE_F, new PumpCommand(firstSprite.get(), "Sounds/Sound/PumpSound.wav", 4), InputType::Down);
-	firstSprite->GetComponent<InputComponent>()->SetMovementSpeed(120.f);
-
-	secondSprite->AddComponent<InputComponent>();
-
-	firstSprite->GetComponent<InputComponent>()->BindControllerCommand(ControllerButton::DPadDown, new MoveCommand(firstSprite.get(), Direction::up), InputType::Press);
-	firstSprite->GetComponent<InputComponent>()->BindControllerCommand(ControllerButton::DPadUp, new MoveCommand(firstSprite.get(), Direction::left), InputType::Press);
-	firstSprite->GetComponent<InputComponent>()->BindControllerCommand(ControllerButton::DPadLeft, new MoveCommand(firstSprite.get(), Direction::down), InputType::Press);
-	firstSprite->GetComponent<InputComponent>()->BindControllerCommand(ControllerButton::DPadRight, new MoveCommand(firstSprite.get(), Direction::right), InputType::Press);
-
-	secondSprite->GetComponent<InputComponent>()->SetMovementSpeed(240.f);
-}
-
 int digdug::LevelManager::ReadHighScoreFromFile()
 {
 	auto highScore = 0;
@@ -399,7 +477,6 @@ int digdug::LevelManager::ReadHighScoreFromFile()
 	txtFile.close();
 	return highScore;
 }
-
 void digdug::LevelManager::SaveHighScoreInFile(int highScore)
 {
 	auto currentHighscore = ReadHighScoreFromFile();
@@ -413,6 +490,7 @@ void digdug::LevelManager::SaveHighScoreInFile(int highScore)
 	}
 	txtFile.close();
 }
+
 
 void digdug::LevelManager::IncreaseRow(int& x, int& y, int maxTileColumn)
 {
