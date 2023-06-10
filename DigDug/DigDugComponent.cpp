@@ -3,6 +3,7 @@
 #include <SDL_ttf.h>
 #include "CollisionManager.h"
 #include "LevelManager.h"
+
 using namespace dae;
 digdug::DigDugComponent::DigDugComponent()
 	:

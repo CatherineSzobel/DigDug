@@ -21,6 +21,7 @@ namespace dae
 		void Render() const;
 		bool isSceneEmpty() { return std::move(m_objects.empty()); };
 		bool HasNoUIObjects() const { return std::move(m_UIobjects.empty()); }
+		bool HasOneUIObject() const { return std::move(m_UIobjects.size() == 1); }
 		std::string GetName() const { return m_name; }
 		~Scene();
 		Scene(const Scene& other) = delete;

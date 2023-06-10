@@ -7,21 +7,17 @@ void digdug::LevelManager::LoadLevel(std::string filename)
 	auto fullPath = dae::ResourceManager::GetInstance().GetDataPath() + "Levels/Single/" + filename;
 	auto levelname = filename.substr(0, filename.size() - 4);
 	auto& level = SceneManager::GetInstance().CreateScene(levelname);
+	auto& collisions = CollisionManager::GetInstance();
+	
 
-	//auto groundLevelOne = std::make_unique<GameObject>();
-	//groundLevelOne->AddComponent<CollisionComponent>();
-	//auto groundLevelTwo = std::make_unique<GameObject>();
-	//groundLevelTwo->AddComponent<CollisionComponent>();
-	//auto groundLevelThree = std::make_unique<GameObject>();
-	//groundLevelThree->AddComponent<CollisionComponent>();
-	//auto groundLevelFour = std::make_unique<GameObject>();
 
 	auto font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 21);
 
 	auto sharedScoringObject = std::make_shared<GameObject>();
 	auto sharedLivesObject = std::make_shared<GameObject>();
-	if (scene.HasNoUIObjects())
+	if (scene.HasOneUIObject())
 	{
+
 		sharedScoringObject->AddComponent<TextComponent>()->SetFont(font);
 		sharedScoringObject->GetComponent<TextComponent>()->SetText("0");
 		sharedScoringObject->AddComponent<PointComponent>()->Initialize();
@@ -69,7 +65,7 @@ void digdug::LevelManager::LoadLevel(std::string filename)
 		tile->MarkForDeletion(true);
 		level.Add(std::move(tile));
 
-		auto& collisions = CollisionManager::GetInstance();
+
 		auto& enemies = EnemyManager::GetInstance();
 		auto scoringObject = std::make_unique<GameObject>();
 		scoringObject->AddComponent<TextComponent>()->SetFont(font);
@@ -223,7 +219,7 @@ void digdug::LevelManager::LoadCoopLevel(std::string filename)
 	auto sharedScoringObjectTwo = std::make_shared<GameObject>();
 	auto sharedLivesObject = std::make_shared<GameObject>();
 	auto sharedLivesObjectTwo = std::make_shared<GameObject>();
-	if (scene.HasNoUIObjects())
+	if (scene.HasOneUIObject())
 	{
 		sharedScoringObject->AddComponent<TextComponent>()->SetFont(font);
 		sharedScoringObject->GetComponent<TextComponent>()->SetText("0");
@@ -411,7 +407,9 @@ void digdug::LevelManager::LoadCoopLevel(std::string filename)
 				break;
 			}
 		}
+		
 	}
+	
 	EnemyManager::GetInstance().SetEnemiesActive();
 	CollisionManager::GetInstance().SetCollisionsActive();
 }

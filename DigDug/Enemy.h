@@ -4,7 +4,6 @@
 #include "CollisionComponent.h"
 #include "SceneManager.h"
 #include "Subject.h"
-
 using namespace dae;
 namespace digdug
 {
@@ -32,11 +31,13 @@ namespace digdug
 		bool m_IsDead = false;
 		int m_AmountOfPumps;
 
-	//	TileType m_CurrentTileType;
+		Subject* m_pSubject = nullptr;
+		std::vector<Rectf> m_LayerPositions;
+		void GetEnemyCurrentLayer();
+		int m_CurrentLayer = 0;
 	private:
 		bool m_IsActive = true;
 		Scene* m_Scene = nullptr;
-		Subject* m_pSubject = nullptr;
 	};
 }
 

@@ -1,10 +1,18 @@
 #include "Enemy.h"
-
+#include "Game.h"
+#include "CollisionManager.h"
 digdug::Enemy::Enemy()
 {
 	auto& currentScene = SceneManager::GetInstance().GetCurrentScene();
 	SetScene(&currentScene);
 	m_pSubject = new Subject();
+	auto TileRowSize = glm::vec2{ 610.f,96.f };
+	auto CollisionLeftBottom = glm::vec2{ 0.f,100.f };
+	m_LayerPositions.emplace_back(Rectf{ CollisionLeftBottom.x,CollisionLeftBottom.y,TileRowSize.x,TileRowSize.y });
+	m_LayerPositions.emplace_back(Rectf{ CollisionLeftBottom.x,CollisionLeftBottom.y + TileRowSize.y,TileRowSize.x,TileRowSize.y });
+	m_LayerPositions.emplace_back(Rectf{ CollisionLeftBottom.x,CollisionLeftBottom.y + (TileRowSize.y * 2),TileRowSize.x,TileRowSize.y});
+	m_LayerPositions.emplace_back(Rectf{ CollisionLeftBottom.x,CollisionLeftBottom.y + (TileRowSize.y * 3),TileRowSize.x,TileRowSize.y - 32.f });
+
 }
 digdug::Enemy::~Enemy()
 {
@@ -22,7 +30,6 @@ void digdug::Enemy::IncreasePump()
 	{
 		//enemy dies
 		m_IsDead = true;
-		m_pSubject->Notify(Event::OnPookaFirstLayerDeath);
 		m_AmountOfPumps = 0;
 	}
 	else
@@ -55,4 +62,15 @@ void digdug::Enemy::HandleOnHit(std::string animation)
 void digdug::Enemy::SetScene(Scene* scene)
 {
 	m_Scene = scene;
+}
+
+void digdug::Enemy::GetEnemyCurrentLayer()
+{
+	for (int i = 0; i < m_LayerPositions.size(); i++)
+	{
+		if (m_pCollisionComp->Collide(m_LayerPositions[i]))
+		{
+			m_CurrentLayer = i + 1;
+		}
+	}
 }

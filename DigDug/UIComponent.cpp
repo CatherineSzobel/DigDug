@@ -1,28 +1,29 @@
-#include "StartScreen.h"
+#include "UIComponent.h"
 #include "SceneManager.h"
 #include "GameObject.h"
 #include "ResourceManager.h"
 #include "LevelManager.h"
 #include "InputManager.h"
-digdug::StartScreen::StartScreen()
+digdug::UIComponent::UIComponent()
 	:m_Action{ "SinglePlayer" }, m_Number{ 0 }, m_StartScreen{ SinglePlayer }
 {
 }
 
-void digdug::StartScreen::Render()
+void digdug::UIComponent::Render()
 {
 }
 
-void digdug::StartScreen::Update(float)
+void digdug::UIComponent::Update(float)
+{
+
+}
+
+void digdug::UIComponent::FixedUpdate(float)
 {
 }
 
-void digdug::StartScreen::FixedUpdate(float)
-{
-}
 
-
-void digdug::StartScreen::HandleAction(int amount)
+void digdug::UIComponent::HandleAction(int amount)
 {
 	m_Number += amount;
 	if (m_Number < 0)
@@ -45,7 +46,7 @@ void digdug::StartScreen::HandleAction(int amount)
 	}
 }
 
-void digdug::StartScreen::ActivateAction(std::string action)
+void digdug::UIComponent::ActivateAction(std::string action)
 {
 	if (action == "SinglePlayer")
 	{

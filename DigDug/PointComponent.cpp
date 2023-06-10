@@ -1,6 +1,7 @@
 #include "PointComponent.h"
 #include "TextComponent.h"
 #include "LevelManager.h"
+#include "Game.h"
 void digdug::PointComponent::Render() {}
 
 void digdug::PointComponent::Update(float) {
@@ -41,4 +42,5 @@ void digdug::PointComponent::Notify( Event event)
 	GetOwner()->GetComponent<TextComponent>()->SetText(std::to_string(m_CurrentPoints));
 	LevelManager levelmanager;
 	levelmanager.SaveHighScoreInFile(m_CurrentPoints);
+	Game::GetInstance().SetCurrentPoints(m_CurrentPoints);
 }

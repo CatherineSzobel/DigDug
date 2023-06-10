@@ -20,6 +20,7 @@ namespace digdug
 		int GetLives() const { return m_RemainingLives; }
 		void NotifyHealthSubject();
 		bool GetIsDead() const { return m_IsDead; }
+		bool GetIsGameOver() const { return m_IsGameOver; };
 		Subject* GetSubject() { return m_pSubject; };
 
 

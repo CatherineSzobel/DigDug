@@ -27,7 +27,7 @@
 #include "PointComponent.h"
 #include "PookaComponent.h"
 #include "EnemyManager.h"
-#include "StartScreen.h"
+#include "UIComponent.h"
 using namespace dae;
 using namespace digdug;
 void CreateInputSolo(std::unique_ptr<GameObject>& firstSprite);
@@ -40,7 +40,9 @@ void load()
 	auto font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 21);
 	auto& input = InputManager::GetInstance();
 	auto& firstLevel = dae::SceneManager::GetInstance().CreateScene("level1");
-
+	auto gameComponent = std::make_shared<GameObject>();
+	gameComponent->AddComponent<UIComponent>();
+	firstLevel.AddUI(gameComponent);
 	auto textObject = std::make_unique<GameObject>();
 	textObject->SetLocalPosition({ 265.f,300.f,0.f });
 	textObject->AddComponent<TextComponent>()->SetFont(font);
@@ -56,7 +58,7 @@ void load()
 	auto arrow = std::make_unique<GameObject>();
 	arrow->SetLocalPosition({ 220.f,300.f,0 });
 	arrow->AddComponent<InputComponent>();
-	arrow->AddComponent<StartScreen>();
+	arrow->AddComponent<UIComponent>();
 	arrow->AddComponent<RenderComponent>();
 	arrow->GetComponent<RenderComponent>()->SetTexture("Arrow.png");
 	arrow->GetComponent<RenderComponent>()->SetScale(25.f);
@@ -71,6 +73,32 @@ void load()
 
 	input.AddKeyboardController(arrow.get());
 	input.AddController(arrow.get(), 0);
+
+
+	auto undergroundBoundary = std::make_unique<GameObject>();
+//	undergroundBoundary->SetLocalPosition({ 0.f,100.f,0.f });
+	undergroundBoundary->AddComponent<CollisionComponent>()->CreateCollision(Rectf{ 0.f,100.f,635.f,350.f }, Underground, true,false);
+	firstLevel.Add(std::move(undergroundBoundary));
+
+	//undergroundBoundary = std::make_unique<GameObject>();
+	//undergroundBoundary->SetLocalPosition({ 0.f,100.f,0.f });
+	//undergroundBoundary->AddComponent<CollisionComponent>()->CreateCollision(Rectf{ 0.f,0.f,610.f,96.f }, Underground, true);
+	//firstLevel.Add(std::move(undergroundBoundary));
+
+	//undergroundBoundary = std::make_unique<GameObject>();
+	//undergroundBoundary->SetLocalPosition({ 0.f,196.f,0.f });
+	//undergroundBoundary->AddComponent<CollisionComponent>()->CreateCollision(Rectf{ 0.f,0.f,610.f,96.f }, Underground, true);
+	//firstLevel.Add(std::move(undergroundBoundary));
+
+	//undergroundBoundary = std::make_unique<GameObject>();
+	//undergroundBoundary->SetLocalPosition({ 0.f,292,0.f });
+	//undergroundBoundary->AddComponent<CollisionComponent>()->CreateCollision(Rectf{ 0.f,0.f,610.f,96.f }, Underground, true);
+	//firstLevel.Add(std::move(undergroundBoundary));
+
+	undergroundBoundary = std::make_unique<GameObject>();
+	undergroundBoundary->AddComponent<CollisionComponent>()->CreateCollision(Rectf{ 0.f,388.f,610.f,64.f }, Underground, true,false);
+	firstLevel.Add(std::move(undergroundBoundary));
+
 	firstLevel.Add(std::move(arrow));
 	
 
@@ -125,11 +153,7 @@ void load()
 	//UIHUD->SetLocalPosition({ 80.f,0.f,0.f });
 	//scene.Add(std::move(UIHUD));
 	//
-	//auto undergroundBoundary = std::make_unique<GameObject>();
-	//undergroundBoundary->SetLocalPosition({ 0.f,100.f,0.f });
-	//undergroundBoundary->AddComponent<CollisionComponent>()->CreateCollision(Rectf{ 0.f,0.f,635.f,350.f }, Underground, true);
-	//collisions.AddCollision(undergroundBoundary->GetComponent<CollisionComponent>());
-	//scene.Add(std::move(undergroundBoundary));
+
 }
 
 int main(int, char* [])

@@ -9,11 +9,11 @@ namespace digdug
 		SinglePlayer = 0,
 		CoOp = 1
 	};
-	class StartScreen final : public BaseComponent
+	class UIComponent final : public BaseComponent
 	{
 	public:
-		StartScreen();
-		virtual ~StartScreen() = default;
+		UIComponent();
+		virtual ~UIComponent() = default;
 	
 		// Inherited via BaseComponent
 		virtual void Render() override;
@@ -23,11 +23,12 @@ namespace digdug
 		void HandleAction(int amount);
 		std::string GetAction() const { return m_Action; };
 		void ActivateAction(std::string action);
+		bool GetIsActionPicked() const { return m_ActionPicked; };
 	private:
 		std::string m_Action;
 		int m_Number = 0;
 		StartScreenChoice m_StartScreen;
-
+		bool m_ActionPicked;
 	
 	};
 }

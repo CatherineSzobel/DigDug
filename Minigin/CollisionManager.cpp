@@ -35,9 +35,10 @@ void dae::CollisionManager::SetCollisionsActive()
 std::vector<dae::CollisionComponent*> dae::CollisionManager::GetCollisionsByType(CollisionType type)
 {
 	std::vector<dae::CollisionComponent*> tempVector;
+	auto& currentScene = SceneManager::GetInstance().GetCurrentScene();
 	for (const auto collision : m_Collisions)
 	{
-		if (collision->GetCollisionType() == type )
+		if (collision->GetCollisionType() == type && collision->GetScene()->GetName() == currentScene.GetName())
 		{
 			tempVector.emplace_back(collision);
 		}

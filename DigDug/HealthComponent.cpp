@@ -1,5 +1,6 @@
 #include "HealthComponent.h"
 #include "LevelManager.h"
+#include "Game.h"
 digdug::HealthComponent::HealthComponent()
 	: m_RemainingLives{ 4 }
 {
@@ -31,6 +32,7 @@ void digdug::HealthComponent::NotifyHealthSubject()
 	if (m_RemainingLives < 0)
 	{
 		m_IsGameOver = true;
+		Game::GetInstance().SetPlayerDead(m_IsGameOver);
 	}
 	else
 	{

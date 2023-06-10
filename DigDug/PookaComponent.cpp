@@ -17,10 +17,26 @@ void digdug::PookaComponent::Render()
 
 void digdug::PookaComponent::Update(float)
 {
+	GetEnemyCurrentLayer();
 	if (m_IsDead)
 	{
 		HandleOnDeath(GetOwner());
-		//m_pSubject->Notify(Event::OnPookaFirstLayerDeath);
+		if (m_CurrentLayer == 1)
+		{
+			m_pSubject->Notify(Event::OnPookaFirstLayerDeath);
+		}
+		else if (m_CurrentLayer == 2)
+		{
+			m_pSubject->Notify(Event::OnPookaSecondLayerDeath);
+		}
+		else if (m_CurrentLayer == 3)
+		{
+			m_pSubject->Notify(Event::OnPookaThirdLayerDeath);
+		}
+		else if (m_CurrentLayer == 4)
+		{
+			m_pSubject->Notify(Event::OnPookaFourthLayerDeath);
+		}
 	}
 	if (m_IsHit)
 	{
@@ -28,7 +44,7 @@ void digdug::PookaComponent::Update(float)
 	}
 }
 
-void digdug::PookaComponent::FixedUpdate(float){}
+void digdug::PookaComponent::FixedUpdate(float) {}
 
 void digdug::PookaComponent::Initialize()
 {
