@@ -8,8 +8,6 @@ digdug::TileComponent::TileComponent()
 }
 digdug::TileComponent::~TileComponent()
 {
-	GetOwner()->RemoveComponent<CollisionComponent>();
-	GetOwner()->RemoveComponent<SpriteComponent>();
 }
 void digdug::TileComponent::Render()
 {

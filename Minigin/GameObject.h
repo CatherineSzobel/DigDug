@@ -33,7 +33,7 @@ namespace dae
 		glm::vec3 GetLocalPosition() const;
 		void SetLocalPosition(const glm::vec3& localPosition);
 		const glm::vec3& GetWorldPosition();
-		void MarkForDeletion(bool flag) {m_IsMarkedForDeletion = flag;};
+		void MarkForDeletion(bool flag) { m_IsMarkedForDeletion = flag; };
 
 	private:
 		void AddChild(GameObject* child);
@@ -50,7 +50,7 @@ namespace dae
 		std::vector<BaseComponent*> GetComponents() const { return m_pComponents; };
 
 		std::vector<BaseComponent*> m_pComponents{};
-		GameObject* m_pParent{nullptr};
+		GameObject* m_pParent{ nullptr };
 		std::vector<GameObject*> m_pChildren{};
 
 		glm::vec3 m_LocalPosition, m_WorldPosition;
@@ -87,11 +87,16 @@ namespace dae
 	template<class Type>
 	inline void GameObject::RemoveComponent()
 	{
-		Type* currentComponent = new Type();
-		auto it = std::find(m_pComponents.cbegin(), m_pComponents.cend(), currentComponent);
-		if (it != m_pComponents.cend())
+		for (auto& component : m_pComponents)
 		{
-			m_pComponents.erase(it);
+			if (auto cast = dynamic_cast<Type*>(component))
+			{
+				delete component;
+				component = nullptr;
+				m_pComponents.erase(std::remove(m_pComponents.begin(), m_pComponents.end(), component));
+				break;
+			}
 		}
+
 	}
 }

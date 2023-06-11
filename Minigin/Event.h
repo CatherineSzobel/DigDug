@@ -10,5 +10,6 @@ enum class Event
 	OnFygarSecondLayerDeath,
 	OnFygarThirdLayerDeath,
 	OnFygarFourthLayerDeath,
+	OnDeathByRock,
 	OnGameOver,
 };

@@ -22,6 +22,8 @@ namespace digdug
 	protected:
 		void HandleOnDeath(GameObject* obj);
 		void HandleOnHit(std::string animation);
+		void DeathByRock();
+
 
 		void SetScene(Scene* scene);
 		SpriteComponent* m_pSpriteComp = nullptr;
@@ -29,6 +31,7 @@ namespace digdug
 		bool m_Attached = false;
 		bool m_IsHit = false;
 		bool m_IsDead = false;
+		bool m_DeathByRock = false;
 		int m_AmountOfPumps;
 
 		Subject* m_pSubject = nullptr;

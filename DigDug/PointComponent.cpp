@@ -38,6 +38,9 @@ void digdug::PointComponent::Notify( Event event)
 	case Event::OnFygarFourthLayerDeath:
 		m_CurrentPoints += 1000;
 		break;
+	case Event::OnDeathByRock:
+		m_CurrentPoints += 1000;
+		break;
 	}
 	GetOwner()->GetComponent<TextComponent>()->SetText(std::to_string(m_CurrentPoints));
 	LevelManager levelmanager;

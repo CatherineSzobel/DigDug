@@ -10,7 +10,7 @@ digdug::Enemy::Enemy()
 	auto CollisionLeftBottom = glm::vec2{ 0.f,100.f };
 	m_LayerPositions.emplace_back(Rectf{ CollisionLeftBottom.x,CollisionLeftBottom.y,TileRowSize.x,TileRowSize.y });
 	m_LayerPositions.emplace_back(Rectf{ CollisionLeftBottom.x,CollisionLeftBottom.y + TileRowSize.y,TileRowSize.x,TileRowSize.y });
-	m_LayerPositions.emplace_back(Rectf{ CollisionLeftBottom.x,CollisionLeftBottom.y + (TileRowSize.y * 2),TileRowSize.x,TileRowSize.y});
+	m_LayerPositions.emplace_back(Rectf{ CollisionLeftBottom.x,CollisionLeftBottom.y + (TileRowSize.y * 2),TileRowSize.x,TileRowSize.y });
 	m_LayerPositions.emplace_back(Rectf{ CollisionLeftBottom.x,CollisionLeftBottom.y + (TileRowSize.y * 3),TileRowSize.x,TileRowSize.y - 32.f });
 
 }
@@ -57,6 +57,19 @@ void digdug::Enemy::HandleOnHit(std::string animation)
 	m_pSpriteComp->SetAnimationByName(animation);
 	m_pSpriteComp->IncreaseSpriteFrame();
 	m_IsHit = false;
+}
+
+void digdug::Enemy::DeathByRock()
+{
+	auto collisions = CollisionManager::GetInstance().GetCollisionsByType(Rock);
+	for (const auto& collision : collisions)
+	{
+		if (m_pCollisionComp->Collide(collision->GetCollision()))
+		{
+			m_IsDead = true;
+			m_DeathByRock = true;
+		}
+	}
 }
 
 void digdug::Enemy::SetScene(Scene* scene)

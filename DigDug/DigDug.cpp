@@ -40,9 +40,10 @@ void load()
 	auto font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 21);
 	auto& input = InputManager::GetInstance();
 	auto& firstLevel = dae::SceneManager::GetInstance().CreateScene("level1");
-	auto gameComponent = std::make_shared<GameObject>();
-	gameComponent->AddComponent<UIComponent>();
-	firstLevel.AddUI(gameComponent);
+	//auto gameComponent = std::make_shared<GameObject>();
+	//gameComponent->AddComponent<UIComponent>()->Initialize();
+	//firstLevel.AddUI(gameComponent);
+
 	auto textObject = std::make_unique<GameObject>();
 	textObject->SetLocalPosition({ 265.f,300.f,0.f });
 	textObject->AddComponent<TextComponent>()->SetFont(font);
@@ -55,10 +56,17 @@ void load()
 	textObject->GetComponent<TextComponent>()->SetText("CoOp");
 	firstLevel.Add(std::move(textObject));
 
-	auto arrow = std::make_unique<GameObject>();
+	textObject = std::make_unique<GameObject>();
+	textObject->SetLocalPosition({ 265.f,200.f,0.f });
+	textObject->AddComponent<TextComponent>()->SetFont(font);
+	textObject->GetComponent<TextComponent>()->SetText("DIG DUG");
+	firstLevel.Add(std::move(textObject));
+
+	auto arrow = std::make_shared<GameObject>();
 	arrow->SetLocalPosition({ 220.f,300.f,0 });
+	arrow->AddComponent<TextComponent>()->SetFont(font);
 	arrow->AddComponent<InputComponent>();
-	arrow->AddComponent<UIComponent>();
+	arrow->AddComponent<UIComponent>()->Initialize();
 	arrow->AddComponent<RenderComponent>();
 	arrow->GetComponent<RenderComponent>()->SetTexture("Arrow.png");
 	arrow->GetComponent<RenderComponent>()->SetScale(25.f);
@@ -73,40 +81,40 @@ void load()
 
 	input.AddKeyboardController(arrow.get());
 	input.AddController(arrow.get(), 0);
+	firstLevel.AddUI(std::move(arrow));
+	input.BindKeyboardCommand(SDL_SCANCODE_F1, new NextSceneCommand(), InputType::Down);
 
+//	auto undergroundBoundary = std::make_unique<GameObject>();
+////	undergroundBoundary->SetLocalPosition({ 0.f,100.f,0.f });
+//	undergroundBoundary->AddComponent<CollisionComponent>()->CreateCollision(Rectf{ 0.f,100.f,635.f,350.f }, Underground, true,false);
+//	firstLevel.Add(std::move(undergroundBoundary));
+//
+//	//undergroundBoundary = std::make_unique<GameObject>();
+//	//undergroundBoundary->SetLocalPosition({ 0.f,100.f,0.f });
+//	//undergroundBoundary->AddComponent<CollisionComponent>()->CreateCollision(Rectf{ 0.f,0.f,610.f,96.f }, Underground, true);
+//	//firstLevel.Add(std::move(undergroundBoundary));
+//
+//	//undergroundBoundary = std::make_unique<GameObject>();
+//	//undergroundBoundary->SetLocalPosition({ 0.f,196.f,0.f });
+//	//undergroundBoundary->AddComponent<CollisionComponent>()->CreateCollision(Rectf{ 0.f,0.f,610.f,96.f }, Underground, true);
+//	//firstLevel.Add(std::move(undergroundBoundary));
+//
+//	//undergroundBoundary = std::make_unique<GameObject>();
+//	//undergroundBoundary->SetLocalPosition({ 0.f,292,0.f });
+//	//undergroundBoundary->AddComponent<CollisionComponent>()->CreateCollision(Rectf{ 0.f,0.f,610.f,96.f }, Underground, true);
+//	//firstLevel.Add(std::move(undergroundBoundary));
+//
+//	undergroundBoundary = std::make_unique<GameObject>();
+//	undergroundBoundary->AddComponent<CollisionComponent>()->CreateCollision(Rectf{ 0.f,388.f,610.f,64.f }, Underground, true,false);
+//	firstLevel.Add(std::move(undergroundBoundary));
 
-	auto undergroundBoundary = std::make_unique<GameObject>();
-//	undergroundBoundary->SetLocalPosition({ 0.f,100.f,0.f });
-	undergroundBoundary->AddComponent<CollisionComponent>()->CreateCollision(Rectf{ 0.f,100.f,635.f,350.f }, Underground, true,false);
-	firstLevel.Add(std::move(undergroundBoundary));
-
-	//undergroundBoundary = std::make_unique<GameObject>();
-	//undergroundBoundary->SetLocalPosition({ 0.f,100.f,0.f });
-	//undergroundBoundary->AddComponent<CollisionComponent>()->CreateCollision(Rectf{ 0.f,0.f,610.f,96.f }, Underground, true);
-	//firstLevel.Add(std::move(undergroundBoundary));
-
-	//undergroundBoundary = std::make_unique<GameObject>();
-	//undergroundBoundary->SetLocalPosition({ 0.f,196.f,0.f });
-	//undergroundBoundary->AddComponent<CollisionComponent>()->CreateCollision(Rectf{ 0.f,0.f,610.f,96.f }, Underground, true);
-	//firstLevel.Add(std::move(undergroundBoundary));
-
-	//undergroundBoundary = std::make_unique<GameObject>();
-	//undergroundBoundary->SetLocalPosition({ 0.f,292,0.f });
-	//undergroundBoundary->AddComponent<CollisionComponent>()->CreateCollision(Rectf{ 0.f,0.f,610.f,96.f }, Underground, true);
-	//firstLevel.Add(std::move(undergroundBoundary));
-
-	undergroundBoundary = std::make_unique<GameObject>();
-	undergroundBoundary->AddComponent<CollisionComponent>()->CreateCollision(Rectf{ 0.f,388.f,610.f,64.f }, Underground, true,false);
-	firstLevel.Add(std::move(undergroundBoundary));
-
-	firstLevel.Add(std::move(arrow));
+	
 	
 
 	//CreateLevels();
 	//servicelocator::get_sound_system().PlayMusic("Sounds/Music/Theme.mp3", 1, true);
 	//auto& scene = dae::SceneManager::GetInstance().GetCurrentScene();
 	//auto& collisions = CollisionManager::GetInstance();
-	input.BindKeyboardCommand(SDL_SCANCODE_F1, new NextSceneCommand(), InputType::Down);
 	//auto font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 21);
 	//auto go = std::make_unique<GameObject>();
 	//go->SetLocalPosition(glm::vec3(0.f, 0.f, 0.f));

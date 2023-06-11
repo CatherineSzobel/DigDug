@@ -6,8 +6,6 @@ digdug::PookaComponent::PookaComponent()
 
 digdug::PookaComponent::~PookaComponent()
 {
-	GetOwner()->RemoveComponent<SpriteComponent>();
-	GetOwner()->RemoveComponent<CollisionComponent>();
 }
 
 void digdug::PookaComponent::Render()
@@ -18,6 +16,11 @@ void digdug::PookaComponent::Render()
 void digdug::PookaComponent::Update(float)
 {
 	GetEnemyCurrentLayer();
+	DeathByRock();
+	if (m_DeathByRock)
+	{
+		m_pSubject->Notify(Event::OnDeathByRock);
+	}
 	if (m_IsDead)
 	{
 		HandleOnDeath(GetOwner());

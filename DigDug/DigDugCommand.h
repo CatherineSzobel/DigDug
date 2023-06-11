@@ -26,33 +26,36 @@ namespace digdug
 			auto movementSpeed = GetGameActor()->GetComponent<InputComponent>()->GetMovementSpeed();
 			auto elapsed = GameTime::GetInstance().GetDeltaTime();
 			auto isDead = m_pDigDugComp->IsPlayerDeadCheck();
-			//auto isDigging = m_pDigDugComp->IsDigging();
-			if (!isDead)
+			auto isGameOver = GetGameActor()->GetComponent<HealthComponent>()->GetIsGameOver();
+			if (!isGameOver)
 			{
-				///	m_OriginalPos = pos;
-				switch (m_Direction)
+				if (!isDead)
 				{
-				case Direction::left:
-					m_DirectionVec.x = -1;
-					m_DirectionVec.y = 0;
-					break;
-				case Direction::right:
-					m_DirectionVec.x = 1;
-					m_DirectionVec.y = 0;
-					break;
-				case Direction::up:
-					m_DirectionVec.y = -1;
-					m_DirectionVec.x = 0;
-					break;
-				case Direction::down:
-					m_DirectionVec.y = 1;
-					m_DirectionVec.x = 0;
-					break;
+					///	m_OriginalPos = pos;
+					switch (m_Direction)
+					{
+					case Direction::left:
+						m_DirectionVec.x = -1;
+						m_DirectionVec.y = 0;
+						break;
+					case Direction::right:
+						m_DirectionVec.x = 1;
+						m_DirectionVec.y = 0;
+						break;
+					case Direction::up:
+						m_DirectionVec.y = -1;
+						m_DirectionVec.x = 0;
+						break;
+					case Direction::down:
+						m_DirectionVec.y = 1;
+						m_DirectionVec.x = 0;
+						break;
+					}
+					m_pDigDugComp->SetDirection(m_Direction);
+					GetGameActor()->SetLocalPosition({ pos.x + ((movementSpeed * m_DirectionVec.x) * elapsed),pos.y + ((movementSpeed * m_DirectionVec.y) * elapsed)  , pos.z });
+					m_pDigDugComp->SetMoving(true);
+					//m_pDigDugComp->SetUsingWaterPump(false);
 				}
-				m_pDigDugComp->SetDirection(m_Direction);
-				GetGameActor()->SetLocalPosition({ pos.x + ((movementSpeed * m_DirectionVec.x) * elapsed),pos.y + ((movementSpeed * m_DirectionVec.y) * elapsed)  , pos.z });
-				m_pDigDugComp->SetMoving(true);
-				//m_pDigDugComp->SetUsingWaterPump(false);
 			}
 		}
 		virtual void Undo() override
@@ -110,7 +113,7 @@ namespace digdug
 		NextSceneCommand() {};
 		virtual ~NextSceneCommand() = default;
 		virtual void Execute() override;
-		virtual void Undo() override{};
+		virtual void Undo() override {};
 	private:
 
 	};
@@ -168,12 +171,15 @@ namespace digdug
 		virtual ~HandleMenuCommand() = default;
 		virtual void Execute() override
 		{
-			auto gb = GetGameActor()->GetComponent<UIComponent>();
+			auto gb = GetGameActor()->GetComponent<InputComponent>();
 			if (gb != nullptr)
 			{
 				m_Action = GetGameActor()->GetComponent<UIComponent>()->GetAction();
 				GetGameActor()->GetComponent<UIComponent>()->ActivateAction(m_Action);
+				GetGameActor()->RemoveComponent<InputComponent>();
+				GetGameActor()->RemoveComponent<RenderComponent>();
 			}
+
 
 		};
 		virtual void Undo() override

@@ -206,17 +206,9 @@ void digdug::LevelManager::LoadCoopLevel(std::string filename)
 	auto levelname = filename.substr(0, filename.size() - 4);
 	auto& level = SceneManager::GetInstance().CreateScene(levelname);
 
-	//auto groundLevelOne = std::make_unique<GameObject>();
-	//groundLevelOne->AddComponent<CollisionComponent>();
-	//auto groundLevelTwo = std::make_unique<GameObject>();
-	//groundLevelTwo->AddComponent<CollisionComponent>();
-	//auto groundLevelThree = std::make_unique<GameObject>();
-	//groundLevelThree->AddComponent<CollisionComponent>();
-	//auto groundLevelFour = std::make_unique<GameObject>();
 	auto font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 21);
 
 	auto sharedScoringObject = std::make_shared<GameObject>();
-	auto sharedScoringObjectTwo = std::make_shared<GameObject>();
 	auto sharedLivesObject = std::make_shared<GameObject>();
 	auto sharedLivesObjectTwo = std::make_shared<GameObject>();
 	if (scene.HasOneUIObject())
@@ -226,12 +218,6 @@ void digdug::LevelManager::LoadCoopLevel(std::string filename)
 		sharedScoringObject->AddComponent<PointComponent>()->Initialize();
 		sharedScoringObject->SetLocalPosition({ 100.f,20.f,0.f });
 		scene.AddUI(sharedScoringObject);
-
-		sharedScoringObjectTwo->AddComponent<TextComponent>()->SetFont(font);
-		sharedScoringObjectTwo->GetComponent<TextComponent>()->SetText("0");
-		sharedScoringObjectTwo->AddComponent<PointComponent>()->Initialize();
-		sharedScoringObjectTwo->SetLocalPosition({ 180.f,20.f,0.f });
-		scene.AddUI(sharedScoringObjectTwo);
 
 		sharedLivesObject->AddComponent<LivesDisplay>()->Initialize();
 		sharedLivesObject->SetLocalPosition({ 0.f,460.f,0.f });
@@ -267,6 +253,24 @@ void digdug::LevelManager::LoadCoopLevel(std::string filename)
 	bool empty = level.isSceneEmpty();
 	if (empty)
 	{
+		auto scoringObject = std::make_unique<GameObject>();
+		scoringObject->AddComponent<TextComponent>()->SetFont(font);
+		scoringObject->GetComponent<TextComponent>()->SetText(std::to_string(ReadHighScoreFromFile()));
+		scoringObject->SetLocalPosition({ 300.f,20.f,0.f });
+		level.Add(std::move(scoringObject));
+
+		scoringObject = std::make_unique<GameObject>();
+		scoringObject->AddComponent<TextComponent>()->SetFont(font);
+		scoringObject->GetComponent<TextComponent>()->SetText("HIGHSCORE");
+		scoringObject->SetLocalPosition({ 250.f,0.f,0.f });
+		level.Add(std::move(scoringObject));
+
+		scoringObject = std::make_unique<GameObject>();
+		scoringObject->AddComponent<TextComponent>()->SetFont(font);
+		scoringObject->GetComponent<TextComponent>()->SetText("1P SCORE");
+		scoringObject->SetLocalPosition({ 80.f,0.f,0.f });
+		level.Add(std::move(scoringObject));
+
 		std::fstream txtFile(fullPath, std::ios_base::in);
 		auto pooka = std::make_unique<GameObject>();
 		auto fygar = std::make_unique<GameObject>();
@@ -359,7 +363,7 @@ void digdug::LevelManager::LoadCoopLevel(std::string filename)
 
 				IncreaseRow(currentXTile, currentYTile, maxTileColumn);
 				pooka->GetComponent<PookaComponent>()->GetSubject()->AddObserver(sharedScoringObject->GetComponent<PointComponent>());
-				pooka->GetComponent<PookaComponent>()->GetSubject()->AddObserver(sharedScoringObjectTwo->GetComponent<PointComponent>());
+				pooka->GetComponent<PookaComponent>()->GetSubject()->AddObserver(sharedScoringObject->GetComponent<PointComponent>());
 
 				collisions.AddCollision(pooka->GetComponent<CollisionComponent>());
 				enemies.AddEnemies(pooka->GetComponent<PookaComponent>());
@@ -374,7 +378,7 @@ void digdug::LevelManager::LoadCoopLevel(std::string filename)
 
 				IncreaseRow(currentXTile, currentYTile, maxTileColumn);
 				fygar->GetComponent<FygarsComponent>()->GetSubject()->AddObserver(sharedScoringObject->GetComponent<PointComponent>());
-				fygar->GetComponent<FygarsComponent>()->GetSubject()->AddObserver(sharedScoringObjectTwo->GetComponent<PointComponent>());
+				fygar->GetComponent<FygarsComponent>()->GetSubject()->AddObserver(sharedScoringObject->GetComponent<PointComponent>());
 
 				collisions.AddCollision(fygar->GetComponent<CollisionComponent>());
 				enemies.AddEnemies(fygar->GetComponent<FygarsComponent>());
@@ -450,6 +454,7 @@ void digdug::LevelManager::CreateInputSolo(std::unique_ptr<GameObject>& sprite, 
 		
 		sprite->GetComponent<InputComponent>()->SetMovementSpeed(120.f);
 		input.AddController(sprite.get(), 0);
+
 		break;
 	case digdug::keyboard:
 

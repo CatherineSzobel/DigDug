@@ -11,6 +11,7 @@ dae::GameObject::~GameObject()
 	for (auto& component : m_pComponents)
 	{
 		delete component;
+		component = nullptr;
 	}
 	for (auto& child : m_pChildren)
 	{

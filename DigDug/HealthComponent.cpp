@@ -2,7 +2,7 @@
 #include "LevelManager.h"
 #include "Game.h"
 digdug::HealthComponent::HealthComponent()
-	: m_RemainingLives{ 4 }
+	: m_RemainingLives{ 3 }
 {
 	m_pSubject = new Subject();
 

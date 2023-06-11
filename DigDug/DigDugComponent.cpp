@@ -19,8 +19,6 @@ digdug::DigDugComponent::DigDugComponent()
 }
 digdug::DigDugComponent::~DigDugComponent()
 {
-	GetOwner()->RemoveComponent<SpriteComponent>();
-	GetOwner()->RemoveComponent<CollisionComponent>();
 	delete	m_CurrentState;
 	m_CurrentState = nullptr;
 	delete m_pSubject;
@@ -41,7 +39,7 @@ void digdug::DigDugComponent::Update(float elapsed)
 	}
 	if (!m_IsDead)
 	{
-		if (EnemyManager::GetInstance().EnemiesLeft() == 0)
+		/*if (EnemyManager::GetInstance().EnemiesLeft() == 0)
 		{
 			LevelManager levelmanager;
 			auto currentLevel = SceneManager::GetInstance().GetCurrentSceneIndex() + 2;
@@ -52,15 +50,16 @@ void digdug::DigDugComponent::Update(float elapsed)
 			else
 			{
 				levelmanager.LoadLevel("level" + std::to_string(currentLevel) + ".txt");
-			}
-		}
+			}*/
+		//}
 		if (m_IsMoving && !servicelocator::get_sound_system().IsPlaying())
 		{
 			servicelocator::get_sound_system().PlayMusic("Sounds/Music/Theme.mp3", 1, true);
 		}
 		for (const auto& collision : CollisionManager::GetInstance().GetCollisions())
 		{
-			if (collision->GetCollisionType() == EnemyLayer && collision->Collide(m_pCollisionComponent->GetCollision()))
+			if (collision->GetCollisionType() == EnemyLayer && collision->Collide(m_pCollisionComponent->GetCollision()) 
+				|| collision->GetCollisionType() == Rock && collision->Collide(m_pCollisionComponent->GetCollision()))
 			{
 				m_IsDead = true;
 				m_IsMoving = false;
