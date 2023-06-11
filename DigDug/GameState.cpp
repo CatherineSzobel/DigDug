@@ -40,6 +40,10 @@ digdug::GameState* digdug::ActiveGameState::Update(dae::GameObject* owner, float
 	{
 		return new EndState(owner, EndGameCondition::lost);
 	}
+	if (Game::GetInstance().IsBothPlayerDead())
+	{
+		return new EndState(owner, EndGameCondition::lost);
+	}
 	if (EnemyManager::GetInstance().EnemiesLeft() == 0)
 	{
 		currentLevel = SceneManager::GetInstance().GetCurrentSceneIndex() + 2;
@@ -80,6 +84,7 @@ digdug::GameState* digdug::StartScreenState::Update(dae::GameObject* owner, floa
 	if (owner->GetComponent<UIComponent>()->GetIsActionPicked())
 	{
 		ActivateAction(m_Action);
+		Game::GetInstance().SetGameMode(m_Action);
 		return new ActiveGameState(owner);
 	}
 	return nullptr;

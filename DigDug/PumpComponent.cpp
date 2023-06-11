@@ -8,17 +8,37 @@ void digdug::PumpComponent::Render()
 void digdug::PumpComponent::Update(float)
 {
 	auto collisions = CollisionManager::GetInstance().GetCollisionsByType(EnemyLayer);
-	for (int i = 0; i < (int)collisions.size(); i++)
+	if (!m_Attached)
 	{
-		if (m_pCollisionComp->Collide(collisions[i]->GetCollision()) && EnemyManager::GetInstance().GetEnemyPointer(i)->IsActive())
+		for (int i = 0; i < (int)collisions.size(); i++)
 		{
-			m_Attached = true;
-			m_Enemy = EnemyManager::GetInstance().GetEnemyPointer(i);
+			if (m_pCollisionComp->Collide(collisions[i]->GetCollision()) && EnemyManager::GetInstance().GetEnemyPointer(i)->IsActive())
+			{
+				m_Attached = true;
+				m_Enemy = EnemyManager::GetInstance().GetEnemyPointer(i);
+				//int renderIdx = 0;
+			/*	switch (GetOwner()->GetComponent<DigDugComponent>()->GetPlayerDirection())
+				{
+				case Direction::right:
+					renderIdx = 0;
+					break;
+				case Direction::left:
+					renderIdx = 1;
+					break;
+				case Direction::up:
+					renderIdx = 2;
+					break;
+				case Direction::down:
+					renderIdx = 3;
+					break;
+				}
+				m_pSpriteComp->SetTexture(m_pListOfArrowRenders[renderIdx]);*/
+				break;
+			}
 
-			break;
 		}
-
 	}
+
 }
 
 void digdug::PumpComponent::FixedUpdate(float)
@@ -28,6 +48,7 @@ void digdug::PumpComponent::FixedUpdate(float)
 void digdug::PumpComponent::Initialize()
 {
 	m_pSpriteComp = GetOwner()->AddComponent<RenderComponent>();
+	m_pListOfArrowRenders = { "Sprites/Player/ArrowRight.png" ,"Sprites/Player/ArrowLeft.png" ,"Sprites/Player/ArrowUp.png","Sprites/Player/ArrowDown.png" };
 	m_pSpriteComp->SetTexture("Sprites/Player/ArrowRight.png");
 	m_pCollisionComp = GetOwner()->AddComponent<CollisionComponent>();
 	m_PumpSize = { 30.f,50.f };

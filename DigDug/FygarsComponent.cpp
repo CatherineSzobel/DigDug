@@ -64,3 +64,10 @@ void digdug::FygarsComponent::Initialize()
 
 }
 
+void digdug::FygarsComponent::Release()
+{
+	m_AmountOfPumps = 0;
+	m_pSpriteComp->ResetSpriteAnimation();
+	m_pSpriteComp->SetAnimationByName("FygerMoveRight");
+}
+

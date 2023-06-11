@@ -18,15 +18,17 @@ namespace digdug
 		{
 			m_pSpriteComp = GetGameActor()->GetComponent<SpriteComponent>();
 			m_pDigDugComp = GetGameActor()->GetComponent<DigDugComponent>();
+
 		};
 		virtual ~MoveCommand() = default;
 		virtual void Execute() override
 		{
 			auto pos = GetGameActor()->GetLocalPosition();
-			auto movementSpeed = GetGameActor()->GetComponent<InputComponent>()->GetMovementSpeed();
 			auto elapsed = GameTime::GetInstance().GetDeltaTime();
 			auto isDead = m_pDigDugComp->IsPlayerDeadCheck();
 			auto isGameOver = GetGameActor()->GetComponent<HealthComponent>()->GetIsGameOver();
+			m_OriginalSpeed = GetGameActor()->GetComponent<InputComponent>()->GetMovementSpeed();
+			m_MovementSpeed = m_OriginalSpeed;
 			if (!isGameOver)
 			{
 				if (!isDead)
@@ -52,7 +54,8 @@ namespace digdug
 						break;
 					}
 					m_pDigDugComp->SetDirection(m_Direction);
-					GetGameActor()->SetLocalPosition({ pos.x + ((movementSpeed * m_DirectionVec.x) * elapsed),pos.y + ((movementSpeed * m_DirectionVec.y) * elapsed)  , pos.z });
+					Clamp();
+					GetGameActor()->SetLocalPosition({ pos.x + ((m_MovementSpeed * m_DirectionVec.x) * elapsed),pos.y + ((m_MovementSpeed * m_DirectionVec.y) * elapsed)  , pos.z });
 					m_pDigDugComp->SetMoving(true);
 					//m_pDigDugComp->SetUsingWaterPump(false);
 				}
@@ -62,8 +65,29 @@ namespace digdug
 		{
 			GetGameActor()->SetLocalPosition({ m_OriginalPos.x,m_OriginalPos.y,m_OriginalPos.z });
 		}
+		void Clamp()
+		{
+			auto playerPosition = glm::vec2{ GetGameActor()->GetLocalPosition().x + GetGameActor()->GetComponent<SpriteComponent>()->GetSpriteSize().x,
+			GetGameActor()->GetLocalPosition().y + GetGameActor()->GetComponent<SpriteComponent>()->GetSpriteSize().y };
+
+			glm::vec2 levelBoundaryRow = { 70.f, 452.f };
+			glm::vec2 levelBoundaryColumm = { 0.f, Game::GetInstance().GetWorldWidth() };
+
+			if (playerPosition.x - GetGameActor()->GetComponent<SpriteComponent>()->GetSpriteSize().x <= levelBoundaryColumm.x && m_Direction == Direction::left ||
+				playerPosition.x >= levelBoundaryColumm .y && m_Direction == Direction::right ||
+				playerPosition.y - GetGameActor()->GetComponent<SpriteComponent>()->GetSpriteSize().y <= levelBoundaryRow.x && m_Direction == Direction::up ||
+				playerPosition.y >= levelBoundaryRow.y && m_Direction == Direction::down)
+			{
+				m_MovementSpeed = 0.f;
+			}
+			else
+			{
+				m_MovementSpeed = m_OriginalSpeed;
+			}
+		};
 	private:
 		Direction m_Direction{ };
+		float m_MovementSpeed{}, m_OriginalSpeed{};
 		glm::vec2 m_DirectionVec{};
 		glm::vec3 m_OriginalPos{};
 		SpriteComponent* m_pSpriteComp = nullptr;
@@ -178,6 +202,7 @@ namespace digdug
 				GetGameActor()->GetComponent<UIComponent>()->ActivateAction(m_Action);
 				GetGameActor()->RemoveComponent<InputComponent>();
 				GetGameActor()->RemoveComponent<RenderComponent>();
+				GetGameActor()->SetLocalPosition(glm::vec3{ 220.f,50.f,0.f });
 			}
 
 

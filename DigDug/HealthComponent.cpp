@@ -24,7 +24,7 @@ void digdug::HealthComponent::Update(float)
 }
 
 void digdug::HealthComponent::FixedUpdate(float) {}
-void digdug::HealthComponent::Initialize(){}
+void digdug::HealthComponent::Initialize() {}
 void digdug::HealthComponent::NotifyHealthSubject()
 {
 	m_pSubject->Notify(Event::OnPlayerDeath);
@@ -32,7 +32,15 @@ void digdug::HealthComponent::NotifyHealthSubject()
 	if (m_RemainingLives < 0)
 	{
 		m_IsGameOver = true;
-		Game::GetInstance().SetPlayerDead(m_IsGameOver);
+		if (Game::GetInstance().GetGameMode() == "CoOp" && Game::GetInstance().PlayerLeft() - 1 > 0)
+		{
+			Game::GetInstance().DecreasePlayerLeft();
+		}
+		else
+		{
+			Game::GetInstance().SetPlayerDead(m_IsGameOver);
+
+		}
 	}
 	else
 	{

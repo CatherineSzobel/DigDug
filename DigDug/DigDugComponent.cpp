@@ -207,3 +207,4 @@ void digdug::DigDugComponent::CreateAnimation()
 
 	m_pSpriteComponent->AddAnimationStrips(DiggerAnimations);
 }
+

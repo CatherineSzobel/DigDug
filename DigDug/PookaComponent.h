@@ -14,8 +14,12 @@ namespace digdug
 		virtual void Update(float deltaTime) override;
 		virtual void FixedUpdate(float deltaTime) override;
 		virtual void Initialize() override;
+		// Inherited via Enemy
+		virtual void Release() override;
 	private:
 		bool m_IsInvinsible = false;
+
+	
 	};
 }
 

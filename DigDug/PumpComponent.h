@@ -21,6 +21,7 @@ namespace digdug
 		void Reset();
 		bool IsAttached() { return m_Attached; }
 		Rectf GetCollision() const;
+		Enemy* GetEnemyPointer() const { return m_Enemy; };
 	private:
 		RenderComponent* m_pSpriteComp = nullptr;
 		CollisionComponent* m_pCollisionComp = nullptr;
@@ -35,6 +36,7 @@ namespace digdug
 		glm::vec2 m_PumpSize;
 		bool m_HasShot{ false };
 		Enemy* m_Enemy;
+		std::vector<std::string> m_pListOfArrowRenders{};
 	};
 
 }

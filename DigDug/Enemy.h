@@ -18,13 +18,12 @@ namespace digdug
 		Scene* GetScene() const { return m_Scene; };
 		Subject* GetSubject() { return m_pSubject; };
 		void IncreasePump();
+		virtual void Release() = 0;
 		void Reset();
 	protected:
 		void HandleOnDeath(GameObject* obj);
 		void HandleOnHit(std::string animation);
 		void DeathByRock();
-
-
 		void SetScene(Scene* scene);
 		SpriteComponent* m_pSpriteComp = nullptr;
 		CollisionComponent* m_pCollisionComp = nullptr;

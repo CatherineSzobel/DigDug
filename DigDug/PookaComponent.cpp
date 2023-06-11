@@ -65,3 +65,10 @@ void digdug::PookaComponent::Initialize()
 	auto size = m_pSpriteComp->GetCurrentSpriteSize();
 	m_pCollisionComp->CreateCollision(Rectf{ size.left,size.height / 2.f,size.width,size.height / 2.f }, EnemyLayer, true);
 }
+
+void digdug::PookaComponent::Release()
+{
+	m_AmountOfPumps = 0;
+	m_pSpriteComp->ResetSpriteAnimation();
+	m_pSpriteComp->SetAnimationByName("PookaMoveRight");
+}
