@@ -61,7 +61,8 @@ namespace digdug
 		glm::vec3 m_OriginalPos{};
 		Direction m_PlayerDirection{};
 		Subject* m_pSubject{};
-
+		glm::vec2 m_OriginalCollisionSize{};
+		Rectf m_CollisionSize{};
 	};
 
 }

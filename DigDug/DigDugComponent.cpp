@@ -37,28 +37,16 @@ void digdug::DigDugComponent::Update(float elapsed)
 		delete m_CurrentState;
 		m_CurrentState = newState;
 	}
+
 	if (!m_IsDead)
 	{
-		/*if (EnemyManager::GetInstance().EnemiesLeft() == 0)
-		{
-			LevelManager levelmanager;
-			auto currentLevel = SceneManager::GetInstance().GetCurrentSceneIndex() + 2;
-			if (currentLevel == 4)
-			{
-				m_GameEnd = true;
-			}
-			else
-			{
-				levelmanager.LoadLevel("level" + std::to_string(currentLevel) + ".txt");
-			}*/
-		//}
 		if (m_IsMoving && !servicelocator::get_sound_system().IsPlaying())
 		{
 			servicelocator::get_sound_system().PlayMusic("Sounds/Music/Theme.mp3", 1, true);
 		}
 		for (const auto& collision : CollisionManager::GetInstance().GetCollisions())
 		{
-			if (collision->GetCollisionType() == EnemyLayer && collision->Collide(m_pCollisionComponent->GetCollision()) 
+			if (collision->GetCollisionType() == EnemyLayer && collision->Collide(m_pCollisionComponent->GetCollision())
 				|| collision->GetCollisionType() == Rock && collision->Collide(m_pCollisionComponent->GetCollision()))
 			{
 				m_IsDead = true;
@@ -66,12 +54,24 @@ void digdug::DigDugComponent::Update(float elapsed)
 
 				m_pHealthComponent->NotifyHealthSubject();
 			}
-			if (collision->GetCollisionType() == Sand && collision->Collide(m_pCollisionComponent->GetCollision()))
-			{
-				//set underground animation
-			//	m_IsDigging = true;
-			}
 		}
+		if (m_IsMoving)
+		{
+			if (m_PlayerDirection == Direction::left ||
+				m_PlayerDirection == Direction::right)
+			{
+				m_CollisionSize.width = m_OriginalCollisionSize.x;
+				m_CollisionSize.height = m_OriginalCollisionSize.y / 2.f;
+			}
+			else if (m_PlayerDirection == Direction::up ||
+				m_PlayerDirection == Direction::down)
+			{
+				m_CollisionSize.width = m_OriginalCollisionSize.x / 2.f;
+				m_CollisionSize.height = m_OriginalCollisionSize.y;
+			}
+			m_pCollisionComponent->CreateCollision(Rectf{ m_CollisionSize }, Player);
+		}
+		
 
 	}
 }
@@ -111,13 +111,19 @@ void digdug::DigDugComponent::Initialize()
 
 	m_CollisionType = Player;
 	m_pCollisionComponent = GetOwner()->AddComponent<CollisionComponent>();
+	m_OriginalCollisionSize = { m_pSpriteComponent->GetCurrentSpriteSize().width,
+		m_pSpriteComponent->GetCurrentSpriteSize().height };
+	m_CollisionSize = Rectf
+	(
+		GetOwner()->GetLocalPosition().x,
+		GetOwner()->GetLocalPosition().y,
+		m_OriginalCollisionSize.x,
+		m_OriginalCollisionSize.y
+	);
 
-	auto size = m_pSpriteComponent->GetCurrentSpriteSize();
-	m_pCollisionComponent->CreateCollision(Rectf{ size }, Player, true);
+	m_pCollisionComponent->CreateCollision(Rectf{ m_CollisionSize }, Player);
 	m_pCollisionComponent->SetCollision(true);
-
 	CollisionManager::GetInstance().AddCollision(m_pCollisionComponent);
-
 	m_OriginalPos = GetOwner()->GetLocalPosition();
 
 	m_pHealthComponent = GetOwner()->AddComponent<HealthComponent>();

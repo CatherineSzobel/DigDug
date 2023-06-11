@@ -43,7 +43,7 @@ void digdug::TileComponent::SetSandType(TileType tile)
 		m_pSpriteComp->SetAnimationByName("TileFour", false);
 		break;
 	}
-	m_pCollisionComp->CreateCollision(m_pSpriteComp->GetCurrentSpriteSize(), Sand, true);
+	m_pCollisionComp->CreateCollision(m_pSpriteComp->GetCurrentSpriteSize(), Sand);
 }
 void digdug::TileComponent::FixedUpdate(float){}
 
@@ -59,6 +59,6 @@ void digdug::TileComponent::Initialize()
 	m_pSpriteComp->AddAnimationStrips(m_pTileLists);
 	m_pSpriteComp->SetAnimationByName("TileOne", false);
 
-	m_pCollisionComp->CreateCollision(m_pSpriteComp->GetCurrentSpriteSize(), Sand, true);
+	m_pCollisionComp->CreateCollision(m_pSpriteComp->GetCurrentSpriteSize(), Sand);
 
 }

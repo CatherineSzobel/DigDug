@@ -80,13 +80,13 @@ digdug::PlayerState* digdug::PumpState::Update(dae::GameObject* player, float el
 	if (player->GetComponent<DigDugComponent>()->IsMoving())
 	{
 
-		std::cout << "return to walking";
+	//	std::cout << "return to walking";
 		player->GetComponent<PumpComponent>()->GetEnemyPointer()->Release();
 		return new WalkingState(player);
 	}
 	if (m_Finished || m_CurrentTime >= m_MaxPumpTime)
 	{
-		std::cout << "return to idle";
+	//	std::cout << "return to idle";
 		player->GetComponent<PumpComponent>()->GetEnemyPointer()->Release();
 		return new IdleState(player);
 	}

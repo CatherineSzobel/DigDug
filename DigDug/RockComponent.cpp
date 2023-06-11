@@ -83,7 +83,7 @@ void digdug::RockComponent::Initialize()
 	m_pSpriteComp->AddAnimationStrips("Sprites/RockBreakAnimation.png", 4, 1, 4.f, 1 / 4.f, "RockBreak", false, 2.f);
 	m_pSpriteComp->SetAnimationByName("SingularRock");
 	auto size = m_pSpriteComp->GetCurrentSpriteSize();
-	m_pCollisionComp->CreateCollision(Rectf{ size.left,size.height / 2.f,size.width / 2.f,size.height / 6.f }, { 10.f,35.f }, Rock, true, true);
+	m_pCollisionComp->CreateCollision(Rectf{ size.left,size.height / 2.f,size.width / 2.f,size.height / 6.f }, { 10.f,35.f }, Rock, false, true);
 	m_pCollisionComp->SetCollision(true);
 	m_CurrentYPosition = GetOwner()->GetLocalPosition().y;
 

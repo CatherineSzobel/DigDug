@@ -60,7 +60,7 @@ void digdug::FygarsComponent::Initialize()
 
 	m_pSpriteComp->SetAnimationByName("FygerMoveRight");
 	auto size = m_pSpriteComp->GetCurrentSpriteSize();
-	m_pCollisionComp->CreateCollision(Rectf{ size.left,size.height / 2.f,size.width,size.height / 2.f }, EnemyLayer, true);
+	m_pCollisionComp->CreateCollision(Rectf{ size.left,size.height / 2.f,size.width,size.height / 2.f }, EnemyLayer);
 
 }
 
