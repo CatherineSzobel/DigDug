@@ -40,17 +40,13 @@ namespace digdug
 		void SetDirection(Direction direction) { m_PlayerDirection = direction; };
 
 		void ResetDigger();
-		void RespawnCountDown(float elapsed);
-		void DeathCountdown(float elapsed);
 		void CreateAnimation();
 
 		Subject* GetSubject() const { return m_pSubject; };
 	private:
 
 		bool m_IsDigging = false, m_IsDead = false, m_IsMoving = false,
-			m_UsingWaterPump = false, m_ThrownPump = false,
-			m_DeathCountdownFinished = false, m_GameEnd = false;
-		float m_RespawnCountdown, m_DeathCountdown;
+			m_UsingWaterPump = false, m_ThrownPump = false, m_GameEnd = false;
 		HealthComponent* m_pHealthComponent{};
 		SpriteComponent* m_pSpriteComponent{};
 		CollisionComponent* m_pCollisionComponent{};

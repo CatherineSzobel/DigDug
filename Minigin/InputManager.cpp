@@ -12,9 +12,6 @@ dae::InputManager::~InputManager()
 bool dae::InputManager::ProcessInput()
 {
 	SDL_Event e;
-	//sdl keyboard state
-	//keycode to scancode -> held
-	//not exit when execute command
 	const Uint8* State = SDL_GetKeyboardState(NULL);
 	for (auto& button : m_GlobalKeyboardButtons)
 	{
@@ -138,10 +135,7 @@ void dae::InputManager::AddKeyboardController(GameObject* gameObject)
 
 void dae::InputManager::Reset()
 {
-	//for (const auto button : m_GlobalKeyboardButtons)
-	//{
-	//	m_GlobalKeyboardButtons.erase(std::remove(m_GlobalKeyboardButtons.cbegin(), m_GlobalKeyboardButtons.cend(), button));
-	//}
+
 	m_pControllers.clear();
 	m_KeyboardButtons.clear();
 }

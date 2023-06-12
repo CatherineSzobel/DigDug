@@ -22,7 +22,7 @@ namespace digdug
 		};
 	private:
 	};
-	class EndState : public GameState
+	class EndState final : public GameState
 	{
 	public:
 		EndState(GameObject* owner, EndGameCondition condition);
@@ -31,7 +31,7 @@ namespace digdug
 	private:
 		EndGameCondition m_Condition;
 	};
-	class ActiveGameState : public GameState
+	class ActiveGameState final : public GameState
 	{
 	public:
 		ActiveGameState(GameObject* owner);
@@ -41,7 +41,7 @@ namespace digdug
 	private:
 		int currentLevel = 1;
 	};
-	class StartScreenState : public GameState
+	class StartScreenState final : public GameState
 	{
 	public:
 		StartScreenState(GameObject* owner);
@@ -66,7 +66,7 @@ namespace digdug
 
 
 
-	class PauseState : public GameState
+	class PauseState final : public GameState
 	{
 	public:
 		PauseState() = default;

@@ -31,7 +31,7 @@ namespace dae
 		void AddAnimationStrips(std::vector<Sprite*>& animationStrips);
 		void SetAnimationByName(std::string animationName, bool loop = true);
 		void IncreaseSpriteFrame();
-		Rectf GetCurrentSpriteSize() const;
+		Rectf GetSpriteRect() const;
 		glm::vec2 GetSpriteSize() const;
 		Sprite* GetCurrentSprite() const;
 		std::string GetCurrentAnimation() const {return m_CurrentAnimationStrip->GetAnimationName();};

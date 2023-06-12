@@ -11,7 +11,6 @@ namespace dae
 	public:
 		void Add(std::unique_ptr<GameObject> object);
 		void AddUI(std::shared_ptr<GameObject> object);
-		void SetUI(std::vector < std::shared_ptr<GameObject>> objects);
 		std::vector < std::shared_ptr<GameObject>> MoveOverUI(Scene& level);
 		void Remove(std::unique_ptr<GameObject> object);
 		void RemoveAll();
@@ -20,7 +19,6 @@ namespace dae
 		void FixedUpdate(float deltaTime);
 		void Render() const;
 		bool isSceneEmpty() { return std::move(m_objects.empty()); };
-		bool HasNoUIObjects() const { return std::move(m_UIobjects.empty()); }
 		bool HasOneUIObject() const { return std::move(m_UIobjects.size() == 1); }
 		std::string GetName() const { return m_name; }
 		~Scene();

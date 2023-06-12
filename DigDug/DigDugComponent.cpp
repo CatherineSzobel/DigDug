@@ -8,8 +8,6 @@ using namespace dae;
 digdug::DigDugComponent::DigDugComponent()
 	:
 	m_IsDead{ false },
-	m_RespawnCountdown{ 3.f },
-	m_DeathCountdown{ 1.f },
 	m_pSpriteComponent{ nullptr },
 	m_pCollisionComponent{ nullptr },
 	m_CollisionType{},
@@ -55,6 +53,7 @@ void digdug::DigDugComponent::Update(float elapsed)
 				m_pHealthComponent->NotifyHealthSubject();
 			}
 		}
+		//Collision size alteration depending on the direction
 		if (m_IsMoving)
 		{
 			if (m_PlayerDirection == Direction::left ||
@@ -111,8 +110,8 @@ void digdug::DigDugComponent::Initialize()
 
 	m_CollisionType = Player;
 	m_pCollisionComponent = GetOwner()->AddComponent<CollisionComponent>();
-	m_OriginalCollisionSize = { m_pSpriteComponent->GetCurrentSpriteSize().width,
-		m_pSpriteComponent->GetCurrentSpriteSize().height };
+	m_OriginalCollisionSize = { m_pSpriteComponent->GetSpriteRect().width,
+		m_pSpriteComponent->GetSpriteRect().height };
 	m_CollisionSize = Rectf
 	(
 		GetOwner()->GetLocalPosition().x,
@@ -149,40 +148,6 @@ void digdug::DigDugComponent::ResetDigger()
 	m_pSpriteComponent->SetAnimationByName("PlayerWalkRight");
 	GetOwner()->SetLocalPosition(m_OriginalPos);
 
-}
-
-void digdug::DigDugComponent::RespawnCountDown(float elapsed)
-{
-	if (m_DeathCountdownFinished)
-	{
-
-		m_RespawnCountdown -= elapsed;
-		if (m_RespawnCountdown <= 0)
-		{
-			ResetDigger();
-			m_pCollisionComponent->SetCollision(true);
-			m_DeathCountdownFinished = false;
-		}
-	}
-}
-
-void digdug::DigDugComponent::DeathCountdown(float elapsed)
-{
-	if (!m_DeathCountdownFinished)
-	{
-
-		m_DeathCountdown -= elapsed;
-		if (m_DeathCountdown <= 0)
-		{
-			servicelocator::get_sound_system().Play("Sounds/Sound/DeathSound.wav", 2);
-			m_pSpriteComponent->SetAnimationByName("deathAnimation", false);
-
-			m_DeathCountdownFinished = true;
-			m_RespawnCountdown = 3.f;
-			m_DeathCountdown = 1.f;
-			m_pSpriteComponent->ResetSpriteAnimation();
-		}
-	}
 }
 
 void digdug::DigDugComponent::CreateAnimation()

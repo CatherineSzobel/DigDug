@@ -153,29 +153,30 @@ namespace digdug
 		virtual void Execute() override
 		{
 			m_originalPosition = GetGameActor()->GetLocalPosition();
-			float offSet = 0;
+			float currentOffSet = 0;
+			const float offSet = 30.f;
 			switch (m_direction)
 			{
 			case Direction::up:
 				GetGameActor()->GetComponent<UIComponent>()->HandleAction(-1);
-				offSet = -30.f;
+				currentOffSet = -offSet;
 				break;
 			case Direction::down:
 				GetGameActor()->GetComponent<UIComponent>()->HandleAction(1);
-				offSet = 30.f;
+				currentOffSet = offSet;
 				break;
 			}
-			auto newPosition = m_originalPosition.y + offSet;
+			auto newPosition = m_originalPosition.y + currentOffSet;
 			if (newPosition < m_MinimumUpwards)
 			{
-				offSet = 30;
+				currentOffSet = offSet;
 			}
 			if (newPosition > m_MaximumDownwards)
 			{
-				offSet = -30;
+				currentOffSet = -offSet;
 			}
 
-			GetGameActor()->SetLocalPosition({ m_originalPosition.x,m_originalPosition.y + offSet,m_originalPosition.z });
+			GetGameActor()->SetLocalPosition({ m_originalPosition.x,m_originalPosition.y + currentOffSet,m_originalPosition.z });
 		};
 		virtual void Undo() override
 		{};

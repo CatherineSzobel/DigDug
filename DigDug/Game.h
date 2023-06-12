@@ -1,7 +1,7 @@
 #pragma once
 #include "Singleton.h"
 #include <string>
-class Game : public dae::Singleton<Game>
+class Game final : public dae::Singleton<Game>
 {
 public:
 	bool IsPlayerDead()const { return m_IsPlayerDead; }

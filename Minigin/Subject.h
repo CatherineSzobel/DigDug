@@ -2,7 +2,7 @@
 #include "Observer.h"
 namespace dae
 {
-	class Subject
+	class Subject final
 	{
 	public:
 		Subject() = default;

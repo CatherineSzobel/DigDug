@@ -31,7 +31,6 @@ void dae::CollisionComponent::FixedUpdate(float)
 void dae::CollisionComponent::CreateCollision(const Rectf& collision, CollisionType type, bool debug,bool moveable)
 {
 	m_Collision = collision;
-	//m_OriginalCollisionPosition = collision;
 	m_DebugOn = debug;
 	m_CollisionType = type;
 	m_IsMoveable = moveable;
@@ -77,12 +76,6 @@ bool dae::CollisionComponent::Collide(Rectf rect2)
 	}
 	return false;
 }
-//
-//Scene& dae::CollisionComponent::GetScene()
-//{
-//	return 
-//}
-
 void dae::CollisionComponent::DrawDebug(float left, float bottom, float width, float height)
 {
 

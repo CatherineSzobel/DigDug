@@ -102,7 +102,6 @@ public:
 	{
 		while (!m_MusicQueue.empty() || !m_SoundQueue.empty())
 		{
-			//one thing and use the conditional lambda wait
 			std::unique_lock<std::mutex> mutexUniqueLock{ m_Mutex };
 			m_ConditionalVariable.wait(mutexUniqueLock, [&] { return !m_SoundQueue.empty() || !m_MusicQueue.empty() || !m_IsStopping; });
 			if (m_QueueChoice == QueueType::sound)

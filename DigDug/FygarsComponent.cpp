@@ -59,7 +59,7 @@ void digdug::FygarsComponent::Initialize()
 	m_pSpriteComp->AddAnimationStrips("Sprites/Fyger/FygerDeathRight.png", 4, 1, 4, 1 / 4.f, "FygerDeathRight",true,playerScale);
 
 	m_pSpriteComp->SetAnimationByName("FygerMoveRight");
-	auto size = m_pSpriteComp->GetCurrentSpriteSize();
+	auto size = m_pSpriteComp->GetSpriteRect();
 	m_pCollisionComp->CreateCollision(Rectf{ size.left,size.height / 2.f,size.width,size.height / 2.f }, EnemyLayer);
 
 }

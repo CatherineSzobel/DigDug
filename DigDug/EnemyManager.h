@@ -6,7 +6,7 @@
 using namespace dae;
 namespace digdug
 {
-	class EnemyManager : public Singleton<EnemyManager>
+	class EnemyManager final : public Singleton<EnemyManager>
 	{
 	public:
 		int EnemiesLeft() const;

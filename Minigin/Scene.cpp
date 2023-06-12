@@ -22,14 +22,6 @@ void dae::Scene::AddUI(std::shared_ptr<GameObject> object)
 	m_UIobjects.emplace_back(object);
 }
 
-void dae::Scene::SetUI(std::vector<std::shared_ptr<GameObject>> objects)
-{
-	for (auto& object : objects)
-	{
-		m_UIobjects.emplace_back(std::move(object));
-	}
-}
-
 std::vector < std::shared_ptr<GameObject>> dae::Scene::MoveOverUI(Scene& level)
 {
 

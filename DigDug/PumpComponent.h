@@ -7,7 +7,7 @@
 using namespace dae;
 namespace digdug
 {
-	class PumpComponent : public BaseComponent
+	class PumpComponent final: public BaseComponent
 	{
 	public:
 		// Inherited via BaseComponent
