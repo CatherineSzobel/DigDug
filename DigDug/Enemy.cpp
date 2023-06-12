@@ -79,7 +79,7 @@ void digdug::Enemy::SetScene(dae::Scene* scene)
 
 void digdug::Enemy::GetEnemyCurrentLayer()
 {
-	for (int i = 0; i < m_LayerPositions.size(); i++)
+	for (int i = 0; i < (int)m_LayerPositions.size(); i++)
 	{
 		if (m_pCollisionComp->Collide(m_LayerPositions[i]))
 		{
