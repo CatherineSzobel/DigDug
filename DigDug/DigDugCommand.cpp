@@ -3,7 +3,7 @@
 void digdug::NextSceneCommand::Execute()
 {
 	LevelManager levelmanager;
-	auto currentLevel = SceneManager::GetInstance().GetCurrentSceneIndex() + 2;
+	auto currentLevel = dae::SceneManager::GetInstance().GetCurrentSceneIndex() + 2;
 	if (currentLevel == 4)
 	{
 		

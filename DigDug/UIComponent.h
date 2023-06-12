@@ -2,7 +2,6 @@
 #include <string>
 #include "BaseComponent.h"
 #include "GameState.h"
-using namespace dae;
 namespace digdug
 {
 	enum StartScreenChoice
@@ -10,7 +9,7 @@ namespace digdug
 		SinglePlayer = 0,
 		CoOp = 1
 	};
-	class UIComponent final : public BaseComponent
+	class UIComponent final : public dae::BaseComponent
 	{
 	public:
 		UIComponent();

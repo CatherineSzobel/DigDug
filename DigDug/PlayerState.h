@@ -5,7 +5,6 @@
 #include "SpriteComponent.h"
 #include "CollisionComponent.h"
 #include "Transform.h"
-using namespace dae;
 namespace digdug
 {
 	class PlayerState : public dae::State
@@ -14,7 +13,7 @@ namespace digdug
 		PlayerState() = default;
 		virtual ~PlayerState() = default;
 
-		virtual PlayerState* HandleInput(GameObject*) { return nullptr; };
+		virtual PlayerState* HandleInput(dae::GameObject*) { return nullptr; };
 		virtual PlayerState* Update(dae::GameObject*, float) { return nullptr; };
 	};
 
@@ -22,40 +21,40 @@ namespace digdug
 	class IdleState final : public PlayerState
 	{
 	public:
-		IdleState(GameObject* obj);
+		IdleState(dae::GameObject* obj);
 		virtual ~IdleState();
 		virtual PlayerState* Update(dae::GameObject*, float deltaTime) override;
 		virtual void OnEnter(dae::GameObject* player) override;
 	private:
-		GameObject* m_Player;
+		dae::GameObject* m_Player;
 	};
 
 	class WalkingState final : public PlayerState
 	{
 	public:
-		WalkingState(GameObject* obj);
+		WalkingState(dae::GameObject* obj);
 		virtual ~WalkingState();
 		virtual PlayerState* Update(dae::GameObject*, float deltaTime) override;
 		virtual void OnEnter(dae::GameObject* player) override;
 	private:
-		GameObject* m_Player;
-		SpriteComponent* m_pSpriteComp = nullptr;
+		dae::GameObject* m_Player;
+		dae::SpriteComponent* m_pSpriteComp = nullptr;
 		Direction m_Direction;
 	};
 
 	class DeathState final : public PlayerState
 	{
 	public:
-		DeathState(GameObject* obj);
+		DeathState(dae::GameObject* obj);
 		virtual ~DeathState();
 		virtual PlayerState* Update(dae::GameObject*, float deltaTime) override;
 		virtual void OnEnter(dae::GameObject* player) override;
 	private:
-		GameObject* m_Player;
+		dae::GameObject* m_Player;
 		float m_RespawnCountdown, m_DeathCountdown;
 		bool m_DeathCountdownFinished = false;
-		SpriteComponent* m_pSpriteComponent;
-		CollisionComponent* m_pCollisionComponent = nullptr;
+		dae::SpriteComponent* m_pSpriteComponent;
+		dae::CollisionComponent* m_pCollisionComponent = nullptr;
 		glm::vec3 m_OriginalPos{};
 
 		void ResetDigger();
@@ -66,14 +65,14 @@ namespace digdug
 	class DiggingState final : public PlayerState
 	{
 	public:
-		DiggingState(GameObject* obj);
+		DiggingState(dae::GameObject* obj);
 		virtual ~DiggingState();
 		virtual PlayerState* Update(dae::GameObject*, float deltaTime) override;
 		virtual void OnEnter(dae::GameObject* player) override;
 
 	private:
-		GameObject* m_Player;
-		SpriteComponent* m_pSpriteComp = nullptr;
+		dae::GameObject* m_Player;
+		dae::SpriteComponent* m_pSpriteComp = nullptr;
 		Direction m_Direction;
 
 	};
@@ -81,15 +80,15 @@ namespace digdug
 	class PumpState final : public PlayerState
 	{
 	public:
-		PumpState(GameObject* obj);
+		PumpState(dae::GameObject* obj);
 		virtual ~PumpState();
 		virtual PlayerState* Update(dae::GameObject* player, float deltaTime) override;
 		virtual void OnEnter(dae::GameObject* player) override;
 	private:
-		SpriteComponent* m_pSpriteComp = nullptr;
+		dae::SpriteComponent* m_pSpriteComp = nullptr;
 		Direction m_Direction;
 		std::string m_DirectionString;
-		GameObject* m_Player;
+		dae::GameObject* m_Player;
 		bool m_Finished = false;
 		float m_CurrentTime;
 		const float m_MaxPumpTime = 2.f;

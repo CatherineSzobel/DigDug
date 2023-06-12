@@ -42,7 +42,7 @@ void digdug::PointComponent::Notify( Event event)
 		m_CurrentPoints += 1000;
 		break;
 	}
-	GetOwner()->GetComponent<TextComponent>()->SetText(std::to_string(m_CurrentPoints));
+	GetOwner()->GetComponent<dae::TextComponent>()->SetText(std::to_string(m_CurrentPoints));
 	LevelManager levelmanager;
 	levelmanager.SaveHighScoreInFile(m_CurrentPoints);
 	Game::GetInstance().SetCurrentPoints(m_CurrentPoints);

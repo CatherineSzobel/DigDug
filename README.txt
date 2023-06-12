@@ -23,7 +23,8 @@ after reading the same function will also create the game objects.
 
 Game state
 the game state is as the name implies, checking which state the game is currently in and change to different states 
-depending on the player input or the player condition.
+depending on the player input or the player condition. 
+If the game ends for example it would go from an active game state to the end state
 
 
 Enemy manager
@@ -31,3 +32,8 @@ I implemented a singleton enemy manager, the reason i made it singleton is becau
 to change scene.
 Since there are two enemies, pooka and fyger, i decided to make a base class called enemy and make them a child of the base class
 this way when i make the enemymanager i dont need to handle 2 vectors for each enemy.
+
+Sprites
+There is a sprite and sprite component, the sprite class does all the drawing and getters if the user would need the size of the sprite.
+The spritecomponent is where we add all the different sprites inside a vector and each give a name, 
+so when needed use a SetAnimation with the given name you've chosen in the initialisation

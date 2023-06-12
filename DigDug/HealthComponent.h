@@ -4,7 +4,6 @@
 #include "TextComponent.h"
 #include "LivesDisplay.h"
 #include "Subject.h"
-using namespace dae;
 namespace digdug
 {
 	class HealthComponent final : public dae::BaseComponent
@@ -20,13 +19,13 @@ namespace digdug
 		int GetLives() const { return m_RemainingLives; }
 		void NotifyHealthSubject();
 		bool GetIsGameOver() const { return m_IsGameOver; };
-		Subject* GetSubject() { return m_pSubject; };
+		dae::Subject* GetSubject() { return m_pSubject; };
 
 
 	private:
 		int m_RemainingLives;
 		bool m_IsDead, m_IsGameOver;
-		Subject* m_pSubject = nullptr;
+		dae::Subject* m_pSubject = nullptr;
 	};
 
 }

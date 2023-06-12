@@ -3,9 +3,9 @@
 #include "CollisionManager.h"
 digdug::Enemy::Enemy()
 {
-	auto& currentScene = SceneManager::GetInstance().GetCurrentScene();
+	auto& currentScene = dae::SceneManager::GetInstance().GetCurrentScene();
 	SetScene(&currentScene);
-	m_pSubject = new Subject();
+	m_pSubject = new dae::Subject();
 	auto TileRowSize = glm::vec2{ 610.f,96.f };
 	auto CollisionLeftBottom = glm::vec2{ 0.f,100.f };
 	m_LayerPositions.emplace_back(Rectf{ CollisionLeftBottom.x,CollisionLeftBottom.y,TileRowSize.x,TileRowSize.y });
@@ -45,7 +45,7 @@ void digdug::Enemy::Reset()
 	m_IsDead = false;
 }
 
-void digdug::Enemy::HandleOnDeath(GameObject* obj)
+void digdug::Enemy::HandleOnDeath(dae::GameObject* obj)
 {
 	obj->MarkForDeletion(true);
 	m_pCollisionComp->SetCollision(false);
@@ -61,7 +61,7 @@ void digdug::Enemy::HandleOnHit(std::string animation)
 
 void digdug::Enemy::DeathByRock()
 {
-	auto collisions = CollisionManager::GetInstance().GetCollisionsByType(Rock);
+	auto collisions = dae::CollisionManager::GetInstance().GetCollisionsByType(Rock);
 	for (const auto& collision : collisions)
 	{
 		if (m_pCollisionComp->Collide(collision->GetCollision()))
@@ -72,7 +72,7 @@ void digdug::Enemy::DeathByRock()
 	}
 }
 
-void digdug::Enemy::SetScene(Scene* scene)
+void digdug::Enemy::SetScene(dae::Scene* scene)
 {
 	m_Scene = scene;
 }

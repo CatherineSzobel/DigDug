@@ -1,9 +1,9 @@
+#pragma once
 #include "BaseComponent.h"
 #include "Observer.h"
-using namespace dae;
 namespace digdug
 {
-	class PointComponent final : public BaseComponent, public Observer
+	class PointComponent final : public dae::BaseComponent, public dae::Observer
 	{
 	public:
 		// Inherited via BaseComponent

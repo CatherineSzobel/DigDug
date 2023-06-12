@@ -7,7 +7,7 @@ void digdug::PumpComponent::Render()
 
 void digdug::PumpComponent::Update(float)
 {
-	auto collisions = CollisionManager::GetInstance().GetCollisionsByType(EnemyLayer);
+	auto collisions = dae::CollisionManager::GetInstance().GetCollisionsByType(EnemyLayer);
 	if (!m_Attached)
 	{
 		for (int i = 0; i < (int)collisions.size(); i++)
@@ -47,10 +47,10 @@ void digdug::PumpComponent::FixedUpdate(float)
 
 void digdug::PumpComponent::Initialize()
 {
-	m_pSpriteComp = GetOwner()->AddComponent<RenderComponent>();
+	m_pSpriteComp = GetOwner()->AddComponent<dae::RenderComponent>();
 	m_pListOfArrowRenders = { "Sprites/Player/ArrowRight.png" ,"Sprites/Player/ArrowLeft.png" ,"Sprites/Player/ArrowUp.png","Sprites/Player/ArrowDown.png" };
 	m_pSpriteComp->SetTexture("Sprites/Player/ArrowRight.png");
-	m_pCollisionComp = GetOwner()->AddComponent<CollisionComponent>();
+	m_pCollisionComp = GetOwner()->AddComponent<dae::CollisionComponent>();
 	m_PumpSize = { 30.f,50.f };
 	m_pCollisionComp->SetCollision(true);
 }

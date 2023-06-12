@@ -3,23 +3,23 @@
 
 void digdug::LevelManager::LoadLevel(std::string filename)
 {
-	auto& scene = SceneManager::GetInstance().GetCurrentScene();
+	auto& scene = dae::SceneManager::GetInstance().GetCurrentScene();
 	auto fullPath = dae::ResourceManager::GetInstance().GetDataPath() + "Levels/Single/" + filename;
 	auto levelname = filename.substr(0, filename.size() - 4);
-	auto& level = SceneManager::GetInstance().CreateScene(levelname);
-	auto& collisions = CollisionManager::GetInstance();
+	auto& level = dae::SceneManager::GetInstance().CreateScene(levelname);
+	auto& collisions = dae::CollisionManager::GetInstance();
 	
 
 
-	auto font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 21);
+	auto font = dae::ResourceManager::GetInstance().LoadFont("Lingua.otf", 21);
 
-	auto sharedScoringObject = std::make_shared<GameObject>();
-	auto sharedLivesObject = std::make_shared<GameObject>();
+	auto sharedScoringObject = std::make_shared<dae::GameObject>();
+	auto sharedLivesObject = std::make_shared<dae::GameObject>();
 	if (scene.HasOneUIObject())
 	{
 
-		sharedScoringObject->AddComponent<TextComponent>()->SetFont(font);
-		sharedScoringObject->GetComponent<TextComponent>()->SetText("0");
+		sharedScoringObject->AddComponent<dae::TextComponent>()->SetFont(font);
+		sharedScoringObject->GetComponent<dae::TextComponent>()->SetText("0");
 		sharedScoringObject->AddComponent<PointComponent>()->Initialize();
 		sharedScoringObject->SetLocalPosition({ 100.f,20.f,0.f });
 		scene.AddUI(sharedScoringObject);
@@ -50,38 +50,38 @@ void digdug::LevelManager::LoadLevel(std::string filename)
 
 	}
 
-	SceneManager::GetInstance().ChangeSceneTo(levelname);
+	dae::SceneManager::GetInstance().ChangeSceneTo(levelname);
 	bool empty = level.isSceneEmpty();
 	if (empty)
 	{
 		std::fstream txtFile(fullPath, std::ios_base::in);
-		auto pooka = std::make_unique<GameObject>();
-		auto fygar = std::make_unique<GameObject>();
-		auto tile = std::make_unique<GameObject>();
-		auto firstSprite = std::make_unique<GameObject>();
+		auto pooka = std::make_unique<dae::GameObject>();
+		auto fygar = std::make_unique<dae::GameObject>();
+		auto tile = std::make_unique<dae::GameObject>();
+		auto firstSprite = std::make_unique<dae::GameObject>();
 
 		tile->AddComponent<TileComponent>()->Initialize();
-		auto tileSize = tile->GetComponent<SpriteComponent>()->GetSpriteSize();
+		auto tileSize = tile->GetComponent<dae::SpriteComponent>()->GetSpriteSize();
 		tile->MarkForDeletion(true);
 		level.Add(std::move(tile));
 
 
 		auto& enemies = EnemyManager::GetInstance();
-		auto scoringObject = std::make_unique<GameObject>();
-		scoringObject->AddComponent<TextComponent>()->SetFont(font);
-		scoringObject->GetComponent<TextComponent>()->SetText(std::to_string(ReadHighScoreFromFile()));
+		auto scoringObject = std::make_unique<dae::GameObject>();
+		scoringObject->AddComponent<dae::TextComponent>()->SetFont(font);
+		scoringObject->GetComponent<dae::TextComponent>()->SetText(std::to_string(ReadHighScoreFromFile()));
 		scoringObject->SetLocalPosition({ 300.f,20.f,0.f });
 		level.Add(std::move(scoringObject));
 
-		scoringObject = std::make_unique<GameObject>();
-		scoringObject->AddComponent<TextComponent>()->SetFont(font);
-		scoringObject->GetComponent<TextComponent>()->SetText("HIGHSCORE");
+		scoringObject = std::make_unique<dae::GameObject>();
+		scoringObject->AddComponent<dae::TextComponent>()->SetFont(font);
+		scoringObject->GetComponent<dae::TextComponent>()->SetText("HIGHSCORE");
 		scoringObject->SetLocalPosition({ 250.f,0.f,0.f });
 		level.Add(std::move(scoringObject));
 
-		scoringObject = std::make_unique<GameObject>();
-		scoringObject->AddComponent<TextComponent>()->SetFont(font);
-		scoringObject->GetComponent<TextComponent>()->SetText("1P SCORE");
+		scoringObject = std::make_unique<dae::GameObject>();
+		scoringObject->AddComponent<dae::TextComponent>()->SetFont(font);
+		scoringObject->GetComponent<dae::TextComponent>()->SetText("1P SCORE");
 		scoringObject->SetLocalPosition({ 80.f,0.f,0.f });
 		level.Add(std::move(scoringObject));
 
@@ -112,7 +112,7 @@ void digdug::LevelManager::LoadLevel(std::string filename)
 
 			case levelType::tile:
 
-				tile = std::make_unique<GameObject>();
+				tile = std::make_unique<dae::GameObject>();
 				if (currentYTile % 3 == 0 && currentYTile != 0 && currentYTile != 12 && currentXTile == 0)
 				{
 					++currentTileType;
@@ -123,7 +123,7 @@ void digdug::LevelManager::LoadLevel(std::string filename)
 
 				IncreaseRow(currentXTile, currentYTile, maxTileColumn);
 
-				collisions.AddCollision(tile->GetComponent<CollisionComponent>());
+				collisions.AddCollision(tile->GetComponent<dae::CollisionComponent>());
 				level.Add(std::move(tile));
 				break;
 
@@ -142,20 +142,20 @@ void digdug::LevelManager::LoadLevel(std::string filename)
 				break;
 
 			case levelType::pooka:
-				pooka = std::make_unique<GameObject>();
+				pooka = std::make_unique<dae::GameObject>();
 				pooka->AddComponent<PookaComponent>()->Initialize();
 
 				pooka->SetLocalPosition({ (tileSize.x * currentXTile),(currentYTile * tileSize.y) + startingBottom,0.f });
 
 				IncreaseRow(currentXTile, currentYTile, maxTileColumn);
 				pooka->GetComponent<PookaComponent>()->GetSubject()->AddObserver(sharedScoringObject->GetComponent<PointComponent>());
-				collisions.AddCollision(pooka->GetComponent<CollisionComponent>());
+				collisions.AddCollision(pooka->GetComponent<dae::CollisionComponent>());
 				enemies.AddEnemies(pooka->GetComponent<PookaComponent>());
 				level.Add(std::move(pooka));
 				break;
 
 			case  levelType::fyger:
-				fygar = std::make_unique<GameObject>();
+				fygar = std::make_unique<dae::GameObject>();
 				fygar->AddComponent<FygarsComponent>()->Initialize();
 
 				fygar->SetLocalPosition({ (tileSize.x * currentXTile),(currentYTile * tileSize.y) + startingBottom,0.f });
@@ -163,15 +163,15 @@ void digdug::LevelManager::LoadLevel(std::string filename)
 				IncreaseRow(currentXTile, currentYTile, maxTileColumn);
 				fygar->GetComponent<FygarsComponent>()->GetSubject()->AddObserver(sharedScoringObject->GetComponent<PointComponent>());
 
-				collisions.AddCollision(fygar->GetComponent<CollisionComponent>());
+				collisions.AddCollision(fygar->GetComponent<dae::CollisionComponent>());
 				enemies.AddEnemies(fygar->GetComponent<FygarsComponent>());
 				level.Add(std::move(fygar));
 				break;
 
 			case  levelType::rock:
-				auto rock = std::make_unique<GameObject>();
+				auto rock = std::make_unique<dae::GameObject>();
 
-				tile = std::make_unique<GameObject>();
+				tile = std::make_unique<dae::GameObject>();
 				tile->AddComponent<TileComponent>()->Initialize();
 				if (currentYTile % 3 == 0
 					&& currentYTile != 0 && currentYTile != 12
@@ -186,8 +186,8 @@ void digdug::LevelManager::LoadLevel(std::string filename)
 
 				IncreaseRow(currentXTile, currentYTile, maxTileColumn);
 
-				collisions.AddCollision(rock->GetComponent<CollisionComponent>());
-				collisions.AddCollision(tile->GetComponent<CollisionComponent>());
+				collisions.AddCollision(rock->GetComponent<dae::CollisionComponent>());
+				collisions.AddCollision(tile->GetComponent<dae::CollisionComponent>());
 				level.Add(std::move(tile));
 				level.Add(std::move(rock));
 
@@ -196,25 +196,25 @@ void digdug::LevelManager::LoadLevel(std::string filename)
 		}
 	}
 	EnemyManager::GetInstance().SetEnemiesActive();
-	CollisionManager::GetInstance().SetCollisionsActive();
+	dae::CollisionManager::GetInstance().SetCollisionsActive();
 }
 
 void digdug::LevelManager::LoadCoopLevel(std::string filename)
 {
-	auto& scene = SceneManager::GetInstance().GetCurrentScene();
+	auto& scene = dae::SceneManager::GetInstance().GetCurrentScene();
 	auto fullPath = dae::ResourceManager::GetInstance().GetDataPath() + "Levels/CoOp/" + filename;
 	auto levelname = filename.substr(0, filename.size() - 4);
-	auto& level = SceneManager::GetInstance().CreateScene(levelname);
+	auto& level = dae::SceneManager::GetInstance().CreateScene(levelname);
 
-	auto font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 21);
+	auto font = dae::ResourceManager::GetInstance().LoadFont("Lingua.otf", 21);
 
-	auto sharedScoringObject = std::make_shared<GameObject>();
-	auto sharedLivesObject = std::make_shared<GameObject>();
-	auto sharedLivesObjectTwo = std::make_shared<GameObject>();
+	auto sharedScoringObject = std::make_shared<dae::GameObject>();
+	auto sharedLivesObject = std::make_shared<dae::GameObject>();
+	auto sharedLivesObjectTwo = std::make_shared<dae::GameObject>();
 	if (scene.HasOneUIObject())
 	{
-		sharedScoringObject->AddComponent<TextComponent>()->SetFont(font);
-		sharedScoringObject->GetComponent<TextComponent>()->SetText("0");
+		sharedScoringObject->AddComponent<dae::TextComponent>()->SetFont(font);
+		sharedScoringObject->GetComponent<dae::TextComponent>()->SetText("0");
 		sharedScoringObject->AddComponent<PointComponent>()->Initialize();
 		sharedScoringObject->SetLocalPosition({ 100.f,20.f,0.f });
 		scene.AddUI(sharedScoringObject);
@@ -249,41 +249,41 @@ void digdug::LevelManager::LoadCoopLevel(std::string filename)
 
 	}
 
-	SceneManager::GetInstance().ChangeSceneTo(levelname);
+	dae::SceneManager::GetInstance().ChangeSceneTo(levelname);
 	bool empty = level.isSceneEmpty();
 	if (empty)
 	{
-		auto scoringObject = std::make_unique<GameObject>();
-		scoringObject->AddComponent<TextComponent>()->SetFont(font);
-		scoringObject->GetComponent<TextComponent>()->SetText(std::to_string(ReadHighScoreFromFile()));
+		auto scoringObject = std::make_unique<dae::GameObject>();
+		scoringObject->AddComponent<dae::TextComponent>()->SetFont(font);
+		scoringObject->GetComponent<dae::TextComponent>()->SetText(std::to_string(ReadHighScoreFromFile()));
 		scoringObject->SetLocalPosition({ 300.f,20.f,0.f });
 		level.Add(std::move(scoringObject));
 
-		scoringObject = std::make_unique<GameObject>();
-		scoringObject->AddComponent<TextComponent>()->SetFont(font);
-		scoringObject->GetComponent<TextComponent>()->SetText("HIGHSCORE");
+		scoringObject = std::make_unique<dae::GameObject>();
+		scoringObject->AddComponent<dae::TextComponent>()->SetFont(font);
+		scoringObject->GetComponent<dae::TextComponent>()->SetText("HIGHSCORE");
 		scoringObject->SetLocalPosition({ 250.f,0.f,0.f });
 		level.Add(std::move(scoringObject));
 
-		scoringObject = std::make_unique<GameObject>();
-		scoringObject->AddComponent<TextComponent>()->SetFont(font);
-		scoringObject->GetComponent<TextComponent>()->SetText("1P SCORE");
+		scoringObject = std::make_unique<dae::GameObject>();
+		scoringObject->AddComponent<dae::TextComponent>()->SetFont(font);
+		scoringObject->GetComponent<dae::TextComponent>()->SetText("1P SCORE");
 		scoringObject->SetLocalPosition({ 80.f,0.f,0.f });
 		level.Add(std::move(scoringObject));
 
 		std::fstream txtFile(fullPath, std::ios_base::in);
-		auto pooka = std::make_unique<GameObject>();
-		auto fygar = std::make_unique<GameObject>();
-		auto firstSprite = std::make_unique<GameObject>();
-		auto secondSprite = std::make_unique<GameObject>();
-		auto tile = std::make_unique<GameObject>();
+		auto pooka = std::make_unique<dae::GameObject>();
+		auto fygar = std::make_unique<dae::GameObject>();
+		auto firstSprite = std::make_unique<dae::GameObject>();
+		auto secondSprite = std::make_unique<dae::GameObject>();
+		auto tile = std::make_unique<dae::GameObject>();
 
 		tile->AddComponent<TileComponent>()->Initialize();
-		auto tileSize = tile->GetComponent<SpriteComponent>()->GetSpriteSize();
+		auto tileSize = tile->GetComponent<dae::SpriteComponent>()->GetSpriteSize();
 		tile->MarkForDeletion(true);
 		level.Add(std::move(tile));
 
-		auto& collisions = CollisionManager::GetInstance();
+		auto& collisions = dae::CollisionManager::GetInstance();
 		auto& enemies = EnemyManager::GetInstance();
 
 		const int maxTileColumn = 20;
@@ -314,7 +314,7 @@ void digdug::LevelManager::LoadCoopLevel(std::string filename)
 
 			case levelType::tile:
 
-				tile = std::make_unique<GameObject>();
+				tile = std::make_unique<dae::GameObject>();
 				if (currentYTile % 3 == 0 && currentYTile != 0 && currentYTile != 12 && currentXTile == 0)
 				{
 					++currentTileType;
@@ -325,7 +325,7 @@ void digdug::LevelManager::LoadCoopLevel(std::string filename)
 
 				IncreaseRow(currentXTile, currentYTile, maxTileColumn);
 
-				collisions.AddCollision(tile->GetComponent<CollisionComponent>());
+				collisions.AddCollision(tile->GetComponent<dae::CollisionComponent>());
 				level.Add(std::move(tile));
 				break;
 
@@ -356,7 +356,7 @@ void digdug::LevelManager::LoadCoopLevel(std::string filename)
 				break;
 
 			case levelType::pooka:
-				pooka = std::make_unique<GameObject>();
+				pooka = std::make_unique<dae::GameObject>();
 				pooka->AddComponent<PookaComponent>()->Initialize();
 
 				pooka->SetLocalPosition({ (tileSize.x * currentXTile),(currentYTile * tileSize.y) + startingBottom,0.f });
@@ -365,13 +365,13 @@ void digdug::LevelManager::LoadCoopLevel(std::string filename)
 				pooka->GetComponent<PookaComponent>()->GetSubject()->AddObserver(sharedScoringObject->GetComponent<PointComponent>());
 				pooka->GetComponent<PookaComponent>()->GetSubject()->AddObserver(sharedScoringObject->GetComponent<PointComponent>());
 
-				collisions.AddCollision(pooka->GetComponent<CollisionComponent>());
+				collisions.AddCollision(pooka->GetComponent<dae::CollisionComponent>());
 				enemies.AddEnemies(pooka->GetComponent<PookaComponent>());
 				level.Add(std::move(pooka));
 				break;
 
 			case  levelType::fyger:
-				fygar = std::make_unique<GameObject>();
+				fygar = std::make_unique<dae::GameObject>();
 				fygar->AddComponent<FygarsComponent>()->Initialize();
 
 				fygar->SetLocalPosition({ (tileSize.x * currentXTile),(currentYTile * tileSize.y) + startingBottom,0.f });
@@ -380,15 +380,15 @@ void digdug::LevelManager::LoadCoopLevel(std::string filename)
 				fygar->GetComponent<FygarsComponent>()->GetSubject()->AddObserver(sharedScoringObject->GetComponent<PointComponent>());
 				fygar->GetComponent<FygarsComponent>()->GetSubject()->AddObserver(sharedScoringObject->GetComponent<PointComponent>());
 
-				collisions.AddCollision(fygar->GetComponent<CollisionComponent>());
+				collisions.AddCollision(fygar->GetComponent<dae::CollisionComponent>());
 				enemies.AddEnemies(fygar->GetComponent<FygarsComponent>());
 				level.Add(std::move(fygar));
 				break;
 
 			case  levelType::rock:
-				auto rock = std::make_unique<GameObject>();
+				auto rock = std::make_unique<dae::GameObject>();
 
-				tile = std::make_unique<GameObject>();
+				tile = std::make_unique<dae::GameObject>();
 				tile->AddComponent<TileComponent>()->Initialize();
 				if (currentYTile % 3 == 0
 					&& currentYTile != 0 && currentYTile != 12
@@ -403,8 +403,8 @@ void digdug::LevelManager::LoadCoopLevel(std::string filename)
 
 				IncreaseRow(currentXTile, currentYTile, maxTileColumn);
 
-				collisions.AddCollision(rock->GetComponent<CollisionComponent>());
-				collisions.AddCollision(tile->GetComponent<CollisionComponent>());
+				collisions.AddCollision(rock->GetComponent<dae::CollisionComponent>());
+				collisions.AddCollision(tile->GetComponent<dae::CollisionComponent>());
 				level.Add(std::move(tile));
 				level.Add(std::move(rock));
 
@@ -415,30 +415,30 @@ void digdug::LevelManager::LoadCoopLevel(std::string filename)
 	}
 	
 	EnemyManager::GetInstance().SetEnemiesActive();
-	CollisionManager::GetInstance().SetCollisionsActive();
+	dae::CollisionManager::GetInstance().SetCollisionsActive();
 }
 
-void digdug::LevelManager::CreateInputSolo(std::unique_ptr<GameObject>& sprite, ControllerType type)
+void digdug::LevelManager::CreateInputSolo(std::unique_ptr<dae::GameObject>& sprite, ControllerType type)
 {
-	auto& input = InputManager::GetInstance();
-	sprite->AddComponent<InputComponent>();
+	auto& input = dae::InputManager::GetInstance();
+	sprite->AddComponent<dae::InputComponent>();
 	switch (type)
 	{
 	case digdug::both:
 
-		sprite->GetComponent<InputComponent>()->BindKeyboardCommand(SDL_SCANCODE_W, new MoveCommand(sprite.get(), Direction::up), InputType::Press);
-		sprite->GetComponent<InputComponent>()->BindKeyboardCommand(SDL_SCANCODE_A, new MoveCommand(sprite.get(), Direction::left), InputType::Press);
-		sprite->GetComponent<InputComponent>()->BindKeyboardCommand(SDL_SCANCODE_S, new MoveCommand(sprite.get(), Direction::down), InputType::Press);
-		sprite->GetComponent<InputComponent>()->BindKeyboardCommand(SDL_SCANCODE_D, new MoveCommand(sprite.get(), Direction::right), InputType::Press);
-		sprite->GetComponent<InputComponent>()->BindKeyboardCommand(SDL_SCANCODE_F, new PumpCommand(sprite.get(), "Sounds/Sound/PumpSound.wav", 4), InputType::Down);
+		sprite->GetComponent<dae::InputComponent>()->BindKeyboardCommand(SDL_SCANCODE_W, new MoveCommand(sprite.get(), Direction::up), dae::InputType::Press);
+		sprite->GetComponent<dae::InputComponent>()->BindKeyboardCommand(SDL_SCANCODE_A, new MoveCommand(sprite.get(), Direction::left), dae::InputType::Press);
+		sprite->GetComponent<dae::InputComponent>()->BindKeyboardCommand(SDL_SCANCODE_S, new MoveCommand(sprite.get(), Direction::down), dae::InputType::Press);
+		sprite->GetComponent<dae::InputComponent>()->BindKeyboardCommand(SDL_SCANCODE_D, new MoveCommand(sprite.get(), Direction::right), dae::InputType::Press);
+		sprite->GetComponent<dae::InputComponent>()->BindKeyboardCommand(SDL_SCANCODE_F, new PumpCommand(sprite.get(), "Sounds/Sound/PumpSound.wav", 4), dae::InputType::Down);
 
-		sprite->GetComponent<InputComponent>()->BindControllerCommand(ControllerButton::DPadDown, new MoveCommand(sprite.get(), Direction::down), InputType::Press);
-		sprite->GetComponent<InputComponent>()->BindControllerCommand(ControllerButton::DPadUp, new MoveCommand(sprite.get(), Direction::up), InputType::Press);
-		sprite->GetComponent<InputComponent>()->BindControllerCommand(ControllerButton::DPadLeft, new MoveCommand(sprite.get(), Direction::left), InputType::Press);
-		sprite->GetComponent<InputComponent>()->BindControllerCommand(ControllerButton::DPadRight, new MoveCommand(sprite.get(), Direction::right), InputType::Press);
-		sprite->GetComponent<InputComponent>()->BindControllerCommand(ControllerButton::ButtonA, new PumpCommand(sprite.get(), "Sounds/Sound/PumpSound.wav", 4), InputType::Down);
+		sprite->GetComponent<dae::InputComponent>()->BindControllerCommand(dae::ControllerButton::DPadDown, new MoveCommand(sprite.get(), Direction::down), dae::InputType::Press);
+		sprite->GetComponent<dae::InputComponent>()->BindControllerCommand(dae::ControllerButton::DPadUp, new MoveCommand(sprite.get(), Direction::up), dae::InputType::Press);
+		sprite->GetComponent<dae::InputComponent>()->BindControllerCommand(dae::ControllerButton::DPadLeft, new MoveCommand(sprite.get(), Direction::left), dae::InputType::Press);
+		sprite->GetComponent<dae::InputComponent>()->BindControllerCommand(dae::ControllerButton::DPadRight, new MoveCommand(sprite.get(), Direction::right), dae::InputType::Press);
+		sprite->GetComponent<dae::InputComponent>()->BindControllerCommand(dae::ControllerButton::ButtonA, new PumpCommand(sprite.get(), "Sounds/Sound/PumpSound.wav", 4), dae::InputType::Down);
 
-		sprite->GetComponent<InputComponent>()->SetMovementSpeed(120.f);
+		sprite->GetComponent<dae::InputComponent>()->SetMovementSpeed(120.f);
 
 		input.AddKeyboardController(sprite.get());
 		input.AddController(sprite.get(), 0);
@@ -446,25 +446,25 @@ void digdug::LevelManager::CreateInputSolo(std::unique_ptr<GameObject>& sprite, 
 		break;
 	case digdug::controller:
 
-		sprite->GetComponent<InputComponent>()->BindControllerCommand(ControllerButton::DPadDown, new MoveCommand(sprite.get(), Direction::down), InputType::Press);
-		sprite->GetComponent<InputComponent>()->BindControllerCommand(ControllerButton::DPadUp, new MoveCommand(sprite.get(), Direction::up), InputType::Press);
-		sprite->GetComponent<InputComponent>()->BindControllerCommand(ControllerButton::DPadLeft, new MoveCommand(sprite.get(), Direction::left), InputType::Press);
-		sprite->GetComponent<InputComponent>()->BindControllerCommand(ControllerButton::DPadRight, new MoveCommand(sprite.get(), Direction::right), InputType::Press);
-		sprite->GetComponent<InputComponent>()->BindControllerCommand(ControllerButton::ButtonA, new PumpCommand(sprite.get(), "Sounds/Sound/PumpSound.wav", 4), InputType::Down);
+		sprite->GetComponent<dae::InputComponent>()->BindControllerCommand(dae::ControllerButton::DPadDown, new MoveCommand(sprite.get(), Direction::down), dae::InputType::Press);
+		sprite->GetComponent<dae::InputComponent>()->BindControllerCommand(dae::ControllerButton::DPadUp, new MoveCommand(sprite.get(), Direction::up), dae::InputType::Press);
+		sprite->GetComponent<dae::InputComponent>()->BindControllerCommand(dae::ControllerButton::DPadLeft, new MoveCommand(sprite.get(), Direction::left), dae::InputType::Press);
+		sprite->GetComponent<dae::InputComponent>()->BindControllerCommand(dae::ControllerButton::DPadRight, new MoveCommand(sprite.get(), Direction::right), dae::InputType::Press);
+		sprite->GetComponent<dae::InputComponent>()->BindControllerCommand(dae::ControllerButton::ButtonA, new PumpCommand(sprite.get(), "Sounds/Sound/PumpSound.wav", 4), dae::InputType::Down);
 		
-		sprite->GetComponent<InputComponent>()->SetMovementSpeed(120.f);
+		sprite->GetComponent<dae::InputComponent>()->SetMovementSpeed(120.f);
 		input.AddController(sprite.get(), 0);
 
 		break;
 	case digdug::keyboard:
 
-		sprite->GetComponent<InputComponent>()->BindKeyboardCommand(SDL_SCANCODE_W, new MoveCommand(sprite.get(), Direction::up), InputType::Press);
-		sprite->GetComponent<InputComponent>()->BindKeyboardCommand(SDL_SCANCODE_A, new MoveCommand(sprite.get(), Direction::left), InputType::Press);
-		sprite->GetComponent<InputComponent>()->BindKeyboardCommand(SDL_SCANCODE_S, new MoveCommand(sprite.get(), Direction::down), InputType::Press);
-		sprite->GetComponent<InputComponent>()->BindKeyboardCommand(SDL_SCANCODE_D, new MoveCommand(sprite.get(), Direction::right), InputType::Press);
-		sprite->GetComponent<InputComponent>()->BindKeyboardCommand(SDL_SCANCODE_F, new PumpCommand(sprite.get(), "Sounds/Sound/PumpSound.wav", 4), InputType::Down);
+		sprite->GetComponent<dae::InputComponent>()->BindKeyboardCommand(SDL_SCANCODE_W, new MoveCommand(sprite.get(), Direction::up), dae::InputType::Press);
+		sprite->GetComponent<dae::InputComponent>()->BindKeyboardCommand(SDL_SCANCODE_A, new MoveCommand(sprite.get(), Direction::left), dae::InputType::Press);
+		sprite->GetComponent<dae::InputComponent>()->BindKeyboardCommand(SDL_SCANCODE_S, new MoveCommand(sprite.get(), Direction::down), dae::InputType::Press);
+		sprite->GetComponent<dae::InputComponent>()->BindKeyboardCommand(SDL_SCANCODE_D, new MoveCommand(sprite.get(), Direction::right), dae::InputType::Press);
+		sprite->GetComponent<dae::InputComponent>()->BindKeyboardCommand(SDL_SCANCODE_F, new PumpCommand(sprite.get(), "Sounds/Sound/PumpSound.wav", 4), dae::InputType::Down);
 		
-		sprite->GetComponent<InputComponent>()->SetMovementSpeed(120.f);
+		sprite->GetComponent<dae::InputComponent>()->SetMovementSpeed(120.f);
 		input.AddKeyboardController(sprite.get());
 
 		break;

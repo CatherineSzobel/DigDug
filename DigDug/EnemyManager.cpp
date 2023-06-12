@@ -22,7 +22,7 @@ void digdug::EnemyManager::SetEnemiesActive()
 {
 	for (auto& enemy : m_Enemies)
 	{
-		auto& currentScene = SceneManager::GetInstance().GetCurrentScene();
+		auto& currentScene = dae::SceneManager::GetInstance().GetCurrentScene();
 		if (currentScene.GetName() == enemy->GetScene()->GetName())
 		{
 			enemy->SetActive(true);
@@ -38,7 +38,7 @@ void digdug::EnemyManager::SetEnemiesActive()
 
 digdug::Enemy* digdug::EnemyManager::GetEnemyPointer(const int i)
 {
-	auto& currentScene = SceneManager::GetInstance().GetCurrentScene();
+	auto& currentScene = dae::SceneManager::GetInstance().GetCurrentScene();
 	std::vector<Enemy*> tempEnemies;
 	for (auto& enemy : m_Enemies)
 	{

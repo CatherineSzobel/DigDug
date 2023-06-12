@@ -4,7 +4,7 @@
 digdug::HealthComponent::HealthComponent()
 	: m_RemainingLives{ 3 }
 {
-	m_pSubject = new Subject();
+	m_pSubject = new dae::Subject();
 
 }
 digdug::HealthComponent::~HealthComponent()

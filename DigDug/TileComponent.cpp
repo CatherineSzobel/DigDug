@@ -15,7 +15,7 @@ void digdug::TileComponent::Render()
 
 void digdug::TileComponent::Update(float)
 {
-	for (const auto& collsion : CollisionManager::GetInstance().GetCollisions())
+	for (const auto& collsion : dae::CollisionManager::GetInstance().GetCollisions())
 	{
 		if (collsion->GetCollisionType() == Player && collsion->Collide(m_pCollisionComp->GetCollision()))
 		{
@@ -49,8 +49,8 @@ void digdug::TileComponent::FixedUpdate(float){}
 
 void digdug::TileComponent::Initialize()
 {
-	m_pCollisionComp = GetOwner()->AddComponent<CollisionComponent>();
-	m_pSpriteComp = GetOwner()->AddComponent<SpriteComponent>();
+	m_pCollisionComp = GetOwner()->AddComponent<dae::CollisionComponent>();
+	m_pSpriteComp = GetOwner()->AddComponent<dae::SpriteComponent>();
 
 	m_pTileLists.emplace_back(new Sprite("Sprites/Sands/TileOne.png", 1, 1, 1, 1, "TileOne", true, 4.f));
 	m_pTileLists.emplace_back(new Sprite("Sprites/Sands/TileTwo.png", 1, 1, 1, 1, "TileTwo", true, 4.f));

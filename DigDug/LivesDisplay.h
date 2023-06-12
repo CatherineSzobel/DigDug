@@ -2,10 +2,9 @@
 #include "SpriteComponent.h"
 #include "BaseComponent.h"
 #include "Observer.h"
-using namespace dae;
 namespace digdug
 {
-	class LivesDisplay final : public Observer, public BaseComponent
+	class LivesDisplay final : public dae::Observer, public dae::BaseComponent
 	{
 	public:
 		LivesDisplay() = default;

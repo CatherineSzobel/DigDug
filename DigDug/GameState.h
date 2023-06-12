@@ -4,7 +4,6 @@
 #include "InputManager.h"
 #include "DigDugComponent.h"
 #include "Game.h"
-using namespace dae;
 namespace digdug
 {
 	class GameState : public dae::State
@@ -25,7 +24,7 @@ namespace digdug
 	class EndState final : public GameState
 	{
 	public:
-		EndState(GameObject* owner, EndGameCondition condition);
+		EndState(dae::GameObject* owner, EndGameCondition condition);
 		virtual ~EndState() = default;
 		virtual void OnEnter(dae::GameObject*);
 	private:
@@ -34,7 +33,7 @@ namespace digdug
 	class ActiveGameState final : public GameState
 	{
 	public:
-		ActiveGameState(GameObject* owner);
+		ActiveGameState(dae::GameObject* owner);
 		virtual ~ActiveGameState() = default;
 		virtual GameState* Update(dae::GameObject* owner, float);
 		virtual void OnEnter(dae::GameObject*);
@@ -44,7 +43,7 @@ namespace digdug
 	class StartScreenState final : public GameState
 	{
 	public:
-		StartScreenState(GameObject* owner);
+		StartScreenState(dae::GameObject* owner);
 		virtual ~StartScreenState() = default;
 
 		virtual void OnEnter(dae::GameObject* owner);
@@ -61,7 +60,7 @@ namespace digdug
 			SinglePlayer = 0,
 			CoOp = 1
 		};
-		GameObject* m_pOwner;
+		dae::GameObject* m_pOwner;
 	};
 
 

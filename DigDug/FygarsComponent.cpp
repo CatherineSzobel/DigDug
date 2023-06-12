@@ -50,8 +50,8 @@ void digdug::FygarsComponent::FixedUpdate(float){}
 
 void digdug::FygarsComponent::Initialize()
 {
-	m_pSpriteComp = GetOwner()->AddComponent<SpriteComponent>();
-	m_pCollisionComp = GetOwner()->AddComponent<CollisionComponent>();
+	m_pSpriteComp = GetOwner()->AddComponent<dae::SpriteComponent>();
+	m_pCollisionComp = GetOwner()->AddComponent<dae::CollisionComponent>();
 
 	auto playerScale = 1.5f;
 	m_pSpriteComp->AddAnimationStrips("Sprites/Fyger/FygerMoveLeft.png", 3, 1, 3, 1 / 3.f, "FygerMoveLeft", false, playerScale);

@@ -51,8 +51,8 @@ void digdug::PookaComponent::FixedUpdate(float) {}
 
 void digdug::PookaComponent::Initialize()
 {
-	m_pSpriteComp = GetOwner()->AddComponent<SpriteComponent>();
-	m_pCollisionComp = GetOwner()->AddComponent<CollisionComponent>();
+	m_pSpriteComp = GetOwner()->AddComponent<dae::SpriteComponent>();
+	m_pCollisionComp = GetOwner()->AddComponent<dae::CollisionComponent>();
 
 	auto playerScale = 1.5f;
 	m_pSpriteComp->AddAnimationStrips("Sprites/Pooka/PookaMoveLeft.png", 3, 1, 3, 1 / 3.f, "PookaMoveLeft", false, playerScale);

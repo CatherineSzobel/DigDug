@@ -7,7 +7,7 @@
 #pragma region IdleState
 
 
-digdug::IdleState::IdleState(GameObject* obj)
+digdug::IdleState::IdleState(dae::GameObject* obj)
 {
 	OnEnter(obj);
 }
@@ -48,7 +48,7 @@ void digdug::IdleState::OnEnter(dae::GameObject* owner)
 #pragma endregion
 #pragma region PumpState
 
-digdug::PumpState::PumpState(GameObject* obj)
+digdug::PumpState::PumpState(dae::GameObject* obj)
 {
 	OnEnter(obj);
 }
@@ -104,14 +104,14 @@ digdug::PlayerState* digdug::PumpState::Update(dae::GameObject* player, float el
 
 void digdug::PumpState::OnEnter(dae::GameObject* obj)
 {
-	m_pSpriteComp = obj->GetComponent<SpriteComponent>();
-	servicelocator::get_sound_system().HaltMusic();
+	m_pSpriteComp = obj->GetComponent<dae::SpriteComponent>();
+	dae::servicelocator::get_sound_system().HaltMusic();
 	m_Player = obj;
 }
 
 #pragma endregion
 #pragma region WalkingState
-digdug::WalkingState::WalkingState(GameObject* obj)
+digdug::WalkingState::WalkingState(dae::GameObject* obj)
 {
 	OnEnter(obj);
 }
@@ -166,14 +166,14 @@ digdug::PlayerState* digdug::WalkingState::Update(dae::GameObject* player, float
 void digdug::WalkingState::OnEnter(dae::GameObject* player)
 {
 
-	m_pSpriteComp = player->GetComponent<SpriteComponent>();
+	m_pSpriteComp = player->GetComponent<dae::SpriteComponent>();
 
 }
 
 #pragma endregion
 
 #pragma region DeathState
-digdug::DeathState::DeathState(GameObject* obj)
+digdug::DeathState::DeathState(dae::GameObject* obj)
 {
 	OnEnter(obj);
 }
@@ -187,7 +187,7 @@ digdug::PlayerState* digdug::DeathState::Update(dae::GameObject* obj, float elap
 {
 	DeathCountdown(elapsed);
 	RespawnCountDown(elapsed);
-	glm::vec3 position = { m_Player->GetComponent<CollisionComponent>()->GetCollision().left , m_Player->GetComponent<CollisionComponent>()->GetCollision().bottom,0 };
+	glm::vec3 position = { m_Player->GetComponent<dae::CollisionComponent>()->GetCollision().left , m_Player->GetComponent<dae::CollisionComponent>()->GetCollision().bottom,0 };
 	if (m_OriginalPos == m_Player->GetLocalPosition() && m_OriginalPos == position)
 	{
 		m_Player->GetComponent<DigDugComponent>()->SetDeath(false);
@@ -199,12 +199,12 @@ digdug::PlayerState* digdug::DeathState::Update(dae::GameObject* obj, float elap
 
 void digdug::DeathState::OnEnter(dae::GameObject* obj)
 {
-	servicelocator::get_sound_system().Play("Sounds/Sound/GetHitSound.wav", 2);
-	servicelocator::get_sound_system().HaltMusic();
+	dae::servicelocator::get_sound_system().Play("Sounds/Sound/GetHitSound.wav", 2);
+	dae::servicelocator::get_sound_system().HaltMusic();
 
 	m_Player = obj;
-	m_pSpriteComponent = obj->GetComponent<SpriteComponent>();
-	m_pCollisionComponent = obj->GetComponent<CollisionComponent>();
+	m_pSpriteComponent = obj->GetComponent<dae::SpriteComponent>();
+	m_pCollisionComponent = obj->GetComponent<dae::CollisionComponent>();
 	m_pCollisionComponent->SetCollision(false);
 
 	m_RespawnCountdown = 3.f;
@@ -239,7 +239,7 @@ void digdug::DeathState::DeathCountdown(float elapsed)
 		m_DeathCountdown -= elapsed;
 		if (m_DeathCountdown <= 0)
 		{
-			servicelocator::get_sound_system().Play("Sounds/Sound/DeathSound.wav", 2);
+			dae::servicelocator::get_sound_system().Play("Sounds/Sound/DeathSound.wav", 2);
 			m_pSpriteComponent->SetAnimationByName("deathAnimation", false);
 
 			m_DeathCountdownFinished = true;
@@ -252,7 +252,7 @@ void digdug::DeathState::DeathCountdown(float elapsed)
 #pragma endregion
 
 #pragma region DiggingState
-digdug::DiggingState::DiggingState(GameObject* obj)
+digdug::DiggingState::DiggingState(dae::GameObject* obj)
 {
 	OnEnter(obj);
 }
@@ -303,7 +303,7 @@ digdug::PlayerState* digdug::DiggingState::Update(dae::GameObject* player, float
 void digdug::DiggingState::OnEnter(dae::GameObject* player)
 {
 	m_Player = player;
-	m_pSpriteComp = player->GetComponent<SpriteComponent>();
+	m_pSpriteComp = player->GetComponent<dae::SpriteComponent>();
 }
 
 #pragma endregion

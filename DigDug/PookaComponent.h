@@ -1,11 +1,10 @@
 #pragma once
 #include "BaseComponent.h"
 #include "Enemy.h"
-using namespace dae;
 namespace digdug
 {
 
-	class PookaComponent final : public BaseComponent, public Enemy
+	class PookaComponent final : public dae::BaseComponent, public Enemy
 	{
 	public:
 		PookaComponent();

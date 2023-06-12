@@ -15,7 +15,6 @@
 #include "SceneManager.h"
 #include "EnemyManager.h"
 #include "DigDugCommand.h"
-using namespace dae;
 namespace digdug
 {
 	enum ControllerType
@@ -32,7 +31,7 @@ namespace digdug
 		int ReadHighScoreFromFile();
 		void SaveHighScoreInFile(int highScore);
 	private:
-		void CreateInputSolo(std::unique_ptr<GameObject>& sprite, ControllerType type);
+		void CreateInputSolo(std::unique_ptr<dae::GameObject>& sprite, ControllerType type);
 		void IncreaseRow(int& x,int& y,int maxtilecolumn);
 		bool m_LevelCleared = false;
 	};

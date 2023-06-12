@@ -23,7 +23,7 @@ void digdug::RockComponent::Update(float elapsed)
 	}
 	if (!m_IsFalling)
 	{
-		for (const auto collision : CollisionManager::GetInstance().GetCollisionsByType(Sand))
+		for (const auto collision : dae::CollisionManager::GetInstance().GetCollisionsByType(Sand))
 		{
 			if (m_pCollisionComp->Collide(collision->GetCollision()))
 			{
@@ -38,7 +38,7 @@ void digdug::RockComponent::Update(float elapsed)
 	{
 		m_IsFalling = true;
 	}
-	for (const auto collision : CollisionManager::GetInstance().GetCollisions())
+	for (const auto collision : dae::CollisionManager::GetInstance().GetCollisions())
 	{
 		if (m_IsFalling && m_pCollisionComp->Collide(collision->GetCollision())
 			&& collision->GetCollisionType() != Rock
@@ -76,8 +76,8 @@ void digdug::RockComponent::DeletionCountdown(float elapsed)
 }
 void digdug::RockComponent::Initialize()
 {
-	m_pSpriteComp = GetOwner()->AddComponent<SpriteComponent>();
-	m_pCollisionComp = GetOwner()->AddComponent<CollisionComponent>();
+	m_pSpriteComp = GetOwner()->AddComponent<dae::SpriteComponent>();
+	m_pCollisionComp = GetOwner()->AddComponent<dae::CollisionComponent>();
 
 	m_pSpriteComp->AddAnimationStrips("Sprites/SingularRock.png", 1, 1, 1, 1 / 4.f, "SingularRock", true, 2.f);
 	m_pSpriteComp->AddAnimationStrips("Sprites/RockBreakAnimation.png", 4, 1, 4.f, 1 / 4.f, "RockBreak", false, 2.f);

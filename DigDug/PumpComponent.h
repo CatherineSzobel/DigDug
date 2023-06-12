@@ -4,10 +4,9 @@
 #include "CollisionComponent.h"
 #include "CollisionManager.h"
 #include "Enemy.h"
-using namespace dae;
 namespace digdug
 {
-	class PumpComponent final: public BaseComponent
+	class PumpComponent final: public dae::BaseComponent
 	{
 	public:
 		// Inherited via BaseComponent
@@ -23,10 +22,10 @@ namespace digdug
 		Rectf GetCollision() const;
 		Enemy* GetEnemyPointer() const { return m_Enemy; };
 	private:
-		RenderComponent* m_pSpriteComp = nullptr;
-		CollisionComponent* m_pCollisionComp = nullptr;
+		dae::RenderComponent* m_pSpriteComp = nullptr;
+		dae::CollisionComponent* m_pCollisionComp = nullptr;
 
-		CollisionManager m_CollisionManager;
+		dae::CollisionManager m_CollisionManager;
 		bool m_Attached = false, m_IsActive = false;
 		float m_Speed, m_Lifetime = 2.f,m_MaxStretch = 50.f;
 		const float m_PumpSpeed = 15.f;

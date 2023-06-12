@@ -1,12 +1,10 @@
 #pragma once
 #include "BaseComponent.h"
-
 #include "Enemy.h"
-using namespace dae;
 namespace digdug
 {
 	class Enemy;
-	class FygarsComponent final : public BaseComponent, public Enemy
+	class FygarsComponent final : public dae::BaseComponent, public Enemy
 	{
 	public:
 		FygarsComponent() = default;

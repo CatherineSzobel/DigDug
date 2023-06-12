@@ -8,11 +8,10 @@
 #include "CollisionComponent.h"
 #include "EnemyManager.h"
 #include "PlayerState.h"
-using namespace dae;
 namespace digdug
 {
 
-	class DigDugComponent final : public BaseComponent
+	class DigDugComponent final : public dae::BaseComponent
 	{
 	public:
 		DigDugComponent();
@@ -42,21 +41,21 @@ namespace digdug
 		void ResetDigger();
 		void CreateAnimation();
 
-		Subject* GetSubject() const { return m_pSubject; };
+		dae::Subject* GetSubject() const { return m_pSubject; };
 	private:
 
 		bool m_IsDigging = false, m_IsDead = false, m_IsMoving = false,
 			m_UsingWaterPump = false, m_ThrownPump = false, m_GameEnd = false;
 		HealthComponent* m_pHealthComponent{};
-		SpriteComponent* m_pSpriteComponent{};
-		CollisionComponent* m_pCollisionComponent{};
+		dae::SpriteComponent* m_pSpriteComponent{};
+		dae::CollisionComponent* m_pCollisionComponent{};
 		PumpComponent* m_pPumpComponent{};
 		PlayerState* m_CurrentState;
 
 		CollisionType m_CollisionType{};
 		glm::vec3 m_OriginalPos{};
 		Direction m_PlayerDirection{};
-		Subject* m_pSubject{};
+		dae::Subject* m_pSubject{};
 		glm::vec2 m_OriginalCollisionSize{};
 		Rectf m_CollisionSize{};
 	};

@@ -1,13 +1,13 @@
+#pragma once
 #include "BaseComponent.h"
 #include "CollisionComponent.h"
 #include "CollisionManager.h"
 #include "SpriteComponent.h"
 #include "Helpers.h"
-using namespace dae;
 namespace digdug
 {
 
-	class TileComponent final : public BaseComponent
+	class TileComponent final : public dae::BaseComponent
 	{
 	public:
 		TileComponent();
@@ -27,11 +27,11 @@ namespace digdug
 		bool IsActive() const { return m_Active; };
 
 	private:
-		CollisionComponent* m_pCollisionComp = nullptr;
+		dae::CollisionComponent* m_pCollisionComp = nullptr;
 		float m_TileScale = 5.f;
 		std::vector<Sprite*> m_pTileLists{};
 		bool m_Active = true;
-		SpriteComponent* m_pSpriteComp = nullptr;
+		dae::SpriteComponent* m_pSpriteComp = nullptr;
 	};
 }
 

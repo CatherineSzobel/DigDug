@@ -7,16 +7,15 @@
 #include "SceneManager.h"
 #include "ExtraStructs.h"
 #include "UIComponent.h"
-using namespace dae;
 namespace digdug
 {
-	class MoveCommand final : public GameObjectCommand
+	class MoveCommand final : public dae::GameObjectCommand
 	{
 	public:
 
-		MoveCommand(GameObject* owner, Direction direction) : GameObjectCommand{ owner }, m_Direction{ direction }
+		MoveCommand(dae::GameObject* owner, Direction direction) : dae::GameObjectCommand{ owner }, m_Direction{ direction }
 		{
-			m_pSpriteComp = GetGameActor()->GetComponent<SpriteComponent>();
+			m_pSpriteComp = GetGameActor()->GetComponent< dae::SpriteComponent>();
 			m_pDigDugComp = GetGameActor()->GetComponent<DigDugComponent>();
 
 		};
@@ -24,10 +23,10 @@ namespace digdug
 		virtual void Execute() override
 		{
 			auto pos = GetGameActor()->GetLocalPosition();
-			auto elapsed = GameTime::GetInstance().GetDeltaTime();
+			auto elapsed = dae::GameTime::GetInstance().GetDeltaTime();
 			auto isDead = m_pDigDugComp->IsPlayerDeadCheck();
 			auto isGameOver = GetGameActor()->GetComponent<HealthComponent>()->GetIsGameOver();
-			m_OriginalSpeed = GetGameActor()->GetComponent<InputComponent>()->GetMovementSpeed();
+			m_OriginalSpeed = GetGameActor()->GetComponent< dae::InputComponent>()->GetMovementSpeed();
 			m_MovementSpeed = m_OriginalSpeed;
 			if (!isGameOver)
 			{
@@ -67,15 +66,15 @@ namespace digdug
 		}
 		void Clamp()
 		{
-			auto playerPosition = glm::vec2{ GetGameActor()->GetLocalPosition().x + GetGameActor()->GetComponent<SpriteComponent>()->GetSpriteSize().x,
-			GetGameActor()->GetLocalPosition().y + GetGameActor()->GetComponent<SpriteComponent>()->GetSpriteSize().y };
+			auto playerPosition = glm::vec2{ GetGameActor()->GetLocalPosition().x + GetGameActor()->GetComponent< dae::SpriteComponent>()->GetSpriteSize().x,
+			GetGameActor()->GetLocalPosition().y + GetGameActor()->GetComponent< dae::SpriteComponent>()->GetSpriteSize().y };
 
 			glm::vec2 levelBoundaryRow = { 70.f, 452.f };
 			glm::vec2 levelBoundaryColumm = { 0.f, Game::GetInstance().GetWorldWidth() };
 
-			if (playerPosition.x - GetGameActor()->GetComponent<SpriteComponent>()->GetSpriteSize().x <= levelBoundaryColumm.x && m_Direction == Direction::left ||
+			if (playerPosition.x - GetGameActor()->GetComponent< dae::SpriteComponent>()->GetSpriteSize().x <= levelBoundaryColumm.x && m_Direction == Direction::left ||
 				playerPosition.x >= levelBoundaryColumm .y && m_Direction == Direction::right ||
-				playerPosition.y - GetGameActor()->GetComponent<SpriteComponent>()->GetSpriteSize().y <= levelBoundaryRow.x && m_Direction == Direction::up ||
+				playerPosition.y - GetGameActor()->GetComponent< dae::SpriteComponent>()->GetSpriteSize().y <= levelBoundaryRow.x && m_Direction == Direction::up ||
 				playerPosition.y >= levelBoundaryRow.y && m_Direction == Direction::down)
 			{
 				m_MovementSpeed = 0.f;
@@ -90,16 +89,16 @@ namespace digdug
 		float m_MovementSpeed{}, m_OriginalSpeed{};
 		glm::vec2 m_DirectionVec{};
 		glm::vec3 m_OriginalPos{};
-		SpriteComponent* m_pSpriteComp = nullptr;
+		dae::SpriteComponent* m_pSpriteComp = nullptr;
 		DigDugComponent* m_pDigDugComp = nullptr;
 	};
-	class PumpCommand final : public GameObjectCommand
+	class PumpCommand final : public  dae::GameObjectCommand
 	{
 	public:
-		PumpCommand(GameObject* owner, std::string path, int volume)
-			: GameObjectCommand(owner), m_Path{ path }, m_Volume{ volume }
+		PumpCommand(dae::GameObject* owner, std::string path, int volume)
+			: dae::GameObjectCommand(owner), m_Path{ path }, m_Volume{ volume }
 		{
-			m_pSpriteComponent = GetGameActor()->GetComponent<SpriteComponent>();
+			m_pSpriteComponent = GetGameActor()->GetComponent< dae::SpriteComponent>();
 			m_pDigDugComp = GetGameActor()->GetComponent<DigDugComponent>();
 		};
 		virtual ~PumpCommand() = default;
@@ -111,27 +110,27 @@ namespace digdug
 				auto isThrown = m_pDigDugComp->IsThrown();
 				if (isThrown)
 				{
-					servicelocator::get_sound_system().Play(m_Path, m_Volume);
+					dae::servicelocator::get_sound_system().Play(m_Path, m_Volume);
 				}
 				else
 				{
 					//	servicelocator::get_sound_system().Play("Sounds/Sound/PumpingSound.wav", m_Volume);
 				}
 				m_pDigDugComp->SetMoving(false);
-				servicelocator::get_sound_system().HaltMusic();
+				dae::servicelocator::get_sound_system().HaltMusic();
 
 			}
 		}
 		virtual void Undo() override
 		{}
 	private:
-		SpriteComponent* m_pSpriteComponent;
+		dae::SpriteComponent* m_pSpriteComponent;
 		DigDugComponent* m_pDigDugComp = nullptr;
 		int m_Volume;
 		std::string m_Path;
 	};
 
-	class NextSceneCommand final : public Command
+	class NextSceneCommand final : public  dae::Command
 	{
 	public:
 		NextSceneCommand() {};
@@ -141,11 +140,11 @@ namespace digdug
 	private:
 
 	};
-	class HandleUpDownMenuCommand final : public GameObjectCommand
+	class HandleUpDownMenuCommand final : public dae::GameObjectCommand
 	{
 	public:
-		HandleUpDownMenuCommand(GameObject* owner, Direction direction)
-			:GameObjectCommand{ owner }, m_direction{ direction }, m_MinimumUpwards{ 299.f }, m_MaximumDownwards{ 331.f }
+		HandleUpDownMenuCommand(dae::GameObject* owner, Direction direction)
+			: dae::GameObjectCommand{ owner }, m_direction{ direction }, m_MinimumUpwards{ 299.f }, m_MaximumDownwards{ 331.f }
 		{
 
 		};
@@ -186,23 +185,23 @@ namespace digdug
 		float m_MinimumUpwards;
 		float m_MaximumDownwards;
 	};
-	class HandleMenuCommand final : public GameObjectCommand
+	class HandleMenuCommand final : public  dae::GameObjectCommand
 	{
 	public:
-		HandleMenuCommand(GameObject* owner)
-			:GameObjectCommand(owner)
+		HandleMenuCommand(dae::GameObject* owner)
+			: dae::GameObjectCommand(owner)
 		{
 		};
 		virtual ~HandleMenuCommand() = default;
 		virtual void Execute() override
 		{
-			auto gb = GetGameActor()->GetComponent<InputComponent>();
+			auto gb = GetGameActor()->GetComponent<dae::InputComponent>();
 			if (gb != nullptr)
 			{
 				m_Action = GetGameActor()->GetComponent<UIComponent>()->GetAction();
 				GetGameActor()->GetComponent<UIComponent>()->ActivateAction(m_Action);
-				GetGameActor()->RemoveComponent<InputComponent>();
-				GetGameActor()->RemoveComponent<RenderComponent>();
+				GetGameActor()->RemoveComponent< dae::InputComponent>();
+				GetGameActor()->RemoveComponent< dae::RenderComponent>();
 				GetGameActor()->SetLocalPosition(glm::vec3{ 220.f,50.f,0.f });
 			}
 

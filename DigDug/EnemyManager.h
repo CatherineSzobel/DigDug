@@ -3,10 +3,9 @@
 #include "Enemy.h"
 #include "Scene.h"
 #include "Subject.h"
-using namespace dae;
 namespace digdug
 {
-	class EnemyManager final : public Singleton<EnemyManager>
+	class EnemyManager final : public dae::Singleton<EnemyManager>
 	{
 	public:
 		int EnemiesLeft() const;

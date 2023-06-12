@@ -3,7 +3,7 @@
 #include "UIComponent.h"
 
 #pragma region EndState
-digdug::EndState::EndState(GameObject* owner, EndGameCondition condition)
+digdug::EndState::EndState(dae::GameObject* owner, EndGameCondition condition)
 {
 	m_Condition = condition;
 	OnEnter(owner);
@@ -14,13 +14,13 @@ void digdug::EndState::OnEnter(dae::GameObject* owner)
 {
 	if (m_Condition == EndGameCondition::win)
 	{
-		owner->GetComponent<TextComponent>()->SetText("Win");
+		owner->GetComponent<dae::TextComponent>()->SetText("Win");
 		printf("Win");
 
 	}
 	else if (m_Condition == EndGameCondition::lost)
 	{
-		owner->GetComponent<TextComponent>()->SetText("Lost");
+		owner->GetComponent<dae::TextComponent>()->SetText("Lost");
 		printf("Lost");
 	}
 	LevelManager levelmanager;
@@ -29,7 +29,7 @@ void digdug::EndState::OnEnter(dae::GameObject* owner)
 #pragma endregion
 
 #pragma region ActiveGameState
-digdug::ActiveGameState::ActiveGameState(GameObject* owner)
+digdug::ActiveGameState::ActiveGameState(dae::GameObject* owner)
 {
 	OnEnter(owner);
 }
@@ -46,7 +46,7 @@ digdug::GameState* digdug::ActiveGameState::Update(dae::GameObject* owner, float
 	}
 	if (EnemyManager::GetInstance().EnemiesLeft() == 0)
 	{
-		currentLevel = SceneManager::GetInstance().GetCurrentSceneIndex() + 2;
+		currentLevel = dae::SceneManager::GetInstance().GetCurrentSceneIndex() + 2;
 		if (currentLevel == 4)
 		{
 			return new EndState(owner, EndGameCondition::win);
@@ -68,7 +68,7 @@ void digdug::ActiveGameState::OnEnter(dae::GameObject*)
 #pragma region StartScreenState
 
 
-digdug::StartScreenState::StartScreenState(GameObject* owner)
+digdug::StartScreenState::StartScreenState(dae::GameObject* owner)
 {
 	OnEnter(owner);
 }
@@ -121,7 +121,7 @@ void digdug::StartScreenState::ActivateAction(std::string action)
 		auto& firstLevel = dae::SceneManager::GetInstance().GetCurrentScene();
 		//auto fullPath = dae::ResourceManager::GetInstance().GetDataPath() + "Levels/level1.txt";
 		firstLevel.RemoveAll();
-		InputManager::GetInstance().Reset();
+		dae::InputManager::GetInstance().Reset();
 		LevelManager levelManager;
 		levelManager.LoadLevel("level1.txt");
 	}
@@ -130,7 +130,7 @@ void digdug::StartScreenState::ActivateAction(std::string action)
 		printf("start co op mode");
 		auto& firstLevel = dae::SceneManager::GetInstance().GetCurrentScene();
 		firstLevel.RemoveAll();
-		InputManager::GetInstance().Reset();
+		dae::InputManager::GetInstance().Reset();
 		LevelManager levelManager;
 		levelManager.LoadCoopLevel("level1.txt");
 	}
